@@ -6,7 +6,7 @@ import pandas as pd
 import cv2
 import torch
 import torchvision
-from data_processing import mkadir
+from module.data_processing import mkadir
 
 def get_RoI_range_csv(size: int, csv_file: pd.DataFrame) -> pd.DataFrame:
     result_csv = csv_file.loc[csv_file.loc[csv_file["width"] <= size].index].copy()
