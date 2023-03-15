@@ -6,6 +6,7 @@ import pandas as pd
 import cv2
 import torch
 import torchvision
+from data_processing import mkadir
 
 def get_RoI_range_csv(size: int, csv_file: pd.DataFrame) -> pd.DataFrame:
     result_csv = csv_file.loc[csv_file.loc[csv_file["width"] <= size].index].copy()
@@ -108,28 +109,33 @@ def resize_and_crop(image_path, modified_path, size, crop_type='middle'):
         os.chdir(modified_path)
         img.save(name, "JPEG")
 
-def ratio_resize_and_zeroPadding(size, RoI_data_path, RZ_data_path):
+def ratio_resize_and_zeroPadding(size, RoI_data_path, RZ_data_path, intpol = cv2.INTER_CUBIC):
+    mkadir(RZ_data_path)
+    
     for label in natsort.natsorted(os.listdir(RoI_data_path)):
         folder_path = os.path.join(RoI_data_path, f"{label}/")
         img_filenames = natsort.natsorted(os.listdir(folder_path))
+
+        try:    os.mkdir(RZ_data_path + label)
+        except: pass
 
         for img_filename in img_filenames:
             result = np.zeros((size, size, 3), np.uint8)
             image = cv2.imread(folder_path + img_filename, cv2.IMREAD_COLOR)
             
             h, w = image.shape[:2]
+            if (h <= 10 and w <= 10): continue
+            
             ash = size / h
             asw = size / w
             if asw < ash: sizeas = (int(w*asw), int(h*asw))
             else:         sizeas = (int(w*ash), int(h*ash))
-            image = cv2.resize(image, dsize=sizeas)
+            image = cv2.resize(image, dsize=sizeas, interpolation=intpol)
 
             sx, ex = int(size/2 - sizeas[1]/2), int(size/2 + sizeas[1]/2)
             sy, ey = int(size/2 - sizeas[0]/2), int(size/2 + sizeas[0]/2)
             result[sx:ex, sy:ey, :] = image
 
-            try:    os.mkdir(RZ_data_path + label)
-            except: pass
             save_path = os.path.join(RZ_data_path, f"{label}/")
             cv2.imwrite(save_path + img_filename, result)
     return

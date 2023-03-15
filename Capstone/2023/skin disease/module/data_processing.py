@@ -4,6 +4,16 @@ import pandas as pd
 import cv2
 
 # fuctions
+def mkadir(path):
+    if not os.path.isdir(path):
+        split_path = path.split("/")
+        for i in range(len(split_path) -2, 0, -1):
+            dir_path = "/".join(split_path[:-i]) + "/"
+            try:    os.mkdir(dir_path)
+            except: pass
+
+    return
+
 def to_excel(path, excel_information: dict):
     pd.DataFrame.from_dict(excel_information).to_csv(path)
     return

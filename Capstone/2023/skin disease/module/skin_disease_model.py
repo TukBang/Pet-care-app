@@ -1,6 +1,7 @@
 ROW = 0
 COLUMN = 1
 
+import pickle as pkl
 from tqdm import notebook
 import numpy as np
 import torch
@@ -121,17 +122,19 @@ class Skin_Distinction_Model(nn.Module):
                 # validation loss가 가장 낮다면 저장
                 if self.best_loss is None or self.best_loss > vlv:
                     self.best_loss = vlv
-                    torch.save(self.state_dict(), self.save_path)
+                    torch.save(self.state_dict(), self.save_path + "low_acc.pth")
                     print("Save model, validation loss:", vlv)
                 
                 # validation acc가 가장 높다면 저장
                 if self.best_acc is None or self.best_acc < vav:
                     self.best_acc = vav
-                    torch.save(self.state_dict(), "/".join(self.save_path.split("/")[:-1]) + "/resnet18_acc.pth")
+                    torch.save(self.state_dict(), self.save_path + "high_acc.pth")
                     print("Save model, validation acc:", vav)
             
             print(f"{epoch} epoch end lr: ", optimizer.param_groups[0]['lr'])
-            
+            with open(self.save_path + "last_history.pkl", "wb") as pkl_file:
+                pkl.dump(self.history, pkl_file)
+
         self.train(False)
         return self.history
     
