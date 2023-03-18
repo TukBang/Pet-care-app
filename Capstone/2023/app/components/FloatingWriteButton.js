@@ -6,9 +6,10 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 function FloatingWriteButton({hidden, selectedDate}) {
     const navigation = useNavigation();
 
+    // const selectedDate = new Date(selectedDate)
     const onPress = () => {
-        navigation.navigate('Write')
-        selectedDate
+        // navigation.navigate('Write')
+        navigation.navigate('Write',{selectedDate : selectedDate} )
     };
 
     const animation = useRef(new Animated.Value(0)).current;

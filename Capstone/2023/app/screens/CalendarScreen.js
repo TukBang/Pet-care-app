@@ -41,7 +41,7 @@ function CalendarScreen() {
               selectedDate={selectedDate}
               onSelectDate={setSelectedDate} />
             <FeedList logs={filteredLogs} onScroll={onScrolledToBottom} />
-            <FloatingWriteButton hidden={hidden}/>
+            <FloatingWriteButton hidden={hidden} selectedDate={selectedDate} onSelectDate={setSelectedDate}/>
         </View>
     )
 }

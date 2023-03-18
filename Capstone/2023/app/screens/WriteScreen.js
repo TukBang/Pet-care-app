@@ -10,6 +10,7 @@ import WriteEditor from "../components/WriterEditor";
 function WriteScreen({route}) {
 
     const log = route.params?.log;
+    const selectedDate = route.params.selectedDate
 
     const [title, setTitle] = useState(log?.title ?? '');
     const [body, setBody] = useState(log?.body ?? '');
@@ -31,6 +32,7 @@ function WriteScreen({route}) {
                 title,
                 body,
                 date: date.toISOString(),
+                // date: selectedDate.toISOString(),
             });
         }
         navigation.pop();
@@ -66,6 +68,8 @@ function WriteScreen({route}) {
                     onAskRemove={onAskRemove} 
                     isEditing={!!log}
                     date={date}
+                    // date={selectedDate}
+
                     onChangeDate={setDate}
                     />
                 <WriteEditor 

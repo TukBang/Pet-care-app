@@ -63,11 +63,15 @@ function WriteHeader({onSave, onAskRemove, isEditing, date, onChangeDate}) {
                         {format(new Date(date),'PPP', {
                             locale: ko,
                         })}
+                        {/* {format(date,'PPP', {
+                            locale: ko,
+                        })} */}
                     </Text>
                 </Pressable>
                 <View style={styles.separator} />
                 <Pressable onPress={onPressTime}>
                     <Text style={styles.Text}>{format(new Date(date), 'p', {locale: ko})}</Text>
+                    {/* <Text style={styles.Text}>{format(date, 'p', {locale: ko})}</Text> */}
                 </Pressable>
             </View>
             <DateTimePickerModal
