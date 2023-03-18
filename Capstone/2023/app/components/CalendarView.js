@@ -17,7 +17,7 @@ function CalendarView({markedDates, selectedDate, onSelectDate}) {
         <Calendar
           style={StyleSheet.calendar}
           markedDates={markedSelectedDate}
-          onPress={(day) => {
+          onDayPress={(day) => {
             onSelectDate(day.dateString);
           }}
           theme={{
@@ -33,6 +33,7 @@ function CalendarView({markedDates, selectedDate, onSelectDate}) {
 
 const styles = StyleSheet.create({
     calendar: {
+        // flex: 1,
         borderBottomWidth: 1,
         borderBottomColor: '#e0e0e0',
     },

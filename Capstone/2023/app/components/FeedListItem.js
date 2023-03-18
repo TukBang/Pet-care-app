@@ -10,11 +10,14 @@ function formatDate(date) {
     const now = Date.now();
     const diff = (now - d.getTime()) / 1000;
 
+    if ( diff < 0) {
+        return formatDistanceToNow(d, {addSuffix:true, locale: ko});
+    }
     if ( diff < 60 * 1) {
         return ' 방금 전 ';
     }
     if ( diff < 60 *60 *24 *3) {
-        return formatDistanceToNow(d, {addSuffix:true, locale: ko});
+        return '이미 지난 일이에요';
     }
     return format(d, 'PPP EEE p', {locale: ko});
 }

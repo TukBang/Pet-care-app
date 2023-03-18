@@ -3,11 +3,12 @@ import React, {useEffect, useReducer, useRef} from 'react';
 import {Platform, Pressable, StyleSheet, View, Animated} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-function FloatingWriteButton({hidden}) {
+function FloatingWriteButton({hidden, selectedDate}) {
     const navigation = useNavigation();
 
     const onPress = () => {
         navigation.navigate('Write')
+        selectedDate
     };
 
     const animation = useRef(new Animated.Value(0)).current;

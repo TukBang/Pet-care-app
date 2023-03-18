@@ -9,6 +9,7 @@ function WriteEditor({title, body, onChangeTitle, onChangeBody}) {
         <View style={styles.block}>
             <TextInput
               placeholder="제목을 입력하세요"
+              placeholderTextColor='#bcbcbc'
               style={styles.titleInput}
               returnKeyType="next"
               onChangeText={onChangeTitle}
@@ -19,6 +20,7 @@ function WriteEditor({title, body, onChangeTitle, onChangeBody}) {
             />
             <TextInput
               placeholder="당신의 오늘을 기록해보세요"
+              placeholderTextColor='#bcbcbc'
               style={styles.bodyInput}
               multiline
               textAlignVertical="top"

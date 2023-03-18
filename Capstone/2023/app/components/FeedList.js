@@ -34,10 +34,10 @@ function FeedList({logs, onScrolledToBottom, ListHeaderComponent}) {
           style={styles.block}
           renderItem={({item}) => <FeedListItem log={item} />}
           keyExtractor={(log) => log.id}
-          ItemSeparatorComponent={() => <View style={styles.separator}
-          onScroll={onScroll} 
+          ItemSeparatorComponent={() => <View style={styles.separator} /> }
           ListHeaderComponent={ListHeaderComponent}
-          />}
+          onScroll={onScroll} 
+          
         />
     );
 }

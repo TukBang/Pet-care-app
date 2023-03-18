@@ -7,9 +7,6 @@ import FeedList from "../components/FeedList";
 import FloatingWriteButton from "../components/FloatingWriteButton";
 import LogContext from "../contexts/LogContext";
 
-
-
-
 function CalendarScreen() {
 
     const {logs} = useContext(LogContext);
@@ -32,7 +29,7 @@ function CalendarScreen() {
                 return acc;
         }, {}),
         [logs],
-    )
+    );
 
     const filteredLogs = logs.filter(
         (log) => format(new Date(log.date), 'yyyy-MM-dd') === selectedDate,
@@ -40,14 +37,12 @@ function CalendarScreen() {
 
     return (
         <View style= {styles.block} >
-            {/* <FadeInAndOut /> */}
             <CalendarView markedDates={markedDates}
               selectedDate={selectedDate}
               onSelectDate={setSelectedDate} />
-            <FeedList logs={logs} onScrolledToBottom={onScrolledToBottom}/>
+            <FeedList logs={filteredLogs} onScroll={onScrolledToBottom} />
             <FloatingWriteButton hidden={hidden}/>
         </View>
-
     )
 }
 
@@ -55,7 +50,7 @@ const styles = StyleSheet.create({
     block: {
         flex: 1,
     },
-    rectangle: {width: 100, height: 100, backgroundColor: 'black'},
+    // rectangle: {width: 100, height: 100, backgroundColor: 'black'},
 });
 
 export default CalendarScreen;
