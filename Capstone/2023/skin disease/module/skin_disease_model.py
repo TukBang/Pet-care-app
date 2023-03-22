@@ -122,7 +122,7 @@ class Skin_Distinction_Model(nn.Module):
                 # validation loss가 가장 낮다면 저장
                 if self.best_loss is None or self.best_loss > vlv:
                     self.best_loss = vlv
-                    torch.save(self.state_dict(), self.save_path + "low_acc.pth")
+                    torch.save(self.state_dict(), self.save_path + "low_loss.pth")
                     print("Save model, validation loss:", vlv)
                 
                 # validation acc가 가장 높다면 저장
@@ -139,16 +139,15 @@ class Skin_Distinction_Model(nn.Module):
         return self.history
     
     def predict(self, x, norm = [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5]]):
-        self.train(True)
         pred = torch.tensor([]).to(self.device)
         tf = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize(norm[0], norm[1])
         ])
-
         test_dataset = Skin_Disease_Dataset(x, np.zeros((len(x),), dtype="int64"), tf)
         test_data_loader = DataLoader(test_dataset, batch_size=128)
-
+        
+        self.train(False)
         with torch.no_grad():
             for i, (images, targets) in enumerate(notebook.tqdm(test_data_loader)):
                 images = images.to(self.device)
