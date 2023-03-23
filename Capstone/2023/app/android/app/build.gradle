@@ -136,14 +136,13 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.learnreactnavigation"
+        applicationId "com.petcareappai"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         multiDexEnabled true
-
         if (isNewArchitectureEnabled()) {
             // We configure the NDK build only if you decide to opt-in for the New Architecture.
             externalNativeBuild {
@@ -159,7 +158,7 @@ android {
                     cppFlags "-std=c++17"
                     // Make sure this target name is the same you specify inside the
                     // src/main/jni/Android.mk file for the `LOCAL_MODULE` variable.
-                    targets "learnreactnavigation_appmodules"
+                    targets "petcareappai_appmodules"
                     // Fix for windows limit on number of character in file paths and in command lines
                     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
                         arguments "NDK_APP_SHORT_COMMANDS=true"
@@ -263,7 +262,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    classpath 'com.google.gms:google-services:4.3.15'
+
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
@@ -320,7 +319,11 @@ def isNewArchitectureEnabled() {
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
 
+
+
 project.ext.vectoricons = [
     iconFontNames: ['MaterialIcons.ttf']
 ]
-apply from : '../../node_modules/react-native-vector-icons/fonts.gradle'
+
+
+apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")

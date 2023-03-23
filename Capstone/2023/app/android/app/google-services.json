@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "1020863297273",
+    "project_id": "petcareapp-a0582",
+    "storage_bucket": "petcareapp-a0582.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1020863297273:android:436fd03e50712b21ba1428",
+        "android_client_info": {
+          "package_name": "com.petcareapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1020863297273-ql3inq04f8g7sic7e7rt3ss1lmr0odbv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYb5Comqnxk-vwVRBJUNCWQyhpHiTyAnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1020863297273-ql3inq04f8g7sic7e7rt3ss1lmr0odbv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1020863297273:android:8c37e4fe57391802ba1428",
+        "android_client_info": {
+          "package_name": "com.petcareappai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1020863297273-rv1h3lun1vbe2r80c4pfng6sm7es64dc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.petcareappai",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "1020863297273-ql3inq04f8g7sic7e7rt3ss1lmr0odbv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYb5Comqnxk-vwVRBJUNCWQyhpHiTyAnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1020863297273-ql3inq04f8g7sic7e7rt3ss1lmr0odbv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
