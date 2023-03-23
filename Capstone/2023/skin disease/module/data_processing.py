@@ -131,11 +131,11 @@ def extract_info_json(original_data_path, project_path, data_dict: dict, data_ty
         break
     return
 
-def get_RoI_range_csv(size: int, csv_file: pd.DataFrame) -> pd.DataFrame:
-    result_csv = csv_file.loc[csv_file.loc[csv_file["width"] <= size].index].copy()
-    result_csv = result_csv.loc[result_csv.loc[result_csv["width"] >= 10].index]
-    result_csv = result_csv.loc[result_csv.loc[result_csv["height"] <= size].index]
-    result_csv = result_csv.loc[result_csv.loc[result_csv["height"] >= 10].index]
+def get_RoI_range_csv(low, high, csv_file: pd.DataFrame) -> pd.DataFrame:
+    result_csv = csv_file.loc[csv_file.loc[csv_file["width"] <= high].index].copy()
+    result_csv = result_csv.loc[result_csv.loc[result_csv["width"] >= low].index]
+    result_csv = result_csv.loc[result_csv.loc[result_csv["height"] <= high].index]
+    result_csv = result_csv.loc[result_csv.loc[result_csv["height"] >= low].index]
     return result_csv
 
 def create_asymptomatic_data(size, gap, csv_files, original_data_path, project_path, data_type):
