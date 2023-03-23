@@ -26,7 +26,7 @@ function MainScreen() {
     <Tab.Navigator initialRouteName="Home" screenOptions={{
     tabBarActiveTintColor: '#fb8c00',
     tabBarShowLabel: true,
-    headerShown: false,
+    headerShown: true,
     }}>
         <Tab.Screen name="Home" component={HomeScreen} options={{
             title: '홈',
