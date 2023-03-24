@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MainScreen from "./MainScreen";
 import WriteScreen from "./Calendar/WriteScreen";
 import SignInScreen from "./Login/SignInScreen";
+import WelcomeScreen from "./User/WelcomeScreen";
 // import MainScreen from "./screens/MainScreen";
 // import DetailScreen from "./components/DetailScreen";
 
@@ -20,6 +21,11 @@ function RootStack() {
           component={SignInScreen}
           options={{headerShown:false}}
           />
+        <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{headerShown: false}}
+        />
         <Stack.Screen
           name="Main"
           component={MainScreen}
