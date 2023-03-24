@@ -11,6 +11,7 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SignButtons from '../../components/Login/SignButtons';
 import SignInForm from '../../components/Login/SignForm';
+import { useUserContext } from '../../contexts/UserContext';
 import { signIn, signUp } from '../../lib/auth';
 import { getUser } from '../../lib/users';
 
@@ -22,30 +23,37 @@ function SignInScreen({navigation, route, confirmPassword}) {
       password: '',
       confirmPassword: '',
     });
+
+    const [loading, setLoading] = useState();
+    const {setUser} = useUserContext();
+
+  
     const createChangeTextHandler = (name) => (value) => {
       setForm({...form, [name]: value});
     };
 
-    const [loading, setLoading] = useState();
+
 
     const onSubmit = async () => {
         Keyboard.dismiss();
-        const {email, password} = form;
+        const {email, password, confirmPassword} = form;
 
         if (isSignUp && password !== confirmPassword) {
             Alert.alert('실패', '비밀번호가 일치하지 않습니다.');
+            console.log({password, confirmPassword});
             return;
           }
 
-        const info = {email, password};
         setLoading(true);
+        const info = {email, password};
+        
         try {
           const {user} = isSignUp ? await signUp(info) : await signIn(info);
             const profile = await getUser(user.uid);
             if (!profile) {
             navigation.navigate('Welcome', {uid: user.uid});
             } else {
-            // 구현 예정
+              setUser(profile);
             }
         } catch (e) {
             const messages = {
@@ -93,6 +101,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 32,
         fontWeight: 'bold',
+        color: 'black'
     },
     form: {
         marginTop: 64,

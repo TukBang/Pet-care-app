@@ -1,4 +1,5 @@
 import React, {useRef} from 'react';
+import { StyleSheet } from 'react-native';
 import BorderedInput from './BorderedInput';
 
 function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
@@ -9,6 +10,7 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
     <>
       <BorderedInput
         hasMarginBottom
+        styles={styles.text}
         placeholder="이메일"
         value={form.email}
         onChangeText={createChangeTextHandler('email')}
@@ -20,6 +22,7 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
         onSubmitEditing={() => passwordRef.current.focus()}
       />
       <BorderedInput
+        styles={styles.text}
         placeholder="비밀번호"
         secureTextEntry
         hasMarginBottom={isSignUp}
@@ -37,6 +40,7 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
       />
       {isSignUp && (
         <BorderedInput
+          styles={styles.text}
           placeholder="비밀번호 확인"
           secureTextEntry
           value={form.confirmPassword}
@@ -49,5 +53,11 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  text: {
+    color: '#808080'
+  }
+})
 
 export default SignForm;

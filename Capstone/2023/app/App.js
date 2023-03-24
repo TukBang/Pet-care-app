@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RootStack from "./screens/RootStack";
 import { LogContextProvider } from "./contexts/LogContext";
+import { UserContextProvider } from "./contexts/UserContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -10,11 +11,13 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   return(
-    <NavigationContainer>
-      <LogContextProvider>
-        <RootStack />
-      </LogContextProvider>
-    </NavigationContainer>
+    <UserContextProvider>
+      <NavigationContainer>
+        <LogContextProvider>
+          <RootStack />
+        </LogContextProvider>
+      </NavigationContainer>
+    </UserContextProvider>
   )
 }
 
