@@ -2,10 +2,10 @@ import { useNavigation } from "@react-navigation/native";
 import React, {useState, useContext} from "react";
 import {StyleSheet, View, KeyboardAvoidingView, Platform, Alert} from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context";
-import LogContext from "../contexts/LogContext";
+import LogContext from "../../contexts/LogContext";
 
-import WriteHeader from "../components/WriteHeader";
-import WriteEditor from "../components/WriterEditor";
+import WriteHeader from "../components/Calendar/WriteHeader";
+import WriteEditor from "../components/Calendar/WriterEditor";
 
 function WriteScreen({route}) {
 

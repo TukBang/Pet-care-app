@@ -180,7 +180,7 @@
 
 import React from "react";
 import { View } from "react-native";
-import AnimatedMarkers from "../components/MapView";
+import AnimatedMarkers from "../components/Walking/MapView";
 
 const WalkingScreen = () => {
   return (

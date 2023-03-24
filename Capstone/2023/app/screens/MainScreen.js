@@ -1,11 +1,11 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import  Icon  from "react-native-vector-icons/MaterialIcons";
-import HomeScreen from "./HomeScreen";
-import CalendarScreen from "./CalendarScreen";
-import WalkingScreen from "./WalkingScreen";
-import CommunityScreen from "./CommunityScreen";
-import DiagnosisScreen from "./DiagnosisScreen";
+import HomeScreen from "./Home/HomeScreen";
+import CalendarScreen from "./Calendar/CalendarScreen";
+import WalkingScreen from "./Walking/WalkingScreen";
+import CommunityScreen from "./Community/CommunityScreen";
+import DiagnosisScreen from "./Diagnosis/DiagnosisScreen";
 
 const Tab = createBottomTabNavigator();
 
