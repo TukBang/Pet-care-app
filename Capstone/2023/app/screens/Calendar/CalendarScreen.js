@@ -1,10 +1,10 @@
 import React, {useContext, useEffect, useMemo, useRef, useState} from "react";
 import { StyleSheet, View, Animated, Button } from "react-native"
 import format from "date-fns/format";
-import CalendarView from '../componens/Calendar/CalendarView';
-import FeedList from "../components/Calendar/FeedList";
+import CalendarView from "../../components/Calendar/CalendarView";
+import FeedList from "../../components/Calendar/FeedList";
 
-import FloatingWriteButton from "../components/Calendar/FloatingWriteButton";
+import FloatingWriteButton from "../../components/Calendar/FloatingWriteButton";
 import LogContext from "../../contexts/LogContext";
 
 function CalendarScreen() {

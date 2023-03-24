@@ -2,8 +2,8 @@ import React, {useEffect} from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MainScreen from "./MainScreen";
-import WriteScreen from "./WriteScreen";
-import SignInScreen from "./SignInScreen"
+import WriteScreen from "./Calendar/WriteScreen";
+import SignInScreen from "./Login/SignInScreen";
 // import MainScreen from "./screens/MainScreen";
 // import DetailScreen from "./components/DetailScreen";
 

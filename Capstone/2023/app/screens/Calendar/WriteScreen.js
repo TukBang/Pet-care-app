@@ -4,8 +4,8 @@ import {StyleSheet, View, KeyboardAvoidingView, Platform, Alert} from 'react-nat
 import { SafeAreaView } from "react-native-safe-area-context";
 import LogContext from "../../contexts/LogContext";
 
-import WriteHeader from "../components/Calendar/WriteHeader";
-import WriteEditor from "../components/Calendar/WriterEditor";
+import WriteHeader from "../../components/Calendar/WriteHeader";
+import WriteEditor from "../../components/Calendar/WriterEditor";
 
 function WriteScreen({route}) {
 
