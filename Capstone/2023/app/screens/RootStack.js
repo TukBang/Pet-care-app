@@ -15,11 +15,11 @@ function RootStack() {
   return(
     <NavigationContainer independent={true}>
       <Stack.Navigator>
-        {/* <Stack.Screen
+        <Stack.Screen
           name="SignIn"
           component={SignInScreen}
           options={{headerShown:false}}
-          /> */}
+          />
         <Stack.Screen
           name="Main"
           component={MainScreen}
