@@ -1,19 +1,23 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import { useUserContext } from "../../contexts/UserContext";
+import Ggupdeagi from "../Ggupdeagi";
 
-// const {user} = useUserContext();
+
 
 function HomeScreen() {
+
+  const {user} = useUserContext();
     return (
     <View style={styles.block}>
-        {/* {user.photoURL && (
+      <Ggupdeagi />
+      {user.photoURL && (
         <Image
           source={{uri: user.photoURL}}
           style={{width: 128, height: 128, marginBottom: 16}}
           resizeMode="cover"
         />
-      )} */}
+      )}
     </View>
     )
 }

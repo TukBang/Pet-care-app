@@ -26,7 +26,7 @@ function MainScreen() {
     <Tab.Navigator initialRouteName="Home" screenOptions={{
     tabBarActiveTintColor: '#fb8c00',
     tabBarShowLabel: true,
-    headerShown: true,
+    headerShown: false,
     }}>
         <Tab.Screen name="CalendarScreen" component={CalendarScreen} options={{
             title: '일정',
