@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="res1">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/Capstone/2023/app/node_modules/react-native-safe-area-context/android/build/intermediates/library_java_res/debug/res.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

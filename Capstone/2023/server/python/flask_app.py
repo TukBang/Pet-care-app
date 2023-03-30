@@ -35,7 +35,7 @@ class ImageResource(Resource):
         else:
             return {'error': 'No image data found'}, 400
 
-api.add_resource(ImageResource, '/image', '/image/<string:image_name>')
+api.add_resource(ImageResource, '/images', '/images/<string:image_name>')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
