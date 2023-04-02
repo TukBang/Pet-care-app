@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
-function CheckList() {
+function CheckList({onButtonPress}) {
   const [data, setData] = useState([
     // { id: 1, text: '1. 도', checked: false },
     // { id: 2, text: '2. 레', checked: false },
@@ -40,7 +40,13 @@ function CheckList() {
         )}
         keyExtractor={(item) => item.id.toString()}
       />
-      <Button title={!isAllChecked ? '진단을 하기 위해선 위 유의사항을 읽어주세요!' : '진단을 시작하려면 눌러주세요!'} disabled={!isAllChecked} />
+      <Button title={
+        !isAllChecked 
+            ? '진단을 하기 위해선 위 유의사항을 읽어주세요!' 
+            : '진단을 시작하려면 눌러주세요!'} 
+            disabled={!isAllChecked}
+            onPress={onButtonPress}
+            />
     </View>
   );
 }
