@@ -1,5 +1,4 @@
 absl-py==1.4.0
-asttokens @ file:///opt/conda/conda-bld/asttokens_1646925590279/work
 astunparse==1.6.3
 backcall @ file:///home/ktietz/src/ci/backcall_1611930011877/work
 brotlipy==0.7.0
