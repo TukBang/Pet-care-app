@@ -14,8 +14,10 @@ if not os.path.exists('images'):
 
 class ImageResource(Resource):
     def get(self, image_name):
-        if os.path.isfile(os.path.join('images', image_name)):
-            return send_from_directory('images', image_name)
+        print(image_name)
+        paths = 'C:/Users/bang/Documents/GitHub/Pet-care-app/Capstone/2023/images/'
+        if os.path.isfile(os.path.join(paths, image_name)):
+            return send_from_directory('images/', image_name)
         else:
             return {'error': 'Image not found'}, 404
 
