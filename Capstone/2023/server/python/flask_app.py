@@ -7,16 +7,17 @@ import os
 
 app = Flask(__name__)
 api = Api(app)
+path = 'D:/GitHub/Pet-care-app/Capstone/2023/server/python/images'
 
 # Ensure the 'images' directory exists
-if not os.path.exists('images'):
-    os.makedirs('images')
+if not os.path.exists(path):
+    os.makedirs(path)
 
 class ImageResource(Resource):
     def get(self, image_name):
         print(image_name)
-        paths = 'C:/Users/bang/Documents/GitHub/Pet-care-app/Capstone/2023/images/'
-        if os.path.isfile(os.path.join(paths, image_name)):
+        
+        if os.path.isfile(os.path.join(path, image_name)):
             return send_from_directory('images/', image_name)
         else:
             return {'error': 'Image not found'}, 404
@@ -31,6 +32,7 @@ class ImageResource(Resource):
                 image_name = data.get('name', 'unnamed.jpg')
                 image_path = os.path.join('images', image_name)
                 image.save(image_path)
+                
                 return {'message': 'Image saved successfully', 'name': image_name}
             except Exception as e:
                 return {'error': str(e)}, 400

@@ -1,19 +1,34 @@
 # default
 import pickle as pkl
-import os
+import sys, os
 from pprint import *
+import numpy as np
+import cv2
 import torch
 from torchvision.models import efficientnet_v2_s
+from torchinfo import summary
 
 # Web server based on Flask ()
-from flask import Flask, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory
 from flask_restful import Resource, Api
 from PIL import Image
 import base64
 import io
 
 # users module
+sys.path.append("d:\\GitHub\\Pet-care-app\\Capstone\\2023\\")
 import skin_disease.module.skin_disease_model as sdm
+
+# AI 불러오기
+# server AI model 가중치 저장 경로
+# Image 저장 경로
+model_path = "E:/Tukorea/Capstone/model/server/"
+image_path = "E:/Tukorea/Capstone/images/"
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = sdm.Skin_Distinction_Model(model=efficientnet_v2_s(weights="DEFAULT"),
+                                       out_features=6,
+                                       device=device,
+                                       save_path=model_path).to(device)
 
 def save_history_fig(history):
     import math
@@ -57,9 +72,8 @@ def get_evaluate_images(src_path, dst_path):
 class ImageResource(Resource):
     # 이 부분은 인공지능 평가에 대한 데이터가 보내져야 함
     def get(self, image_name):
-        image_path = ""
-        if os.path.isfile(os.path.join('images', image_name)):
-            return send_from_directory('images', image_name)
+        if os.path.isfile(os.path.join(image_path, image_name)):
+            return send_from_directory(image_path, image_name)
         else:
             return {'error': 'Image not found'}, 404
 
@@ -72,35 +86,32 @@ class ImageResource(Resource):
                 image_data = base64.b64decode(image_data)
                 image = Image.open(io.BytesIO(image_data))
                 image_name = data.get('name', 'unnamed.jpg')
-                image_path = os.path.join('images', image_name)
+                image_path = os.path.join("", image_name)
                 image.save(image_path)
-                return {'message': 'Image saved successfully', 'name': image_name}
+
+                image = Image.fromarray(cv2.merge(list(cv2.split(np.array(image))[::-1])))
+                pred = model.forward(image)
+                prob = torch.softmax(pred, dim=1)
+
+                ret_data = jsonify({'name': image_name, 
+                                    'L1': prob[0], 'L2': prob[1],
+                                    'L3': prob[2], 'L4': prob[3],
+                                    'L5': prob[4], 'L6': prob[5]})
+                return ret_data
+            
             except Exception as e:
                 return {'error': str(e)}, 400
         else:
             return {'error': 'No image data found'}, 400
 
 if __name__ == "__main__":
-    # AI 불러오기
+    if not os.path.exists(image_path):
+        os.makedirs(image_path)
 
-    # server AI model 가중치 저장 경로
-    # 2023-03-30 6-CLASS Valid 63% Model
-    
-    if not os.path.exists('images'):
-        os.makedirs('images')
-
-    model_path = ""
-    image_path = ""
-
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = sdm.Skin_Distinction_Model(model=efficientnet_v2_s(weights="DEFAULT"),
-                                       out_features=6,
-                                       device=device,
-                                       save_path=model_path).to(device)
-    
     pprint(summary(model, input_size=(1, 3, 224, 224), verbose=0))
     
     # 예외 처리 필요
+    # 2023-03-30 6-CLASS Valid 63% Model
     with open(f"{model_path}last_history.pkl", "rb") as pkl_file:
         save_history_fig(history=pkl.load(pkl_file))
     get_evaluate_images(src_path=model_path, dst_path=image_path)
@@ -113,7 +124,6 @@ if __name__ == "__main__":
     app = Flask(__name__)
     api = Api(app)
     api.add_resource(ImageResource, '/images', '/images/<string:image_name>')
-    app.run(host='0.0.0.0', debug=True)
-    
 
-    print("Hello World!")
+    # 웹 서버 열기
+    app.run(host='0.0.0.0', debug=True)
