@@ -57,7 +57,7 @@ def save_history_fig(history):
     ax[1].set_ylim((0, 100))
     ax[1].legend()
     ax[1].grid()
-    plt.savefig('model_history.png')
+    plt.savefig(image_path + 'evaluate/model_history.png')
     return 
 
 def get_evaluate_images(src_path, dst_path):
@@ -91,9 +91,11 @@ class ImageResource(Resource):
     def get(self):
         auc_roc = encode_image(image_path=image_path + "evaluate/AUC-ROC.png")
         class_report = encode_image(image_path=image_path + "evaluate/classification_report.png")
+        history = encode_image(image_path=image_path + "evaluate/model_history.png")
 
         ret_data = {"auc-roc": auc_roc,
-                    "classification_report": class_report}
+                    "classification_report": class_report,
+                    "model_history": history}
 
         return ret_data
 
