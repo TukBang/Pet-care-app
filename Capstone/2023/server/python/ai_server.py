@@ -5,6 +5,7 @@ from pprint import *
 import numpy as np
 import cv2
 import torch
+from torchvision import transforms
 from torchvision.models import efficientnet_v2_s
 from torchinfo import summary
 
@@ -65,20 +66,40 @@ def get_evaluate_images(src_path, dst_path):
     return_flag = True
     try:
         shutil.copy(src_path + "AUC-ROC.png", dst_path + "AUC-ROC.png")
-        shutil.copy(src_path + "classification_report.txt", dst_path + "classification_report.txt")
+        shutil.copy(src_path + "classification_report.png", dst_path + "classification_report.png")
     except: return_flag = False
     return return_flag
 
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode("utf-8")
+    return encoded_string
+
+def softmax(pred):
+    sum_exp = float()
+    for prob in pred:
+        sum_exp += np.exp(prob)
+
+    ret_pred = list()
+    for prob in pred:
+        ret_pred.append(np.exp(prob) / sum_exp)
+
+    return ret_pred
+
 class ImageResource(Resource):
     # 이 부분은 인공지능 평가에 대한 데이터가 보내져야 함
-    def get(self, image_name):
-        if os.path.isfile(os.path.join(image_path, image_name)):
-            return send_from_directory(image_path, image_name)
-        else:
-            return {'error': 'Image not found'}, 404
+    def get(self):
+        auc_roc = encode_image(image_path=image_path + "evaluate/AUC-ROC.png")
+        class_report = encode_image(image_path=image_path + "evaluate/classification_report.png")
+
+        ret_data = {"auc-roc": auc_roc,
+                    "classification_report": class_report}
+
+        return ret_data
 
     # 이미지를 받으면, 저장하고, 인공지능 모델에 넣어야 함
     def post(self):
+        global image_path
         data = request.get_json()
         image_data = data.get('image', None)
         if image_data:
@@ -86,20 +107,28 @@ class ImageResource(Resource):
                 image_data = base64.b64decode(image_data)
                 image = Image.open(io.BytesIO(image_data))
                 image_name = data.get('name', 'unnamed.jpg')
-                image_path = os.path.join("", image_name)
-                image.save(image_path)
+                save_path = os.path.join(image_path, image_name)
+                image.save(save_path)
+
+                test_transforms = transforms.Compose([
+                    transforms.Resize(224),
+                    transforms.ToTensor(),                    
+                    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+                ])
 
                 image = Image.fromarray(cv2.merge(list(cv2.split(np.array(image))[::-1])))
+                image = test_transforms(image).to(device).unsqueeze(0)
                 pred = model.forward(image)
-                prob = torch.softmax(pred, dim=1)
+                probs = softmax(pred[0].to("cpu").detach().numpy())
 
                 ret_data = jsonify({'name': image_name, 
-                                    'L1': prob[0], 'L2': prob[1],
-                                    'L3': prob[2], 'L4': prob[3],
-                                    'L5': prob[4], 'L6': prob[5]})
+                                    'L1': probs[0], 'L2': probs[1],
+                                    'L3': probs[2], 'L4': probs[3],
+                                    'L5': probs[4], 'L6': probs[5]})
                 return ret_data
-            
+
             except Exception as e:
+                print(e)
                 return {'error': str(e)}, 400
         else:
             return {'error': 'No image data found'}, 400
@@ -114,7 +143,7 @@ if __name__ == "__main__":
     # 2023-03-30 6-CLASS Valid 63% Model
     with open(f"{model_path}last_history.pkl", "rb") as pkl_file:
         save_history_fig(history=pkl.load(pkl_file))
-    get_evaluate_images(src_path=model_path, dst_path=image_path)
+    get_evaluate_images(src_path=model_path, dst_path=image_path + "evaluate/")
     # PCA, T-SNE 결과도 가져오기 추가
 
     # 예외 처리 필요
@@ -123,7 +152,7 @@ if __name__ == "__main__":
     # 위 내용이 불러와지면, 서버를 엽니다.
     app = Flask(__name__)
     api = Api(app)
-    api.add_resource(ImageResource, '/images', '/images/<string:image_name>')
+    api.add_resource(ImageResource, '/images')
 
     # 웹 서버 열기
     app.run(host='0.0.0.0', debug=True)
