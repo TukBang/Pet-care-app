@@ -1,14 +1,9 @@
 const express = require('express');
 const app = express();
-const mysql = require('mysql2');
+
 
 // MySQL connection
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '1234',
-  database: 'db_service'
-});
+const {connection} =require('./constants');
 
 connection.connect();
 
