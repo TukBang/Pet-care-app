@@ -12,7 +12,9 @@ import storage from '@react-native-firebase/storage'
 function SetupProfile() {
   const [displayName, setDisplayName] = useState('');
   const navigation = useNavigation();
+
   const {setUser} = useUserContext();
+  
   const [response, setResponse] = useState(null);
   const [ loading, setLoading] = useState(false);
 
@@ -47,6 +49,7 @@ function SetupProfile() {
     createUser(user);
     setUser(user);
   };
+  
   const onCancel = () => {
     signOut();
     navigation.goBack();
@@ -71,16 +74,16 @@ function SetupProfile() {
 
   return (
     <View style={styles.block}>
-        <Pressable onPress={onSelectImage} >
-          <Image
-            stlye={styles.circle}
-            source={
-                response
-                ? {uri: response?.assets[0]?.uri}
-                : require('../../assets/user.png')
-              
-              } />
-        </Pressable>
+      <Pressable onPress={onSelectImage} >
+        <Image
+          stlye={styles.circle}
+          source={
+              response
+              ? {uri: response?.assets[0]?.uri}
+              : require('../../assets/user.png')
+            
+            } />
+      </Pressable>
 
       <View style={styles.form}>
         <BorderedInput

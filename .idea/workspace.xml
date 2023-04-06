@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8f89722c-05e3-493f-899a-5ab5e62182f2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/BUCK" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/android/app/BUCK" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/debug/java/com/learnreactnavigation/ReactNativeFlipper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/assets/index.android.bundle" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/assets/index.android.bundle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/java/com/learnreactnavigation/MainActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/java/com/learnreactnavigation/MainApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/java/com/learnreactnavigation/newarchitecture/MainApplicationReactNativeHost.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/java/com/learnreactnavigation/newarchitecture/components/MainComponentsRegistry.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/java/com/learnreactnavigation/newarchitecture/modules/MainApplicationTurboModuleManagerDelegate.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/jni/Android.mk" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/jni/Android.mk" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/jni/MainApplicationTurboModuleManagerDelegate.h" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/jni/MainApplicationTurboModuleManagerDelegate.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/jni/MainComponentsRegistry.h" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/jni/MainComponentsRegistry.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/android/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/android/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/android/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/components/CalendarView.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/components/DetailScreen.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/components/FeedList.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/components/FeedListItem.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/components/FloatingWriteButton.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/components/TransparentCircleButton.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/components/WriteHeader.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/components/WriterEditor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/contexts/LogContext.js" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/contexts/LogContext.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/ios/LearnReactNavigation.xcodeproj/project.pbxproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/ios/LearnReactNavigation.xcodeproj/xcshareddata/xcschemes/LearnReactNavigation.xcscheme" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/ios/LearnReactNavigation/AppDelegate.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/ios/LearnReactNavigation/AppDelegate.mm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/ios/LearnReactNavigation/Images.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/ios/LearnReactNavigation/Images.xcassets/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/ios/LearnReactNavigation/Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/ios/LearnReactNavigation/LaunchScreen.storyboard" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/ios/LearnReactNavigation/main.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/ios/LearnReactNavigationTests/Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/ios/LearnReactNavigationTests/LearnReactNavigationTests.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/ios/Podfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/screens/CalendarScreen.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/screens/CommunityScreen.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/screens/DiagnosisScreen.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/screens/FeedScreen.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/screens/HomeScreen.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/screens/MainScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/screens/MainScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/screens/RootStack.js" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/screens/RootStack.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/screens/WalkingScreen.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/screens/WriteScreen.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/src/navigation/navigator.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/storages/logsStorage.js" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/storages/logsStorage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Capstone/2023/app/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Capstone/2023/app/yarn.lock" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2NSp809aEYLuz4DBOuArNhpA7Yy" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="PROJECT_TRUSTED_KEY" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="cidr.known.project.marker" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8f89722c-05e3-493f-899a-5ab5e62182f2" name="Changes" comment="" />
+      <created>1679667177438</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1679667177438</updated>
+    </task>
+    <servers />
+  </component>
+</project>
