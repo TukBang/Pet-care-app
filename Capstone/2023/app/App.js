@@ -5,7 +5,7 @@ import RootStack from "./screens/RootStack";
 import { LogContextProvider } from "./contexts/LogContext";
 import { UserContextProvider } from "./contexts/UserContext";
 
-const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator();
 
 
 
