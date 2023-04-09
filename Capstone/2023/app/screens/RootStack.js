@@ -6,6 +6,7 @@ import WriteScreen from "./Calendar/WriteScreen";
 import SignInScreen from "./Login/SignInScreen";
 import WelcomeScreen from "./User/WelcomeScreen";
 import { useUserContext } from "../contexts/UserContext";
+import UploadScreen from "./Community/UploadScreen";
 // import MainScreen from "./screens/MainScreen";
 // import DetailScreen from "./components/DetailScreen";
 
@@ -28,6 +29,11 @@ function RootStack() {
               options={{headerShown: false}}
             />
             <Stack.Screen name="Write" component={WriteScreen} options={{headerShown: false}}/>
+            <Stack.Screen
+            name="Upload"
+            component={UploadScreen}
+            options={{title: '새 게시물', headerBackTitle: '뒤로가기'}}
+          />
           </>
         ) : (
           <>

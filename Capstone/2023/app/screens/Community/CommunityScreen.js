@@ -1,44 +1,87 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { useUserContext } from "../../contexts/UserContext";
-import Ggupdeagi from "../Ggupdeagi";
-import { Image } from "react-native";
+import CameraButton from "../../components/Community/CameraButton";
 
 
 
 function CommunityScreen() {
-
-  const {user} = useUserContext();
     return (
-    <View style={styles.block}>
-      <View style={{flexDirection: 'row',justifyContent: 'space-around'}} >
-        <Text style={styles.text}>안녕하세요. {user.displayName}님!</Text>
-        {user.photoURL && (
-          <Image
-            source={{uri: user.photoURL}}
-            style={{width: 64, height: 64, marginBottom: 0}}
-            resizeMode="cover"
-          />
-        )}
-      </View>
-      
-      <Ggupdeagi />
+      <>
+        <View style={styles.block}>
+          <CameraButton />
 
-      
-    </View>
+        </View>
+      </>
     )
 }
 
 const styles = StyleSheet.create({
-    block: {},
-    text: {
-      fontSize: 25,
-      padding: 15,
-      color: 'black'
-    }
+  block: {
+    flex: 1,
+    zIndex: 0,
+  },
 });
 
 export default CommunityScreen;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React from "react";
+// import { StyleSheet, View, Text } from "react-native";
+// import { useUserContext } from "../../contexts/UserContext";
+// import Ggupdeagi from "../Ggupdeagi";
+// import { Image } from "react-native";
+
+
+
+// function CommunityScreen() {
+
+//   const {user} = useUserContext();
+//     return (
+//     <View style={styles.block}>
+//       <View style={{flexDirection: 'row',justifyContent: 'space-around'}} >
+//         <Text style={styles.text}>안녕하세요. {user.displayName}님!</Text>
+//         {user.photoURL && (
+//           <Image
+//             source={{uri: user.photoURL}}
+//             style={{width: 64, height: 64, marginBottom: 0}}
+//             resizeMode="cover"
+//           />
+//         )}
+//       </View>
+      
+//       <Ggupdeagi />
+
+      
+//     </View>
+//     )
+// }
+
+// const styles = StyleSheet.create({
+//     block: {},
+//     text: {
+//       fontSize: 25,
+//       padding: 15,
+//       color: 'black'
+//     }
+// });
+
+// export default CommunityScreen;
 
 
 
