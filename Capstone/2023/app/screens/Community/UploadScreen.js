@@ -13,6 +13,7 @@ import { useUserContext } from '../../contexts/UserContext';
 import { v4 } from 'uuid';
 import { createPost } from '../../lib/post';
 import storage from '@react-native-firebase/storage'
+import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
 
 function UploadScreen() {
   const route = useRoute();

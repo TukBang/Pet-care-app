@@ -1,19 +1,43 @@
-import React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import CameraButton from "../../components/Community/CameraButton";
-
+import React, {useEffect, useState} from 'react';
+import {FlatList} from 'react-native';
+import PostCard from "../../components/Community/PostCard";
+import { getPosts } from "../../lib/post";
 
 
 function CommunityScreen() {
+
+  const [posts, setPosts] = useState(null);
+
+  useEffect(() => {
+    // 컴포넌트가 처음 마운트될 때 포스트 목록을 조회한 후 `posts` 상태에 담기
+    getPosts().then(setPosts);
+  }, []);
     return (
       <>
         <View style={styles.block}>
           <CameraButton />
-
+          <FlatList
+            data={posts}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+          />
         </View>
       </>
     )
 }
+
+const renderItem = ({item}) => (
+  <PostCard
+    createdAt={item.createdAt}
+    description={item.description}
+    id={item.id}
+    user={item.user}
+    photoURL={item.photoURL}
+  />
+);
+
 
 const styles = StyleSheet.create({
   block: {
@@ -23,11 +47,6 @@ const styles = StyleSheet.create({
 });
 
 export default CommunityScreen;
-
-
-
-
-
 
 
 
