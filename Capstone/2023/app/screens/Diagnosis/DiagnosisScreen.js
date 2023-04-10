@@ -59,8 +59,11 @@ function DiagnosisScreen() {
                             <Image source={{ uri: selectedImage }} style={styles.image} resizeMode="center" />
                         </View>
                     </View>
-                    <View style={{width: '100%'}}>
+                    <View>
                         <HorizontalBarChartScreen />
+                    </View>
+                    <View>
+                        <Button title='처음으로 돌아가기' onPress={()=>{setSelectedImage(null);setDiagtmpView(false);setDiagEnd(false) }} />
                     </View>
                 </View>
               ) : (
