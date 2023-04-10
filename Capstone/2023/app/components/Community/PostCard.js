@@ -14,16 +14,18 @@ function PostCard({user, photoURL, description, createdAt, id}) {
   return (
     <View style={styles.block}>
       <View style={[styles.head, styles.paddingBlock]}>
-        <Pressable style={styles.profile} onPress={onOpenProfile}
-          source={
-            user.photoURL
-              ? {
-                uri: user.photoURL,
-              }
-            : require('../../assets/user.png')
-          }
-          resizeMode="cover"
-          style={styles.avatar}>
+        <Pressable style={styles.profile} onPress={onOpenProfile}>
+            <Image
+                source={
+                    user.photoURL
+                    ? {
+                        uri: user.photoURL,
+                    }
+                    : require('../../assets/user.png')
+                } 
+                resizeMode="cover"
+                style={styles.avatar} 
+            />
         <Text style={styles.displayName}>{user.displayName}</Text>
       </Pressable>
       </View>
