@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Button, StyleSheet, View, Image, Text, processColor } from "react-native";
-import { BarChart } from "react-native-chart-kit";
 import PreDiagList from "../../components/Diagnosis/PreDiagList";
 import DiagModal from "../../components/Diagnosis/DiagModal";
 import HorizontalBarChartScreen from "../../components/Diagnosis/HorizontalBarChart";

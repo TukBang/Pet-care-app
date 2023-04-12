@@ -29,6 +29,7 @@
 // export default HomeScreen;
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
+import { useUserContext } from "../../contexts/UserContext";
 
 function HomeScreen() {
   const [petname, setPetname] = useState("");
@@ -38,6 +39,7 @@ function HomeScreen() {
   const [birth, setBirth] = useState("");
   const [kind, setKind] = useState("");
   const [saving, setSaving] = useState(false);
+  const {user} = useUserContext();
 
   useEffect(() => {
     return () => {
@@ -114,6 +116,7 @@ function HomeScreen() {
         value={kind}
       />
       <Button title="애완동물 정보 저장" onPress={savePet} />
+      <Text>{user.id}입니다</Text>
     </View>
   );
 }

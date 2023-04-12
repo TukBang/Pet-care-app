@@ -15,6 +15,7 @@ class HorizontalBarChartScreen extends React.Component {
     super();
 
     this.state = {
+      // 안씀
       legend: {
         enabled: false,
         textSize: 30,
@@ -94,7 +95,7 @@ class HorizontalBarChartScreen extends React.Component {
             data={this.state.data}
             xAxis={this.state.xAxis}
             yAxis={this.state.yAxis}
-            animation={{durationX: 2000}}
+            animation={{durationX: 300}}
             legend={this.state.legend}
             gridBackgroundColor={processColor('#ffffff')}
             // drawBarShadow={false}

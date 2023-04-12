@@ -8,7 +8,7 @@ function UploadModeModal({
     onLaunchCamera,
     onLaunchImageLibrary,
 }) {
-    // const [selectedImageUrl, setSelectedImageUrl] = useState(null);
+
   return (
     <Modal
       visible={visible}
