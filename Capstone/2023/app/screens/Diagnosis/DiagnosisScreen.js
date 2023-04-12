@@ -63,6 +63,7 @@ function DiagnosisScreen() {
                     </View>
                     <View>
                         <Button title='처음으로 돌아가기' onPress={()=>{setSelectedImage(null);setDiagtmpView(false);setDiagEnd(false) }} />
+                        <Button title='상담 게시판 올리기' onPress={()=>{}}/>
                     </View>
                 </View>
               ) : (

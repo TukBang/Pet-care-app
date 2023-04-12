@@ -32,6 +32,7 @@ const renderItem = ({item}) => (
   <PostCard
     createdAt={item.createdAt}
     description={item.description}
+    title={item.title}
     id={item.id}
     user={item.user}
     photoURL={item.photoURL}

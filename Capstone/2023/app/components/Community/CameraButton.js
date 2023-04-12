@@ -61,14 +61,14 @@ function CameraButton() {
   return (
     <>
         <View style={[styles.wrapper, {bottom}]}>
-        <Pressable
-            android_ripple={{
-            color: '#ffffff',
-            }}
-            style={styles.circle}
-            onPress={()=>setModalVisible(true)}>
-            <Icon name="publish" color="white" size={24} />
-        </Pressable>
+          <Pressable
+              android_ripple={{
+              color: '#ffffff',
+              }}
+              style={styles.circle}
+              onPress={()=>setModalVisible(true)}>
+              <Icon name="publish" color="white" size={24} />
+          </Pressable>
         </View>
         <UploadModeModal
         visible={modalVisible}
