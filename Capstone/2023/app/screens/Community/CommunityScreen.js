@@ -1,44 +1,107 @@
-import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { useUserContext } from "../../contexts/UserContext";
-import Ggupdeagi from "../Ggupdeagi";
-import { Image } from "react-native";
-
+import CameraButton from "../../components/Community/CameraButton";
+import React, {useEffect, useState} from 'react';
+import {FlatList} from 'react-native';
+import PostCard from "../../components/Community/PostCard";
+import { getPosts } from "../../lib/post";
 
 
 function CommunityScreen() {
 
-  const {user} = useUserContext();
-    return (
-    <View style={styles.block}>
-      <View style={{flexDirection: 'row',justifyContent: 'space-around'}} >
-        <Text style={styles.text}>안녕하세요. {user.displayName}님!</Text>
-        {user.photoURL && (
-          <Image
-            source={{uri: user.photoURL}}
-            style={{width: 64, height: 64, marginBottom: 0}}
-            resizeMode="cover"
-          />
-        )}
-      </View>
-      
-      <Ggupdeagi />
+  const [posts, setPosts] = useState(null);
 
-      
-    </View>
+  useEffect(() => {
+    // 컴포넌트가 처음 마운트될 때 포스트 목록을 조회한 후 `posts` 상태에 담기
+    getPosts().then(setPosts);
+  }, []);
+    return (
+      <>
+        <View style={styles.block}>
+          <CameraButton />
+          <FlatList
+            data={posts}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+          />
+        </View>
+      </>
     )
 }
 
+const renderItem = ({item}) => (
+  <PostCard
+    createdAt={item.createdAt}
+    description={item.description}
+    title={item.title}
+    id={item.id}
+    user={item.user}
+    photoURL={item.photoURL}
+  />
+);
+
+
 const styles = StyleSheet.create({
-    block: {},
-    text: {
-      fontSize: 25,
-      padding: 15,
-      color: 'black'
-    }
+  block: {
+    flex: 1,
+    zIndex: 0,
+  },
 });
 
 export default CommunityScreen;
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React from "react";
+// import { StyleSheet, View, Text } from "react-native";
+// import { useUserContext } from "../../contexts/UserContext";
+// import Ggupdeagi from "../Ggupdeagi";
+// import { Image } from "react-native";
+
+
+
+// function CommunityScreen() {
+
+//   const {user} = useUserContext();
+//     return (
+//     <View style={styles.block}>
+//       <View style={{flexDirection: 'row',justifyContent: 'space-around'}} >
+//         <Text style={styles.text}>안녕하세요. {user.displayName}님!</Text>
+//         {user.photoURL && (
+//           <Image
+//             source={{uri: user.photoURL}}
+//             style={{width: 64, height: 64, marginBottom: 0}}
+//             resizeMode="cover"
+//           />
+//         )}
+//       </View>
+      
+//       <Ggupdeagi />
+
+      
+//     </View>
+//     )
+// }
+
+// const styles = StyleSheet.create({
+//     block: {},
+//     text: {
+//       fontSize: 25,
+//       padding: 15,
+//       color: 'black'
+//     }
+// });
+
+// export default CommunityScreen;
 
 
 

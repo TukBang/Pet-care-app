@@ -3,12 +3,11 @@ import {StyleSheet, Modal, View, Pressable, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function UploadModeModal({
-    visible,
-    onClose,
-    onLaunchCamera,
-    onLaunchImageLibrary,
+  visible, 
+  onClose,
+  onLaunchCamera,
+  onLaunchImageLibrary,
 }) {
-
   return (
     <Modal
       visible={visible}
