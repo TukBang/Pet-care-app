@@ -39,10 +39,10 @@ function DiagnosisScreen() {
           image: image
         }),
       });
-      console.log("hello");
+
       aiResult.predictions = await response.json();
       console.log(aiResult.predictions);
-
+      
     } catch (error) {
       console.error(error);
     }
@@ -83,7 +83,7 @@ function DiagnosisScreen() {
                         진단 결과
                       </Text>
                       <Text>
-                        OO이 의심됩니다.
+                        {}이 의심됩니다.
                       </Text>
                     </View>
 
