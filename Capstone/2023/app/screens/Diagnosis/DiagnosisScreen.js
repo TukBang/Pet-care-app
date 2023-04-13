@@ -101,6 +101,7 @@ function DiagnosisScreen() {
                         setSelectedImage(null);
                         setDiagtempView(false);
                         setDiagEnd(false)}} />
+                      <Button title='상담 게시판 올리기' onPress={() => {}} />
                   </View>
                 </View>
               ) : (
