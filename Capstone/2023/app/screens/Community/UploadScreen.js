@@ -20,6 +20,7 @@ function UploadScreen() {
   const {res} = route.params || {};
   const {width} = useWindowDimensions();
   const [description, setDescription] = useState('');
+  const [title, setTitle] = useState('');
 
   const navigation = useNavigation();
 //   const onSubmit = useCallback(() => {
@@ -41,9 +42,9 @@ function UploadScreen() {
       await reference.putFile(asset.uri);
     }
     const photoURL = await reference.getDownloadURL();
-    await createPost({description, photoURL, user});
+    await createPost({title,description, photoURL, user});
     // TODO: 포스트 목록 새로고침
-  }, [res, user, description, navigation]);
+  }, [res, user, title,description, navigation]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -58,7 +59,14 @@ function UploadScreen() {
       keyboardVerticalOffset={Platform.select({
         ios: 180,
       })}>
-    
+      <TextInput
+        style={styles.titleinput}
+        placeholder="제목을 입력하세요..."
+        returnKeyType="next"
+        textAlignVertical="top"
+        value={title}
+        onChangeText={setTitle}
+      />
       <Image
         source={{uri: res.assets[0]?.uri}}
         style={[styles.image, {height: width}]}
@@ -81,6 +89,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {width: '100%'},
+  titleInput: {
+    paddingVertical: 0,
+    fontSize: 24,
+    marginBottom: 16,
+    color: '#263238',
+    fontWeight: 'bold',
+},
   input: {
     paddingHorizontal: 16,
     paddingTop: 16,

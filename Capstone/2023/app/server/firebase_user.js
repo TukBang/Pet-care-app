@@ -15,8 +15,10 @@ connection.connect((err) => {
     }
     console.log('Connected to MySQL database.');
 });
+
  
 admin.auth().listUsers().then((userRecords) => {
+    //console.log(userRecords.users);
     userRecords.users.forEach((user) => {
         const userData = {
             uid: user.uid, email: user.email

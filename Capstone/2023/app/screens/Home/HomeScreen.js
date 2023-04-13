@@ -1,39 +1,9 @@
-// import React from "react";
-// import { StyleSheet, View, Text } from "react-native";
-// import { useUserContext } from "../../contexts/UserContext";
-// import Ggupdeagi from "../Ggupdeagi";
-
-
-
-// function HomeScreen() {
-
-//   const {user} = useUserContext();
-//     return (
-//     <View style={styles.block}>
-//       <Ggupdeagi />
-//       {user.photoURL && (
-//         <Image
-//           source={{uri: user.photoURL}}
-//           style={{width: 128, height: 128, marginBottom: 16}}
-//           resizeMode="cover"
-//         />
-//       )}
-//     </View>
-//     )
-// }
-
-// const styles = StyleSheet.create({
-//     block: {},
-// });
-
-// export default HomeScreen;
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 import { useUserContext } from "../../contexts/UserContext";
 
 function HomeScreen() {
   const [petname, setPetname] = useState("");
-  const [id, setId] = useState("");
   const [gender, setGender] = useState("");
   const [weight, setWeight] = useState("");
   const [birth, setBirth] = useState("");
@@ -52,7 +22,7 @@ function HomeScreen() {
   const savePet = async () => {
     setSaving(true);
     try {
-      const response = await fetch("http://127.0.0.1:3000/pet", {
+      const response = await fetch("http://127.0.0.1:4000/pet", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,45 +49,45 @@ function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>새로운 애완동물 정보를 추가하세요.</Text>
+      <Text style={styles.title}>Add new pet information.</Text>
       <TextInput
         style={styles.input}
-        placeholder="애완동물 이름"
+        placeholder="Pet name"
         onChangeText={(text) => setPetname(text)}
         value={petname}
       />
       <TextInput
         style={styles.input}
-        placeholder="ID"
-        onChangeText={(text) => setId(text)}
-        value={id}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="성별"
+        placeholder="Gender"
         onChangeText={(text) => setGender(text)}
         value={gender}
       />
       <TextInput
         style={styles.input}
-        placeholder="무게"
+        placeholder="Weight"
         onChangeText={(text) => setWeight(text)}
         value={weight}
       />
       <TextInput
         style={styles.input}
-        placeholder="생년월일"
+        placeholder="Birth date"
         onChangeText={(text) => setBirth(text)}
         value={birth}
       />
       <TextInput
         style={styles.input}
-        placeholder="종류"
+        placeholder="Kind"
         onChangeText={(text) => setKind(text)}
         value={kind}
       />
-      <Button title="애완동물 정보 저장" onPress={savePet} />
-      <Text>{user.id}입니다</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="User ID"
+        onChangeText={() => {}}
+        value={user.id}
+        editable={false}
+      />
+      <Button title="Save pet information" onPress={savePet} />
     </View>
   );
 }
