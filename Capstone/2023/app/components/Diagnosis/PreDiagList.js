@@ -11,13 +11,9 @@ const imagePickerOption = {
   includeBase64: Platform.OS === 'android',
 };
 
-
 function PreDiagList(props) {
-
   const onCropImage = (res) => {
-    if (res.didCancel || !res) {
-      return;
-    }
+    if (res.didCancel || !res) { return; }
     props.setSelectedImage(res.path);
     console.log(res);
   };
@@ -38,28 +34,19 @@ function PreDiagList(props) {
 
   const onLaunchImageLibrary = () => {
     ImagePicker.openPicker(imagePickerOption)
-      .then((image) => {
-        ImagePicker.openCropper({
-          path: image.path,
-          width: image.width,
-          height: image.height,
-        })
-          .then(onCropImage)
-          .catch((error) => console.log(error));
+    .then((image) => {
+      ImagePicker.openCropper({
+        path: image.path,
+        width: image.width,
+        height: image.height,
       })
+      .then(onCropImage)
       .catch((error) => console.log(error));
+    })
+    .catch((error) => console.log(error));
   };
 
-
-  // const onPress = () => {
-  //   if (Platform.OS === 'android') {
-  //     setModalVisible(true);
-  //     return;
-  //   }
-  // }
-
   const [modalVisible, setModalVisible] = useState(false);
-
   return (
     <View>
       <CheckList setModalVisible={setModalVisible}/>
@@ -75,17 +62,11 @@ function PreDiagList(props) {
 
 const styles = StyleSheet.create({
     header: {
-        marginLeft: 10,
-        fontSize: 20,
+      marginLeft: 10,
+      fontSize: 20
     },
-    sentence : {
-        marginLeft: 7
-
-    },
-    buttons: {
-        
-    }
+    sentence : {marginLeft: 7},
+    buttons: {}
 })
-
 
 export default PreDiagList;

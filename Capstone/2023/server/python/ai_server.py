@@ -11,6 +11,7 @@ from torchinfo import summary
 
 # Web server based on Flask ()
 from flask import Flask, jsonify, request, send_from_directory
+from flask_cors import CORS
 from flask_restful import Resource, Api
 from PIL import Image
 import base64
@@ -153,6 +154,8 @@ if __name__ == "__main__":
     
     # 위 내용이 불러와지면, 서버를 엽니다.
     app = Flask(__name__)
+    CORS(app)
+    
     api = Api(app)
     api.add_resource(ImageResource, '/images')
 

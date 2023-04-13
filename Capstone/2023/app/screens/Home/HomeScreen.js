@@ -40,6 +40,7 @@ function HomeScreen() {
   const [kind, setKind] = useState("");
   const [saving, setSaving] = useState(false);
   const {user} = useUserContext();
+  const uid = user.uid;
 
   useEffect(() => {
     return () => {
@@ -58,7 +59,7 @@ function HomeScreen() {
         },
         body: JSON.stringify({
           petname,
-          id,
+          uid,
           gender,
           weight,
           birth,
