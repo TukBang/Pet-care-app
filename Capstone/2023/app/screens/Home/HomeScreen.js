@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput, Button } from "react-native";
 import { useUserContext } from "../../contexts/UserContext";
+import { Calendar } from "react-native-calendars";
 
 function HomeScreen() {
   const [petname, setPetname] = useState("");
