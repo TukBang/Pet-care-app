@@ -3,10 +3,8 @@ import {
   View, 
   Text, 
   FlatList, 
-  Button, 
   StyleSheet,
-  TouchableOpacity,
-  TouchableHighlight
+  TouchableOpacity
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
@@ -20,8 +18,7 @@ function CheckList({setModalVisible}) {
    6. 결절, 종괴`;
   let explainText2 = `진단 결과는 전문가의 진단과 다를 수 있습니다. 결과에서 진단된 병의 설명을 자세히 읽어보시고 참고용으로 사용해주세요. 또한 진단된 병이 심각하다면, 수의사와 상담을 권장드립니다!`;
   let checkText = `유의사항 확인`;
-  let ButtonText1 = !isAllChecked ? "진단 시작 전, 유의사항을 확인해주세요" : "진단 시작";
-  let ButtonText2 = "챗봇에게 물어보기";
+  let buttonText2 = "챗봇에게 물어보기";
 
   const [data, setData] = useState([
     { id: 4, text: '유의사항', checked: false }
@@ -29,6 +26,7 @@ function CheckList({setModalVisible}) {
   
   const [buttonColor, setButtonColor] = useState('#DFDFDF');
   const [buttonTextColor, setButtonTextColor] = useState('#A7A7A7');
+  const [buttonText1, setButtonText1] = useState("진단 시작 전, 유의사항을 확인해주세요");
 
   const handleCheck = (id) => {
     setData(data.map((item) =>
@@ -38,9 +36,11 @@ function CheckList({setModalVisible}) {
     if (buttonColor === '#DFDFDF') {
       setButtonColor('#2296F3');
       setButtonTextColor('#FFFFFF');
+      setButtonText1("진단 시작");
     } else {
       setButtonColor('#DFDFDF');
       setButtonTextColor('#A7A7A7');
+      setButtonText1("진단 시작 전, 유의사항을 확인해주세요");
     }
   }
 
@@ -77,11 +77,11 @@ function CheckList({setModalVisible}) {
         <TouchableOpacity style={[styles.button1, { backgroundColor: buttonColor, marginBottom: 10 }]}
           disabled={!isAllChecked}
           onPress={() => setModalVisible(true)}>
-          <Text style={[styles.buttonText, { color: buttonTextColor }]}>{ButtonText1}</Text>
+          <Text style={[styles.buttonText, { color: buttonTextColor }]}>{buttonText1}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.button1, { backgroundColor: '#2296F3' }]}>
-          <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>{ButtonText2}</Text>
+          <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>{buttonText2}</Text>
         </TouchableOpacity>
       </View>
     </View>
