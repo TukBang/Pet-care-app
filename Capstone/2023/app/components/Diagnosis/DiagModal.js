@@ -1,18 +1,18 @@
-import Reac, {useEffect, useState} from 'react';
-import {StyleSheet, Modal, View, Pressable, Text,ActivityIndicator, Button, Image} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useEffect } from 'react';
+import { StyleSheet, Modal, View, Pressable, Text,ActivityIndicator, Image } from 'react-native';
 
 function DiagModal({
-  setDiagEnd,
+  diagState,
   selectedImage,
   visible,
   onClose,
-  timeout = 3000
+  timeout = 1
 }) { 
   useEffect(() => {
-    const timeoutId = setTimeout(() => { onClose(); }, timeout);
-    setDiagEnd(true)
-    return () => clearTimeout(timeoutId);
+    if (diagState === true) {
+      const timeoutId = setTimeout(() => { onClose(); }, timeout);
+      return () => clearTimeout(timeoutId);
+    }
   }, [visible, timeout, onClose]);
   
   return (
@@ -21,14 +21,13 @@ function DiagModal({
       transparent={true}
       animationType="fade"
     >
-      <Pressable style={styles.background} onPress={onClose}>
+      <Pressable style={styles.background}>
         <View style={styles.whiteBox}>
-          {/* 로딩 중 */}
-          <Text style={styles.actionText}>진단 중</Text>
-          <ActivityIndicator size={32} color="#6200ee"/>
-          <Button title='임시버튼' onPress={onClose} />
-          {/* 로딩 끝 */}
-          <Image source={{ uri: selectedImage }}  style={styles.image} resizeMode='contain'/>
+          <Image source={{ uri: selectedImage.path }}  style={styles.image} resizeMode='contain'/>
+          <ActivityIndicator 
+            size={50} 
+            color="#2296F3"/>
+          <Text style={styles.modalText}>진단 중입니다. 잠시만 기다려주세요!</Text>
         </View>
       </Pressable>
     </Modal>
@@ -44,24 +43,25 @@ const styles = StyleSheet.create({
   },
 
   whiteBox: {
-    width: '85%',
+    flexDirection: "column",
+    alignItems: 'center',
+    width: '80%',
     backgroundColor: 'white',
     borderRadius: 4,
     elevation: 2
   },
 
-  actionButton: {
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
+  image: {
+    marginTop: 10,
+    marginBottom: 15,
+    width: 200,
+    height: 200
   },
 
-  icon: {marginRight: 8},
-  text: {fontSize: 16},
-
-  image: {
-    width: '100%',
-    height: 200
+  modalText: {
+    marginTop: 15,
+    marginBottom: 10,
+    fontSize: 15,
   }
 });
 

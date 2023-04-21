@@ -1,47 +1,53 @@
 import React from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
   processColor
 } from 'react-native';
+import { HorizontalBarChart } from 'react-native-charts-wrapper';
 
-import {HorizontalBarChart} from 'react-native-charts-wrapper';
-
-class HorizontalBarChartScreen extends React.Component {
-
-  constructor() {
-    super();
+class ProbChart extends React.Component {
+  constructor(props) {
+    super(props);
 
     this.state = {
-      // 안씀
       legend: {
         enabled: false,
-        textSize: 30,
-        form: 'CIRCLE',
-        formSize: 14,
-        xEntrySpace: 10,
-        yEntrySpace: 5,
-        formToTextSpace: 5,
-        wordWrapEnabled: true,
-        maxSizePercent: 0.5,
       },
+
       data: {
         dataSets: [{
-          values: [{y: 10}, {y: 40}, {y: 20}, {y: 50}, {y: 70}, {y: 99}],
-          label: 'Diease Acc',
+          values: [
+            {y: this.props.prediction[5]}, 
+            {y: this.props.prediction[4]}, 
+            {y: this.props.prediction[3]}, 
+            {y: this.props.prediction[2]}, 
+            {y: this.props.prediction[1]}, 
+            {y: this.props.prediction[0]}
+          ],
+
+          label: "",
+
           config: {
-            color: processColor('teal'),
+            color: processColor('#2296F3'),
             barShadowColor: processColor('lightgrey'),
-            highlightAlpha: 90,
-            highlightColor: processColor('red'),
-        
+            highlightAlpha: 30,
+            highlightColor: processColor('red'),        
           }
         }],
       },
+
       xAxis: {
-        valueFormatter: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+        textSize: 11,
+        valueFormatter: [
+          "결절, 종괴", 
+          "미란, 궤양", 
+          "농포, 여드름", 
+          "태선화, 과다색소침착", 
+          "비듬, 각질, 상피성잔고리", 
+          "구진, 플라크", 
+        ],
         position: 'BOTTOM',
         granularityEnabled: true,
         granularity: 1,
@@ -50,86 +56,70 @@ class HorizontalBarChartScreen extends React.Component {
         drawAxisLine: false,
         drawGridLines: false,
       },
+
       yAxis: {
         left: {
-            enabled: false, // y축 라벨 표시 여부
-            drawAxisLine: false, // y축 선 표시 여부
-            drawGridLines: false, // y축 그리드 라인 표시 여부
-            axisMinimum: 0,
-            // labelCount: -1, // y축 라벨 개수
-          },
+          enabled: false,
+          drawAxisLine: false,
+          drawGridLines: false,
+          axisMinimum: 0,
+        },
+
         right:{
-            enabled: false,
-            // labelCount: -1,
+          enabled: false,
         }
-    }
+      }
+
     };
   }
 
   handleSelect(event) {
     let entry = event.nativeEvent
-    if (entry == null) {
-      this.setState({...this.state, selectedEntry: null})
-    } else {
-      this.setState({...this.state, selectedEntry: JSON.stringify(entry)})
-    }
-
+    if (entry == null) this.setState({...this.state, selectedEntry: null})
+    else               this.setState({...this.state, selectedEntry: JSON.stringify(entry)})
     console.log(event.nativeEvent)
   }
 
-
   render() {
+    let chartTitleText = "진단 확률"
+
     return (
       <View style={{flex: 1}}>
-
-        <View style={{height:20}}>
-          <Text> Result </Text>
-          <Text> {this.state.selectedEntry}</Text>
-        </View>
-
-
-        <View style={styles.container}>
+        <Text style={styles.chartTitle}>{chartTitleText}</Text>
+        <View style={styles.chartView}>
           <HorizontalBarChart
             style={styles.chart}
-            
             data={this.state.data}
             xAxis={this.state.xAxis}
             yAxis={this.state.yAxis}
-            animation={{durationX: 300}}
             legend={this.state.legend}
-            gridBackgroundColor={processColor('#ffffff')}
-            // drawBarShadow={false}
-            drawValueAboveBar={true}
-            // drawHighlightArrow={false}
-
-            chartDescription={{ text: '' }}
-            valueFormatter={(value) => `${value} %`} // value 값을 % 단위로 변환
-            valueFormatterTextColor={'red'}
-            // axisLineWidth={0}
-            // gridLineWidth={0}
-            // gridLineColor={'transparent'}
-            // drawBorders={false}
-            // drawGridBackground={false}
-            
-            onSelect={this.handleSelect.bind(this)}
-            onChange={(event) => console.log(event.nativeEvent)}
+            chartDescription={{text: ''}}
+            touchEnabled={false}
           />
-
         </View>
       </View>
     );
-  }
+  }  
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F5FCFF'
+  chartTitle: {
+    fontSize: 15,
+    fontWeight: "bold",
+    height: 30,
   },
+
+  chartView: {
+    flex: 1,
+    height: "100%",
+    width: "100%",
+  },
+
   chart: {
-    height: 150,
+    backgroundColor: '#DDDDDD',
+    height: 200,
     width: '100%'
   }
 });
 
-export default HorizontalBarChartScreen
+export default ProbChart

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { 
+  FlatList, 
   View, 
   Text, 
-  FlatList, 
-  StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  StyleSheet
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
@@ -36,7 +36,7 @@ function CheckList({setModalVisible}) {
     if (buttonColor === '#DFDFDF') {
       setButtonColor('#2296F3');
       setButtonTextColor('#FFFFFF');
-      setButtonText1("진단 시작");
+      setButtonText1("진단 시작하기");
     } else {
       setButtonColor('#DFDFDF');
       setButtonTextColor('#A7A7A7');
@@ -74,13 +74,13 @@ function CheckList({setModalVisible}) {
         keyExtractor = {(item) => item.id.toString()}
       />
       <View style={styles.button_container}>
-        <TouchableOpacity style={[styles.button1, { backgroundColor: buttonColor, marginBottom: 10 }]}
+        <TouchableOpacity style={[styles.button, { backgroundColor: buttonColor, marginBottom: 10 }]}
           disabled={!isAllChecked}
           onPress={() => setModalVisible(true)}>
           <Text style={[styles.buttonText, { color: buttonTextColor }]}>{buttonText1}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.button1, { backgroundColor: '#2296F3' }]}>
+        <TouchableOpacity style={[styles.button, { backgroundColor: '#2296F3' }]}>
           <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>{buttonText2}</Text>
         </TouchableOpacity>
       </View>
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
   // 유의사항 
   header: {
     // 여백
-    marginTop: 40,
-    marginLeft: 158,
+    marginTop: 30,
+    marginLeft: 155,
 
     // 폰트
     fontSize: 30
@@ -113,8 +113,8 @@ const styles = StyleSheet.create({
   // 체크박스 뷰 (텍스트, 체크박스)
   checkView: {
     // 정렬
-    flexDirection:'row',
-    justifyContent:'flex-end',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
 
     // 여백
     marginTop: 10
@@ -148,10 +148,11 @@ const styles = StyleSheet.create({
   },
 
   // 버튼
-  button1: {
+  button: {
     // 정렬
     justifyContent: 'center',
     alignItems: 'center',
+
     height: 40,
     width: 330,
     borderRadius: 5

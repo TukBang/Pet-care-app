@@ -43,6 +43,7 @@ function UploadScreen() {
     pickerRef.current.blur();
   }
 
+  console.log(res.path.split('.'))
   
 //   const onSubmit = useCallback(() => {
 //     // TODO: 포스트 작성 로직 구현
