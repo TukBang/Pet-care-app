@@ -22,8 +22,8 @@ function DiagnosisScreen() {
   }
 
   let aiResult = {
-    labels: ["A1", "A2", "A3", "A4", "A5", "A6"],
-    predictions: [{ predict: [0, 0, 0, 0, 0, 0] }],
+    labels: ["구진, 플라크", "비듬, 각질, 상피성잔고리", "태선화, 과다색소침착", "농포, 여드름", "미란, 궤양", "결절, 종괴"],
+    predictions: undefined,
   };
 
   const chartConfig = {
@@ -36,6 +36,7 @@ function DiagnosisScreen() {
 
   // SelectedImage AI SERVER 전송
   const handlePostRequest = async () => {
+    console.log(aiResult.predictions)
     try {
       console.log("NOW")
       console.log(selectedImage);
@@ -45,12 +46,19 @@ function DiagnosisScreen() {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-          name: "test.jpg",
+          /* 더 많은 펫 정보들이 담겨서 가야 함 */
+          /* 랜덤 이미지 이름은 추후에 사용자 정보와 펫 정보를 함께 담을 수 있도록
+             식별하여 구성하도록 만들어야 함 (2023-04-15) */
+          name : Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + ".jpg",
           image: image
         }),
       });
-      console.log("hello");
-      aiResult.predictions = await response.json();
+
+      let prediction = await response.json();
+      aiResult.predictions = [
+        prediction["L1"], prediction["L2"], prediction["L3"],
+        prediction["L4"], prediction["L5"], prediction["L6"]
+      ];
       console.log(aiResult.predictions);
 
     } catch (error) {
@@ -93,7 +101,7 @@ function DiagnosisScreen() {
                         진단 결과
                       </Text>
                       <Text>
-                        OO이 의심됩니다.
+                        {}이 의심됩니다.
                       </Text>
                     </View>
                     <View style={{width: "70%"}}>
