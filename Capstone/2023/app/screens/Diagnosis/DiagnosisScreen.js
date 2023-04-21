@@ -1,15 +1,25 @@
 import React, { useState } from "react";
 import { Button, StyleSheet, View, Image, Text, processColor } from "react-native";
+import {useNavigation, useRoute} from '@react-navigation/native';
 import RNFS from "react-native-fs"
 import PreDiagList from "../../components/Diagnosis/PreDiagList";
 import DiagModal from "../../components/Diagnosis/DiagModal";
 import HorizontalBarChartScreen from "../../components/Diagnosis/HorizontalBarChart";
+import UploadScreen from "../Community/UploadScreen";
 
 function DiagnosisScreen() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [diagmodalVisible, setDiagModalVisible] = useState(false);
   const [diagEnd, setDiagEnd] = useState(false);
   const [diagtempView, setDiagtempView] = useState(false)
+  const navigation = useNavigation();
+  // const [isSolution, setIsSolution] = useState(false)
+
+  // 상담 게시판 이동 버튼 - 
+  const goWrite = (res) => {
+    console.log("PickImage", res);
+    navigation.push('Upload', {res, isSolution: true});
+  }
 
   let aiResult = {
     labels: ["A1", "A2", "A3", "A4", "A5", "A6"],
@@ -30,7 +40,7 @@ function DiagnosisScreen() {
       console.log("NOW")
       console.log(selectedImage);
       
-      const image = await RNFS.readFile(selectedImage, 'base64');
+      const image = await RNFS.readFile(selectedImage.path, 'base64');
       const response = await fetch("http://61.106.219.238:5000/images", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
@@ -56,10 +66,10 @@ function DiagnosisScreen() {
           {
             !diagtempView ? (
             <>
-              <Text>이 사진이 맞나요?</Text>
+              <Text>이 사진이 맞나요? {selectedImage.path} or null</Text>
               <Button title="다시 선택하기" onPress={() => setSelectedImage(null)} />
               <View style={{height:150}}>
-                <Image source={{ uri: selectedImage }} style={styles.image} resizeMode="contain" />
+                <Image source={{ uri: selectedImage.path }} style={styles.image} resizeMode="contain" />
               </View>
               <Button title="진단하기" onPress={() => {
                 handlePostRequest();
@@ -70,7 +80,7 @@ function DiagnosisScreen() {
           <>
             <DiagModal 
               setDiagEnd={setDiagEnd}
-              selectedImage={selectedImage}
+              selectedImage={selectedImage.path}
               visible={diagmodalVisible}
               onClose={() => {setDiagModalVisible(false);}}
                />
@@ -86,22 +96,22 @@ function DiagnosisScreen() {
                         OO이 의심됩니다.
                       </Text>
                     </View>
-
                     <View style={{width: "70%"}}>
-                      <Image source={{uri: selectedImage}} style={styles.image} resizeMode="center" />
+                      <Image source={{uri: selectedImage.path}} style={styles.image} resizeMode="center" />
                     </View>
                   </View>
-
                   <View>
                       <HorizontalBarChartScreen />
                   </View>
-
                   <View>
                       <Button title="처음으로 돌아가기" onPress={() => {
                         setSelectedImage(null);
                         setDiagtempView(false);
                         setDiagEnd(false)}} />
-                      <Button title='상담 게시판 올리기' onPress={() => {}} />
+                      {/* UploadScreen.js 를 재활용해서 상담에 쓰기 위한 isSolution 활용 */}
+                      {/* isSolution 으로 조건 분기 : 자세한건 UploadScreen.js 참조 */}
+                      <Button title='상담 게시판 올리기'  
+                        onPress={() => {goWrite(selectedImage)}} />
                   </View>
                 </View>
               ) : (

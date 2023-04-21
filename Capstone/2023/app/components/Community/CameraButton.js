@@ -23,6 +23,7 @@ function CameraButton() {
     android: TABBAR_HEIGHT / 2,
     ios: TABBAR_HEIGHT / 2 + insets.bottom - 4,
   });
+
   const onPress = () => {
     if (Platform.OS === 'android') {
       setModalVisible(true);
@@ -44,10 +45,11 @@ function CameraButton() {
     };
 
     const onPickImage = (res) => {
-    if (res.didCancel || !res) {
-        return;
-    }
-    navigation.push('Upload', {res});
+      if (res.didCancel || !res) {
+          return;
+      }
+      console.log("PickImage", res);
+      navigation.push('Upload', {res, isSolution: false});
     };
 
   const onLaunchCamera = () => {

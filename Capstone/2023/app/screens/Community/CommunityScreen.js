@@ -1,19 +1,51 @@
-import { StyleSheet, View, Text } from "react-native";
+import {ActivityIndicator,View, FlatList, StyleSheet,RefreshControl} from 'react-native';
 import CameraButton from "../../components/Community/CameraButton";
 import React, {useEffect, useState} from 'react';
-import {FlatList} from 'react-native';
 import PostCard from "../../components/Community/PostCard";
-import { getPosts } from "../../lib/post";
+import { getOlderPosts, getPosts, PAGE_SIZE,getNewerPosts } from "../../lib/post";
 
 
 function CommunityScreen() {
 
   const [posts, setPosts] = useState(null);
+  const [noMorePost, setNoMorePost] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     // 컴포넌트가 처음 마운트될 때 포스트 목록을 조회한 후 `posts` 상태에 담기
     getPosts().then(setPosts);
   }, []);
+
+  // Page size 이후 글을 확인하려고 할 때 사용
+  const onLoadMore = async () => {
+    if (noMorePost || !posts || posts.length < PAGE_SIZE) {
+      return;
+    }
+    const lastPost = posts[posts.length - 1];
+    const olderPosts = await getOlderPosts(lastPost.id);
+    if (olderPosts.length < PAGE_SIZE) {
+      setNoMorePost(true);
+    }
+    setPosts(posts.concat(olderPosts));
+  };
+
+  // 새로고침에 사용
+  const onRefresh = async () => {
+    if (!posts || posts.length === 0 || refreshing) {
+      return;
+    }
+    const firstPost = posts[0];
+    setRefreshing(true);
+    const newerPosts = await getNewerPosts(firstPost.id);
+    setRefreshing(false);
+    if (newerPosts.length === 0) {
+      return;
+    }
+    setPosts(newerPosts.concat(posts));
+  };
+
+
+
     return (
       <>
         <View style={styles.block}>
@@ -22,6 +54,17 @@ function CommunityScreen() {
             data={posts}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.container}
+            onEndReached={onLoadMore}
+            onEndReachedThreshold={0.75}
+            ListFooterComponent={
+              !noMorePost && (
+                <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
+              )
+            }
+            refreshControl={
+              <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+            }
           />
         </View>
       </>
@@ -33,6 +76,7 @@ const renderItem = ({item}) => (
     createdAt={item.createdAt}
     description={item.description}
     title={item.title}
+    category={item.category}
     id={item.id}
     user={item.user}
     photoURL={item.photoURL}
@@ -44,6 +88,12 @@ const styles = StyleSheet.create({
   block: {
     flex: 1,
     zIndex: 0,
+  },
+  container: {
+    paddingBottom: 48,
+  },
+  spinner: {
+    height: 64,
   },
 });
 

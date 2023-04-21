@@ -13,8 +13,11 @@ const imagePickerOption = {
 
 function PreDiagList(props) {
   const onCropImage = (res) => {
-    if (res.didCancel || !res) { return; }
-    props.setSelectedImage(res.path);
+    if (res.didCancel || !res) { 
+      return; 
+    }
+    props.setSelectedImage(res);
+    // props.setSelectedImage(res.path);
     console.log(res);
   };
 

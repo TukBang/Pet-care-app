@@ -63,6 +63,7 @@ function SignInScreen({ navigation, route }) {
         'auth/user-not-found': '존재하지 않는 계정입니다.',
         'auth/invalid-email': '유효하지 않은 이메일 주소입니다.',
       };
+      console.log(e.code)
       const msg = messages[e.code] || `${isSignUp ? '가입' : '로그인'} 실패`;
       Alert.alert('실패', msg);
     } finally {
