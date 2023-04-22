@@ -47,6 +47,7 @@ function MainScreen() {
             ),
         }}/>
         <Tab.Screen name="DiagnosisScreen" component={DiagnosisScreen} options={{
+            
             title: '진단',
             tabBarIcon: ({color, size}) => (
             <Icon name='medical-services' color={color} size={size}/>

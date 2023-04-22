@@ -31,7 +31,7 @@ function UploadScreen() {
   const [title, setTitle] = useState('');
   
   const isSolution = route.params.isSolution;
-  const [category, setCategory] = useState(isSolution ? "[상담] " : "[자유] ");
+  const [category, setCategory] = useState(isSolution ? "상담" : "자유");
   // console.log(isSolution)
   const pickerRef = useRef();
 
@@ -111,8 +111,8 @@ function UploadScreen() {
         onValueChange={(itemValue, itemIndex) =>
           setCategory(itemValue)
         }>
-        <Picker.Item label="자유" value="[자유] " />
-        <Picker.Item label="상담" value="[상담] " />
+        <Picker.Item label="자유" value="자유" />
+        <Picker.Item label="상담" value="상담" />
       </Picker>
 
       <TextInput

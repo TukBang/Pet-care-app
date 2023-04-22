@@ -1,19 +1,28 @@
 import {ActivityIndicator,View, FlatList, StyleSheet,RefreshControl} from 'react-native';
 import CameraButton from "../../components/Community/CameraButton";
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PostCard from "../../components/Community/PostCard";
 import { getOlderPosts, getPosts, PAGE_SIZE,getNewerPosts } from "../../lib/post";
-
+import { useNavigation } from '@react-navigation/native';
+import {Picker} from '@react-native-picker/picker'
 
 function CommunityScreen() {
-
+  const navigation = useNavigation();
   const [posts, setPosts] = useState(null);
   const [noMorePost, setNoMorePost] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [boardCategory, setBoardCategory] = useState("자유");
 
+  const pickerRef = useRef();
   useEffect(() => {
+
+
     // 컴포넌트가 처음 마운트될 때 포스트 목록을 조회한 후 `posts` 상태에 담기
     getPosts().then(setPosts);
+
+    //navigation.header 설정
+    //headerLeft 는 좌측 헤더 설정정
+
   }, []);
 
   // Page size 이후 글을 확인하려고 할 때 사용
@@ -49,6 +58,15 @@ function CommunityScreen() {
     return (
       <>
         <View style={styles.block}>
+          <Picker
+            ref={pickerRef}
+            selectedValue={boardCategory}
+            onValueChange={(itemValue, itemIndex) =>
+              setBoardCategory(itemValue)
+            }>
+            <Picker.Item label="자유" value="자유" />
+            <Picker.Item label="상담" value="상담" />
+          </Picker>
           <CameraButton />
           <FlatList
             data={posts}
