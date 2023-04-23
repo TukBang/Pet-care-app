@@ -16,55 +16,67 @@ function PostCard({user, category,title, photoURL, description, createdAt, id}) 
 
   return (
     <View style={styles.block}>
-      {/* 게시글 윗부분(헤더) - 프로필 사진, 유저 닉네임, 게시글 제목으로 구성되어 있음 */}
-      <View style={[styles.head, styles.paddingBlock]}>
-        <Pressable style={styles.profile} onPress={onOpenProfile}>
-          {/* Pressable 내부 요소를 누르면 onOpenProfile 작동 -> 프로필 정보 확인 (아직 미구현) */}
-            <Image
-                source={
-                    user.photoURL
-                    ? {
-                        uri: user.photoURL,
-                    }
-                    : require('../../assets/user.png')
-                } 
-                resizeMode="cover"
-                style={styles.avatar} 
-            />
-          <Text style={styles.displayName}>{user.displayName}</Text>
-          {
-            category ? (<Text style={styles.displayName}>{category}</Text>)
-            : (<Text style={styles.displayName}>[없음] </Text>)
-          }
-          <Text style={styles.displayName}>{title}</Text>
-        </Pressable>
+      {/* 게시글 윗부분(헤더) - 이미지와 게시글 제목 및 내용 으로 구성되어 있음 */}
+      <View style={ styles.paddingBlock}>
+        <View style={styles.head}>
+          {/* 게시글 이미지 */}
+          <Image
+            source={{uri: photoURL}}
+            style={styles.image}
+            resizeMethod="resize"
+            resizeMode="cover"
+          />
+          <View>
+            {
+              category ? (<Text numberOfLines={2} ellipsizeMode="tail" style={styles.boardTitle}>{category} {title}</Text>)
+              : (<Text style={styles.boardTitle}>[없음] {title}</Text>)
+            }
+            <Text numberOfLines={3} ellipsizeMode="tail" style={styles.description}>{description}</Text>
+          </View>
+        </View>
+        {/* tail 프로필 이미지, 닉네임, 게시글 게시 시각으로 구성되어 있음 */}
+        <View style={styles.tail}>
+          <Pressable style={styles.profile} onPress={onOpenProfile}>
+            {/* Pressable 내부 요소를 누르면 onOpenProfile 작동 -> 프로필 정보 확인 (아직 미구현) */}
+              <Image
+                  source={
+                      user.photoURL
+                      ? {
+                          uri: user.photoURL,
+                      }
+                      : require('../../assets/user.png')
+                  } 
+                  resizeMode="cover"
+                  style={styles.avatar} 
+              />
+            <Text style={styles.displayName}>{user.displayName}</Text>
+          </Pressable>
+          <Text date={date} style={styles.date}>
+            {date.toLocaleString()}
+          </Text>
+        </View>
       </View>
-      {/* 게시글 이미지 */}
-      <Image
-        source={{uri: photoURL}}
-        style={styles.image}
-        resizeMethod="resize"
-        resizeMode="cover"
-      />
-      {/* 게시글 내용 */}
-      <View style={styles.paddingBlock}>
-        <Text style={styles.description}>{description}</Text>
-        <Text date={date} style={styles.date}>
-          {date.toLocaleString()}
-        </Text>
-      </View>
+      {/* 게시글 아래 구분선 */}
+      <View style={styles.border} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   block: {
-    paddingTop: 16,
-    paddingBottom: 16,
+    // paddingTop: 16,
+    // paddingBottom: 16,
+  },
+  border: {
+    height: 1, 
+    backgroundColor: 'gray',
+    // marginBottom: 10,
+    marginLeft: 10,
+    marginRight: 20,
   },
   avatar: {
-    width: 32,
-    height: 32,
+    width: 15,
+    height: 15,
     borderRadius: 16,
     // alignSelf:'right'
   },
@@ -73,35 +85,50 @@ const styles = StyleSheet.create({
   },
   head: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 16,
+    marginTop: 16,
+    marginBottom: 6,
+    // marginBotton: 20,
+    // paddingBotton: 14,
+  },
+  tail: {
+    flexDirection: 'row',
+    marginBottom: 10,
   },
   profile: {
     flexDirection: 'row',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   displayName: {
-    lineHeight: 20,
+    // lineHeight: 20,
+    fontSize: 13,
+    marginLeft: 3,
+    fontWeight: 'bold',
+    justifyContent: 'space-between',
+  },
+  boardTitle: {
+    // lineHeight: 20,
     fontSize: 16,
-    marginLeft: 8,
+    marginLeft: 6,
     fontWeight: 'bold',
   },
   image: {
     backgroundColor: '#bdbdbd',
-    width: '100%',
+    width: '20%',
     aspectRatio: 1,
-    marginBottom: 16,
+    // marginBottom: 6,
+    // marginTop: 6,
+    borderRadius: 10,
   },
   description: {
     fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 8,
+    // lineHeight: 24,
+    marginLeft: 8,
   },
   date: {
     color: '#757575',
     fontSize: 12,
     lineHeight: 18,
+    marginLeft: 14
   },
 });
 

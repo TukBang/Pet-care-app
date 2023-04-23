@@ -43,7 +43,7 @@ function UploadScreen() {
     pickerRef.current.blur();
   }
 
-  console.log(res.path.split('.'))
+  // console.log(res.path.split('.'))
   
 //   const onSubmit = useCallback(() => {
 //     // TODO: 포스트 작성 로직 구현
@@ -81,10 +81,15 @@ function UploadScreen() {
         await reference.putFile(res.path);
       }
     }
-    // reference 에서 getDownloadURL 함수를 통해 이미지 path 저장
-    const photoURL = await reference.getDownloadURL();
-    console.log('photourl : ',photoURL)
+  
+  // reference 에서 getDownloadURL 함수를 통해 이미지 path 저장
+  const photoURL = await reference.getDownloadURL();
+  console.log('photourl : ',photoURL)
+  try{
     await createPost({title,category,description, photoURL, user});
+  } catch (error) {
+    
+  }
     // TODO: 포스트 목록 새로고침
   }, [res, user, title,category,description, navigation]);
 
