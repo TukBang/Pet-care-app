@@ -48,7 +48,7 @@ function CameraButton() {
       if (res.didCancel || !res) {
           return;
       }
-      console.log("PickImage", res);
+      // console.log("PickImage", res);
       navigation.push('Upload', {res, isSolution: false});
     };
 
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     }),
   },
   circle: {
-    backgroundColor: '#6200ee',
+    backgroundColor: '#009688',
     borderRadius: 27,
     height: 54,
     width: 54,

@@ -18,6 +18,8 @@ import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/Key
 import RNFS from "react-native-fs"
 import RNPickerSelect from 'react-native-picker-select'
 import {Picker} from '@react-native-picker/picker'
+import EndModal from '../../components/Community/EndModal';
+import { CommonActions } from '@react-navigation/native';
 
 // CameraButton 에 Modal 에서 이미지를 선택하면 나오는 게시글 작성 화면
 // DiagnosisScreen.js 에서 상담 게시판을 올리는데 사용
@@ -29,7 +31,8 @@ function UploadScreen() {
   const {width} = useWindowDimensions();
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
-  
+  const [endModalVisible, setEndModalVisible] = useState(false);
+
   const isSolution = route.params.isSolution;
   const [category, setCategory] = useState(isSolution ? "상담" : "자유");
   // console.log(isSolution)
@@ -53,11 +56,11 @@ function UploadScreen() {
 
   const {user} = useUserContext();
   const onSubmit = useCallback(async () => {
-    navigation.pop();
+    // navigation.pop();
     if( !isSolution ) {
       const asset = res.assets[0];
       const extension = asset.fileName.split('.').pop();
-      console.log('extension : ',extension)
+      // console.log('extension : ',extension)
       // firebase storge 에서 /photo/uid/랜덤변수.확장자 링크?
       var reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
       if (Platform.OS === 'android') {
@@ -69,7 +72,7 @@ function UploadScreen() {
       }
     } else {
       const extension = res.path.split('.').pop();
-      console.log('extension : ',extension)
+      // console.log('extension : ',extension)
       var reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
       //image : path to base64 변환
       const image = await RNFS.readFile(res.path, 'base64');
@@ -84,15 +87,35 @@ function UploadScreen() {
   
   // reference 에서 getDownloadURL 함수를 통해 이미지 path 저장
   const photoURL = await reference.getDownloadURL();
-  console.log('photourl : ',photoURL)
+  // console.log('photourl : ',photoURL)
   try{
     await createPost({title,category,description, photoURL, user});
+    if (isSolution) {
+      setEndModalVisible(true);
+    } else {
+      navigation.pop()
+    }
+    
+    // <EndModal visible={endModalVisible} onClose={()=>setEndModalVisible(false) } />
   } catch (error) {
     
   }
     // TODO: 포스트 목록 새로고침
   }, [res, user, title,category,description, navigation]);
 
+  // const onCloseModal = () => {
+  //   setEndModalVisible(false);
+  //   navigation.pop();
+  //   navigation.navigate('Main')
+  // };
+  const onCloseModal = useCallback(() => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'Main' }],
+      })
+    );
+  }, [navigation]);
 
   // navigation.setOptions 의 파라미터로 headerRight 설정 : IconRightButton.js 참조
   // header 부분의 오른쪽 UI
@@ -143,6 +166,7 @@ function UploadScreen() {
         value={description}
         onChangeText={setDescription}
       />
+      <EndModal visible={endModalVisible} onClose={onCloseModal} />
     </KeyboardAvoidingView>
   );
 }
