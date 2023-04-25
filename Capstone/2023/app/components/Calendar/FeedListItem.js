@@ -1,84 +1,84 @@
 import React from "react";
-import { Platform, Pressable, StyleSheet, Text } from "react-native";
-import {format, formatDistanceToNow } from "date-fns";
-import ko from "date-fns/locale/ko";
+import { 
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import {format, formatDistanceToNow } from "date-fns";
+import ko from "date-fns/locale/ko";
 
 function formatDate(date) {
-    const d = new Date(date);
-    const now = Date.now();
-    const diff = (now - d.getTime()) / 1000;
+  const d = new Date(date);
+  const now = Date.now();
+  const diff = (now - d.getTime()) / 1000;
+  
+  if (diff < 0)                 return formatDistanceToNow(d, {addSuffix:true, locale: ko});
+  else if (diff < 60 * 1)       return '1분 전';
+  else if (diff < 60 * 5)       return "5분 전";
+  else if (diff < 60 * 10)      return "10분 전";
+  else if (diff < 60 * 30)      return "30분 전";
+  else if (diff < 60 * 60)      return "1시간 전";
+  else if (diff < 60 * 60 * 6)  return "6시간 전";
+  else if (diff < 60 * 60 * 12) return "12시간 전";
+  else if (diff < 60 * 60 * 24) return format(d, '1일 전', {locale: ko});
 
-    if ( diff < 0) {
-        return formatDistanceToNow(d, {addSuffix:true, locale: ko});
-    }
-    if ( diff < 60 * 1) {
-        return ' 방금 전 ';
-    }
-    if ( diff < 60 *60 *24 *3) {
-        return '이미 지난 일이에요';
-    }
-    return format(d, 'PPP EEE p', {locale: ko});
-}
-
-function truncate(text) {
-    const replaced = text.replace(/\n/g,' ');
-    if ( replaced.length <= 100) {
-        return replaced;
-    }
-    return replaced.slice(0, 100).concat('...');
+  return format(d, 'MM월 dd일 (EEE) hh시 mm분', {locale: ko});
 }
 
 function FeedListItem({log}) {
-    const {title,body,date} = log;
-    const navigation = useNavigation();
+  const {title, date} = log;
+  const navigation = useNavigation();
 
-    const onPress = () => {
-        navigation.navigate('Write', {
-            log,
-        });
-    };
+  const onPress = () => {
+    navigation.navigate('Write', {
+      log,
+    });
+  };
 
-    return (
-        <Pressable
-          style={({pressed}) => [
-            styles.block,
-            Platform.OS ==='ios' && pressed && {backgroundColor: '#efefef'},
-          ]}
-          android_ripple={{color: '#ededed'}}
-          onPress={onPress}>
+  let showTitle = undefined;
+  if (title === '') showTitle = "일정 - 제목 없음";
+  else              showTitle = title;
 
-            <Text style={styles.date}>{formatDate(date)}</Text>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.body}>{truncate(body)}</Text>
-
-        </Pressable>
-    );
+  return (
+    <Pressable
+      style={({pressed}) => [
+        styles.block,
+        Platform.OS ==='ios' && pressed && {backgroundColor: '#efefef'},
+      ]}
+      android_ripple={{color: '#ededed'}}
+      onPress={onPress}>
+      
+      <Text style={styles.title}>{showTitle}</Text>
+      <Text style={styles.time}>{formatDate(date)}</Text>
+    </Pressable>
+  );
 }
 
 const styles = StyleSheet.create({
-    block: {
-        backgroundColor: 'white',
-        paddingHorizontal: 16,
-        paddingVertical: 24,
-    },
-    date: {
-        fontSize: 12,
-        color: '#546e7a',
-        marginBottom: 8,
-    },
-    title: {
-        color: '#263238',
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 8,
-    },
-    body: {
-        color: '#37474f',
-        fontSize: 16,
-        lineHeight: 21,
-    },
+  block: {
+    backgroundColor: 'white',
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+  },
+
+  title: {
+    marginTop: 5,
+    marginLeft: 10,
+    marginBottom: 2,
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: '#000000',
+  },
+
+  time: {
+    marginLeft: 10,
+    marginBottom: 8,
+    fontSize: 13,
+    color: '#9E9E9E',
+  }, 
 });
 
 export default FeedListItem;

@@ -62,14 +62,14 @@ function CameraButton() {
 
   return (
     <>
-        <View style={[styles.wrapper, {bottom}]}>
+        <View style={[styles.wrapper]}>
           <Pressable
               android_ripple={{
               color: '#ffffff',
               }}
               style={styles.circle}
               onPress={()=>setModalVisible(true)}>
-              <Icon name="publish" color="white" size={24} />
+              <Icon name='add' size={24} style={{color: 'white'}} />
           </Pressable>
         </View>
         <UploadModeModal
@@ -84,20 +84,25 @@ function CameraButton() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    zIndex: 5,
-    borderRadius: 27,
-    height: 54,
-    width: 54,
     position: 'absolute',
-    left: '90%',
-    transform: [
-      {
-        translateX: -27,
-      },
-    ],
+    bottom: 15,
+    right: 15,
+    width: 58,
+    height: 58,
+    borderRadius: 28,
+    zIndex: 5,
+    
+    shadowColor: '#4D4D4D',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+
+    transform: [{ translateX: 0 }],
+
     ...Platform.select({
       ios: {
-        shadowColor: '#4d4d4d',
+        shadowColor: '#4D4D4D',
         shadowOffset: {width: 0, height: 4},
         shadowOpacity: 0.3,
         shadowRadius: 4,
@@ -108,6 +113,7 @@ const styles = StyleSheet.create({
       },
     }),
   },
+
   circle: {
     backgroundColor: '#009688',
     borderRadius: 27,

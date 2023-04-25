@@ -1,52 +1,77 @@
-import React,{useRef} from "react";
-import { View, StyleSheet, TextInput } from "react-native";
+import React, { useRef } from "react";
+import { 
+  View,
+  StyleSheet,
+  TextInput
+} from "react-native";
 
 function WriteEditor({title, body, onChangeTitle, onChangeBody}) {
+  const bodyRef = useRef();
 
-    const bodyRef = useRef();
+  let titlePlaceHolder = "제목"
+  let bodyPlaceHolder = "메모"
+  let placeholderTextColor = "#BCBCBC"
 
-    return (
-        <View style={styles.block}>
-            <TextInput
-              placeholder="제목을 입력하세요"
-              placeholderTextColor='#bcbcbc'
-              style={styles.titleInput}
-              returnKeyType="next"
-              onChangeText={onChangeTitle}
-              value={title}
-              onSubmitEditing={()=> {
-                bodyRef.current.focus()
-              }}
-            />
-            <TextInput
-              placeholder="당신의 오늘을 기록해보세요"
-              placeholderTextColor='#bcbcbc'
-              style={styles.bodyInput}
-              multiline
-              textAlignVertical="top"
-              onChangeText={onChangeBody}
-              value={body}
-              ref={bodyRef}
-            />
-        </View>
-    )
+  return (
+    <View style={styles.block}>
+      {/* 제목 */}
+      <TextInput
+        style={styles.titleTextInput}
+        placeholder={titlePlaceHolder}
+        placeholderTextColor={placeholderTextColor}
+        onChangeText={onChangeTitle}
+
+        value={title}
+
+        returnKeyType="next"
+        onSubmitEditing={()=> {
+          bodyRef.current.focus()
+        }}
+      />
+      
+      {/* 메모 */}
+      <TextInput
+        style={styles.bodyTextInput}
+        placeholder={bodyPlaceHolder}
+        placeholderTextColor={placeholderTextColor}
+        onChangeText={onChangeBody}
+                
+        value={body}
+
+        multiline={true}
+        ref={bodyRef}
+      />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-    block: {flex: 1, padding: 16},
-    titleInput: {
-        paddingVertical: 0,
-        fontSize: 18,
-        marginBottom: 16,
-        color: '#263238',
-        fontWeight: 'bold',
-    },
-    bodyInput: {
-        flex: 1,
-        fontSize: 16,
-        paddingVertical: 0,
-        color: '#263238',
-    },
+  block: {flex: 1, padding: 12},
+  
+  titleTextInput: {
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: "#CDCDCD",
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 15,
+  },
+
+  bodyTextInput: {
+    textAlignVertical: "top",
+    borderWidth: 2,
+    borderRadius: 5,
+    borderColor: "#CDCDCD",
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    height: 400,
+    
+    fontWeight: "bold",
+    fontSize: 18,
+  },
 });
 
 export default WriteEditor;
