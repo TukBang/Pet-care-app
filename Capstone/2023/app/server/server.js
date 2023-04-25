@@ -32,12 +32,15 @@ app.post('/pet', (req, res) => {
 
 // GET request to retrieve all pets from MySQL database
 app.get('/pet', (req, res) => {
-  connection.query('SELECT * FROM pet_info', (error, results) => {
-    if (error) throw error;
+  const uid = req.query.uid;
+  const sql = `SELECT * FROM pet_info WHERE uid = '${uid}'`;
 
-    res.send(results);
+  connection.query(sql, (err, result) => {
+    if (err) throw err;
+    res.json(result);
   });
 });
+
 
 app.listen(4000, () => {
   console.log('Node.js server is running on port 4000');

@@ -179,13 +179,16 @@
 
 
 import React from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import AnimatedMarkers from "../../components/Walking/MapView";
 
 const WalkingScreen = () => {
   return (
     <View style={{ height: 200 }}>
-      <AnimatedMarkers />
+      {/* <AnimatedMarkers /> */}
+      <Text>
+        산책 미구현
+      </Text>
     </View>
   );
 };

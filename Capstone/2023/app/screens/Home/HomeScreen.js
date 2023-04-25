@@ -1,127 +1,12 @@
-// import React, { useState, useEffect } from "react";
-// import { StyleSheet, View, Text, TextInput, Button } from "react-native";
-// import { useUserContext } from "../../contexts/UserContext";
-
-// function HomeScreen() {
-//   const [petname, setPetname] = useState("");
-//   const [gender, setGender] = useState("");
-//   const [weight, setWeight] = useState("");
-//   const [birth, setBirth] = useState("");
-//   const [kind, setKind] = useState("");
-//   const [saving, setSaving] = useState(false);
-//   const {user} = useUserContext();
-
-//   const uid = user["id"];
-
-//   useEffect(() => {
-//     return () => {
-//       // cleanup function
-//       setSaving(false); // cancel saving if component unmounts
-//     };
-//   }, []);
-
-//   const savePet = async () => {
-//     setSaving(true);
-//     try {
-//       const response = await fetch("http://127.0.0.1:4000/pet", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//           petname,
-//           id: uid,
-//           gender,
-//           weight,
-//           birth,
-//           kind,
-//         }),
-//       });
-//       const data = await response.json();
-//       console.log(data);
-//     } catch (error) {
-//       console.error(error);
-//     } finally {
-//       // check if component is still mounted before updating state
-//       if (!saving) return;
-//       setSaving(false);
-//     }
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.title}>Add new pet information.</Text>
-//       <TextInput
-//         style={styles.input}
-//         placeholder="Pet name"
-//         onChangeText={(text) => setPetname(text)}
-//         value={petname}
-//       />
-//       <TextInput
-//         style={styles.input}
-//         placeholder="Gender"
-//         onChangeText={(text) => setGender(text)}
-//         value={gender}
-//       />
-//       <TextInput
-//         style={styles.input}
-//         placeholder="Weight"
-//         onChangeText={(text) => setWeight(text)}
-//         value={weight}
-//       />
-//       <TextInput
-//         style={styles.input}
-//         placeholder="Birth date"
-//         onChangeText={(text) => setBirth(text)}
-//         value={birth}
-//       />
-//       <TextInput
-//         style={styles.input}
-//         placeholder="Kind"
-//         onChangeText={(text) => setKind(text)}
-//         value={kind}
-//       />
-//       <TextInput
-//         style={styles.input}
-//         placeholder="User ID"
-//         onChangeText={() => {}}
-//         value={uid}
-//         editable={false}
-//       />
-//       <Button title="Save pet information" onPress={savePet} />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: "bold",
-//     marginBottom: 16,
-//   },
-//   input: {
-//     borderWidth: 1,
-//     borderColor: "#ccc",
-//     borderRadius: 4,
-//     padding: 8,
-//     margin: 8,
-//     width: "80%",
-//     maxWidth: 400,
-//   },
-// });
-
-// export default HomeScreen;
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TextInput, Button, ScrollView, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TextInput, Button, Modal, ScrollView, TouchableOpacity } from "react-native";
 import { useUserContext } from "../../contexts/UserContext";
 import { Calendar } from "react-native-calendars";
+import Ggupdeagi from "../Ggupdeagi";
+import { Pressable } from "react-native";
 
 function HomeScreen() {
+  
   const [petname, setPetname] = useState("");
   const [gender, setGender] = useState("");
   const [weight, setWeight] = useState("");
@@ -132,7 +17,7 @@ function HomeScreen() {
   const { user } = useUserContext();
   const uid = user["id"];
   const [showModal, setShowModal] = useState(false);
-
+  
   useEffect(() => {
     return () => {
       // cleanup function
@@ -144,6 +29,7 @@ function HomeScreen() {
     // GET request to retrieve pet information for the user
     const fetchPetInfo = async () => {
       try {
+        console.log(uid)
         const response = await fetch(`http://127.0.0.1:4000/pet?uid=${uid}`);
         const data = await response.json();
         setPetInfo(data); // Assuming there is only one pet per user
@@ -187,49 +73,62 @@ function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContent}>
+      <Ggupdeagi />
+      {user.photoURL && (
+        <Image
+          source={{uri: user.photoURL}}
+          style={{width: 128, height: 128, marginBottom: 16}}
+          resizeMode="cover"
+        />
+      )}      
+      <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContent} style={styles.scrollView}>
         {petInfo && petInfo.map((pet, index) => (
-          <View key={index}>
-            <Text style={styles.subtitle}></Text>
-            <Text>Name: {pet.petname}</Text>
-            <Text>Gender: {pet.gender}</Text>
-            <Text>Weight: {pet.weight}</Text>
-            <Text>Birth date: {pet.birth}</Text>
-            <Text>Kind: {pet.kind}</Text>
-          </View>
-        ))}
-      </ScrollView>
-      {showModal && (
-        <View style={styles.modalBackground}>
-          <View style={styles.modal}>
-            <Text style={styles.modalTitle}>Add new pet</Text>
+          <View key={index} style={styles.petInfoContainer}>
+          <Text style={styles.subtitle}></Text>
+          <Text style={styles.petInfoText}>Name: {pet.petname}</Text>
+          <Text style={styles.petInfoText}>Gender: {pet.gender}</Text>
+          <Text style={styles.petInfoText}>Weight: {pet.weight}</Text>
+          <Text style={styles.petInfoText}>Birth date: {pet.birth}</Text>
+          <Text style={styles.petInfoText}>Kind: {pet.kind}</Text>
+        </View>
+      ))}
+    </ScrollView>
+    <Modal
+      visible={showModal}
+      transparent={true}
+      animationType="fade"
+    >
+      <Pressable style={styles.background}>
+        <View style={styles.whiteBox}>
+          
+            <Text style={styles.modalTitle}>새로운 반려동물을 등록해주세요</Text>
             <TextInput
               style={styles.modalInput}
-              placeholder="Pet name"
+              placeholder="이름"
               onChangeText={(text) => setPetname(text)}
               value={petname}
             />
             <TextInput
               style={styles.modalInput}
-              placeholder="Gender"
+              placeholder="성별"
               onChangeText={(text) => setGender(text)}
               value={gender}
             />
             <TextInput
               style={styles.modalInput}
-              placeholder="Weight"
+              placeholder="무게"
               onChangeText={(text) => setWeight(text)}
               value={weight}
             />
             <TextInput
               style={styles.modalInput}
-              placeholder="Birth date"
+              placeholder="생년월일 ( 예) 000000 )"
               onChangeText={(text) => setBirth(text)}
               value={birth}
             />
             <TextInput
               style={styles.modalInput}
-              placeholder="Kind"
+              placeholder="품종"
               onChangeText={(text) => setKind(text)}
               value={kind}
             />
@@ -249,11 +148,13 @@ function HomeScreen() {
               <Button title="Save" onPress={savePet} />
             </View>
           </View>
-        </View>
-      )}
+
+      </Pressable>
+    </Modal>
       <TouchableOpacity style={styles.addButton} onPress={() => setShowModal(true)}>
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
+
     </View>
   );
 }
@@ -309,6 +210,50 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 24,
   },
+  // 스크롤 뷰 스타일
+  scrollView: {
+    backgroundColor: '#FFFFFF',
+  },
+  scrollViewContent: {
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  petInfoContainer: {
+    width: 200,
+    height: 200,
+    borderRadius: 10,
+    backgroundColor: '#E5E5E5',
+    marginRight: 20,
+    padding: 10,
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  petInfoText: {
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  //--------------------------------------------------------------------
+  // 모달 창 스타일
+
+  background: {
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  whiteBox: {
+    flexDirection: "column",
+    alignItems: 'center',
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 4,
+    elevation: 2
+  },
   modalContainer: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -349,6 +294,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
   },
+  modalButtons: {
+    width: "100%"    
+  }
+  //--------------------------------------------------------------------
 });
 
 export default HomeScreen;
