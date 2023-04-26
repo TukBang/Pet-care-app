@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TextInput, Button, Modal, ScrollView, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text,Image, TextInput, Button, Modal, ScrollView, TouchableOpacity } from "react-native";
 import { useUserContext } from "../../contexts/UserContext";
 import { Calendar } from "react-native-calendars";
 import Ggupdeagi from "../Ggupdeagi";
@@ -73,14 +73,18 @@ function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={{margin:10,flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
+        {user.photoURL && (
+          <Image
+            source={{uri: user.photoURL}}
+            style={{width: 60, height: 60}}
+            resizeMode="cover"
+          />
+        )} 
+        <Text style={{fontSize:30, marginLeft:10}}>안녕하세요 {user.displayName} 님!</Text>
+      </View>
       <Ggupdeagi />
-      {user.photoURL && (
-        <Image
-          source={{uri: user.photoURL}}
-          style={{width: 128, height: 128, marginBottom: 16}}
-          resizeMode="cover"
-        />
-      )}      
+           
       <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContent} style={styles.scrollView}>
         {petInfo && petInfo.map((pet, index) => (
           <View key={index} style={styles.petInfoContainer}>

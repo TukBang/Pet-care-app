@@ -7,6 +7,9 @@ import SignInScreen from "./Login/SignInScreen";
 import WelcomeScreen from "./User/WelcomeScreen";
 import { useUserContext } from "../contexts/UserContext";
 import UploadScreen from "./Community/UploadScreen";
+import BoardScreen from "../components/Community/BoardScreen";
+import ModifyScreen from "./Community/ModifyScreen";
+import ModifyCommentScreen from "./Community/ModifyCommentScreen";
 // import MainScreen from "./screens/MainScreen";
 // import DetailScreen from "./components/DetailScreen";
 
@@ -33,7 +36,22 @@ function RootStack() {
             name="Upload"
             component={UploadScreen}
             options={{title: '새 게시물', headerBackTitle: '뒤로가기'}}
-          />
+            />
+            <Stack.Screen
+            name="Board"
+            component={BoardScreen}
+            options={{title: '커뮤니티', headerBackTitle: '뒤로가기'}}
+            />
+            <Stack.Screen
+            name="Modify"
+            component={ModifyScreen}
+            options={{title: '게시글 수정', headerBackTitle: '뒤로가기'}}
+            />
+            <Stack.Screen
+            name="ModifyComment"
+            component={ModifyCommentScreen}
+            options={{title: '댓글 수정', headerBackTitle: '뒤로가기'}}
+            />
           </>
         ) : (
           <>

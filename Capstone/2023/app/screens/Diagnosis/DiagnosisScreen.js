@@ -46,7 +46,7 @@ function DiagnosisScreen() {
   const handlePostRequest = async () => {
     try {
       const image = await RNFS.readFile(selectedImage.path, 'base64');
-      const response = await fetch("http://61.106.219.238:5000/images", {
+      const response = await fetch("http://121.170.118.190:5000/images", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({

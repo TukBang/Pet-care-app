@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState, useCallback} from 'react';
-import { Text } from 'react-native';
+import { ActivityIndicator, Modal, Text } from 'react-native';
 import {
   StyleSheet,
   TextInput,
@@ -16,10 +16,11 @@ import { createPost } from '../../lib/post';
 import storage from '@react-native-firebase/storage'
 import KeyboardAvoidingView from 'react-native/Libraries/Components/Keyboard/KeyboardAvoidingView';
 import RNFS from "react-native-fs"
-import RNPickerSelect from 'react-native-picker-select'
 import {Picker} from '@react-native-picker/picker'
 import EndModal from '../../components/Community/EndModal';
 import { CommonActions } from '@react-navigation/native';
+import events from '../../lib/events';
+import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 
 // CameraButton 에 Modal 에서 이미지를 선택하면 나오는 게시글 작성 화면
 // DiagnosisScreen.js 에서 상담 게시판을 올리는데 사용
@@ -32,35 +33,18 @@ function UploadScreen() {
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
   const [endModalVisible, setEndModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const isSolution = route.params.isSolution;
   const [category, setCategory] = useState(isSolution ? "상담" : "자유");
-  // console.log(isSolution)
   const pickerRef = useRef();
-
-  function open() {
-    pickerRef.current.focus();
-  }
-
-  function close() {
-    pickerRef.current.blur();
-  }
-
-  // console.log(res.path.split('.'))
-  
-//   const onSubmit = useCallback(() => {
-//     // TODO: 포스트 작성 로직 구현
-//   }, []);
-  // console.log('route.params:', route.params.res);
-  // console.log('Res',res.assets[0])
 
   const {user} = useUserContext();
   const onSubmit = useCallback(async () => {
-    // navigation.pop();
+    setIsLoading(true);
     if( !isSolution ) {
       const asset = res.assets[0];
       const extension = asset.fileName.split('.').pop();
-      // console.log('extension : ',extension)
       // firebase storge 에서 /photo/uid/랜덤변수.확장자 링크?
       var reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
       if (Platform.OS === 'android') {
@@ -72,7 +56,6 @@ function UploadScreen() {
       }
     } else {
       const extension = res.path.split('.').pop();
-      // console.log('extension : ',extension)
       var reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
       //image : path to base64 변환
       const image = await RNFS.readFile(res.path, 'base64');
@@ -87,27 +70,22 @@ function UploadScreen() {
   
   // reference 에서 getDownloadURL 함수를 통해 이미지 path 저장
   const photoURL = await reference.getDownloadURL();
-  // console.log('photourl : ',photoURL)
   try{
     await createPost({title,category,description, photoURL, user});
+    setIsLoading(false);
     if (isSolution) {
       setEndModalVisible(true);
     } else {
       navigation.pop()
     }
-    
-    // <EndModal visible={endModalVisible} onClose={()=>setEndModalVisible(false) } />
+  
   } catch (error) {
     
   }
+    events.emit('refresh');
     // TODO: 포스트 목록 새로고침
   }, [res, user, title,category,description, navigation]);
 
-  // const onCloseModal = () => {
-  //   setEndModalVisible(false);
-  //   navigation.pop();
-  //   navigation.navigate('Main')
-  // };
   const onCloseModal = useCallback(() => {
     navigation.dispatch(
       CommonActions.reset({
@@ -144,7 +122,7 @@ function UploadScreen() {
       </Picker>
 
       <TextInput
-        style={styles.titleinput}
+        style={styles.titleInput}
         placeholder="제목을 입력하세요..."
         returnKeyType="next"
         textAlignVertical="top"
@@ -166,6 +144,18 @@ function UploadScreen() {
         value={description}
         onChangeText={setDescription}
       />
+      {isLoading && (
+        <Modal
+          transparent={true}
+          animationType='fade'
+        >
+          <Pressable style={styles.background}>
+            <View style={styles.loading}>
+              <ActivityIndicator size="large" />
+            </View>
+          </Pressable>
+        </Modal>
+      )}
       <EndModal visible={endModalVisible} onClose={onCloseModal} />
     </KeyboardAvoidingView>
   );
@@ -178,9 +168,9 @@ const styles = StyleSheet.create({
   image: {width: '100%'},
   titleInput: {
     paddingVertical: 0,
-    flex: 1,
-    fontSize: 30,
-    paddingBottom: 16,
+    // flex: 1,
+    fontSize: 20,
+    // paddingBottom: 1,
     color: '#263238',
     fontWeight: 'bold',
 },
@@ -190,6 +180,12 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     flex: 1,
     fontSize: 16,
+  },
+  background: {
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 });
 

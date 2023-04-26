@@ -54,8 +54,6 @@ function MainScreen() {
             // <Icon name='stethoscope' color={color} size={size}/>
             ),
         }}/>
-        
-
         <Tab.Screen name="CommunityScreen" component={CommunityScreen} options={{
             title: '커뮤니티',
             tabBarIcon: ({color, size}) => (

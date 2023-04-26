@@ -2,7 +2,8 @@ import firestore from '@react-native-firebase/firestore';
 
 const postsCollection = firestore().collection('posts');
 
-export function createPost({user,category, photoURL,title, description}) {
+
+export function createPost({user,category, photoURL, title, description}) {
   return postsCollection.add({
     user,
     category,
@@ -15,8 +16,10 @@ export function createPost({user,category, photoURL,title, description}) {
 // page size 는 한페이지에 로드할 게시글의 개수
 export const PAGE_SIZE = 15;
 
+
+
 // 기본 게시글 표시
-export async function getPosts() {
+  export async function getPosts() {
     const snapshot = await postsCollection
       .orderBy('createdAt', 'desc')
       .limit(PAGE_SIZE)
@@ -59,4 +62,16 @@ export async function getPosts() {
     }));
   
     return posts;
+  }
+
+  //삭제 함수
+  export function removePost(id) {
+    return postsCollection.doc(id).delete();
+  }
+
+  export function updatePost({id, title,description}) {
+    return postsCollection.doc(id).update({
+      title,
+      description,
+    });
   }

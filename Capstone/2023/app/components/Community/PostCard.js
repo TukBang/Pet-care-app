@@ -135,40 +135,47 @@
 // export default PostCard;
 import React, { useMemo } from 'react';
 import { View, StyleSheet, Text, Image, Pressable } from 'react-native';
-
+import { useNavigation } from "@react-navigation/native";
 function PostCard({ user, category, title, photoURL, description, createdAt, id }) {
   const date = useMemo(
     () => (createdAt ? new Date(createdAt._seconds * 1000) : new Date()),
     [createdAt],
   );
+  const navigation = useNavigation();
 
   const onOpenProfile = () => {
     // TODO: 사용자 프로필 화면 열기
   };
 
+  const onOpenBoard = () => {
+    navigation.push('Board',{ post: {user,category, title, photoURL, description, createdAt, id } })
+  }
+
   return (
     <View style={styles.block}>
       <View style={styles.paddingBlock}>
-        <View style={styles.head}>
-          <Image
-            source={{ uri: photoURL }}
-            style={styles.image}
-            resizeMethod="resize"
-            resizeMode="cover"
-          />
-          <View>
-            {category ? (
-              <Text numberOfLines={2} ellipsizeMode="tail" style={styles.boardTitle}>
-                {category} {title}
+        <Pressable onPress={onOpenBoard}>
+          <View style={styles.head}>
+            <Image
+              source={{ uri: photoURL }}
+              style={styles.image}
+              resizeMethod="resize"
+              resizeMode="cover"
+            />
+            <View>
+              {category ? (
+                <Text numberOfLines={2} ellipsizeMode="tail" style={styles.boardTitle}>
+                  {category} {title}
+                </Text>
+              ) : (
+                <Text style={styles.boardTitle}>[없음] {title}</Text>
+              )}
+              <Text numberOfLines={3} ellipsizeMode="tail" style={styles.description}>
+                {description}
               </Text>
-            ) : (
-              <Text style={styles.boardTitle}>[없음] {title}</Text>
-            )}
-            <Text numberOfLines={3} ellipsizeMode="tail" style={styles.description}>
-              {description}
-            </Text>
+            </View>
           </View>
-        </View>
+        </Pressable>
         <View style={styles.tail}>
           <Pressable style={styles.profile} onPress={onOpenProfile}>
             <Image
