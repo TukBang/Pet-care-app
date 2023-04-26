@@ -1,29 +1,177 @@
-import {ActivityIndicator,View, FlatList, StyleSheet,RefreshControl} from 'react-native';
+// import {ActivityIndicator,View, FlatList, StyleSheet,RefreshControl} from 'react-native';
+// import CameraButton from "../../components/Community/CameraButton";
+// import React, {useEffect, useRef, useState} from 'react';
+// import PostCard from "../../components/Community/PostCard";
+// import { getOlderPosts, getPosts, PAGE_SIZE,getNewerPosts } from "../../lib/post";
+// import { useNavigation } from '@react-navigation/native';
+// import {Picker} from '@react-native-picker/picker'
+
+// function CommunityScreen() {
+//   const navigation = useNavigation();
+//   const [posts, setPosts] = useState(null);
+//   const [noMorePost, setNoMorePost] = useState(false);
+//   const [refreshing, setRefreshing] = useState(false);
+//   const [boardCategory, setBoardCategory] = useState("자유");
+
+//   const pickerRef = useRef();
+//   useEffect(() => {
+
+
+//     // 컴포넌트가 처음 마운트될 때 포스트 목록을 조회한 후 `posts` 상태에 담기
+//     getPosts().then(setPosts);
+
+//     //navigation.header 설정
+//     //headerLeft 는 좌측 헤더 설정정
+
+//   }, []);
+
+//   // Page size 이후 글을 확인하려고 할 때 사용
+//   const onLoadMore = async () => {
+//     if (noMorePost || !posts || posts.length < PAGE_SIZE) {
+//       return;
+//     }
+//     const lastPost = posts[posts.length - 1];
+//     const olderPosts = await getOlderPosts(lastPost.id);
+//     if (olderPosts.length < PAGE_SIZE) {
+//       setNoMorePost(true);
+//     }
+//     setPosts(posts.concat(olderPosts));
+//   };
+
+
+//   // 새로고침에 사용
+//   const onRefresh = async () => {
+//     if (!posts || posts.length === 0 || refreshing) {
+//       return;
+//     }
+//     const firstPost = posts[0];
+//     setRefreshing(true);
+//     const newerPosts = await getNewerPosts(firstPost.id);
+//     setRefreshing(false);
+//     if (newerPosts.length === 0) {
+//       return;
+//     }
+//     setPosts(newerPosts.concat(posts));
+//   };
+
+
+
+//     return (
+//       <>
+//         <View style={styles.block}>
+//           <Picker
+//             ref={pickerRef}
+//             selectedValue={boardCategory}
+//             onValueChange={(itemValue, itemIndex) =>
+//               setBoardCategory(itemValue)
+//             }>
+            
+//             <Picker.Item label="자유" value="자유" />
+//             <Picker.Item label="상담" value="상담" />
+
+//           </Picker>
+//           <CameraButton />
+//           <FlatList
+//             data={posts}
+//             renderItem={renderItem}
+//             keyExtractor={(item) => item.id}
+//             contentContainerStyle={styles.container}
+//             onEndReached={onLoadMore}
+//             onEndReachedThreshold={0.75}
+//             ListFooterComponent={
+//               !noMorePost && (
+//                 <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
+//               )
+//             }
+//             refreshControl={
+//               <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+//             }
+//           />
+//         </View>
+//       </>
+//     )
+// }
+
+// const renderItem = ({item}) => (
+//   <PostCard
+//     createdAt={item.createdAt}
+//     description={item.description}
+//     title={item.title}
+//     category={item.category}
+//     id={item.id}
+//     user={item.user}
+//     photoURL={item.photoURL}
+//   />
+// );
+
+
+// const styles = StyleSheet.create({
+//   block: {
+//     flex: 1,
+//     zIndex: 0,
+//   },
+//   container: {
+//     paddingBottom: 48,
+//   },
+//   spinner: {
+//     height: 64,
+//   },
+// });
+
+// export default CommunityScreen;
+
+
+import {ActivityIndicator, View, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import CameraButton from "../../components/Community/CameraButton";
 import React, {useEffect, useRef, useState} from 'react';
 import PostCard from "../../components/Community/PostCard";
-import { getOlderPosts, getPosts, PAGE_SIZE,getNewerPosts } from "../../lib/post";
-import { useNavigation } from '@react-navigation/native';
-import {Picker} from '@react-native-picker/picker'
+import {getOlderPosts, getPosts, PAGE_SIZE, getNewerPosts} from "../../lib/post";
+import {useNavigation} from '@react-navigation/native';
+import {Picker} from '@react-native-picker/picker';
+import { useUserContext } from "../../contexts/UserContext";
+
 
 function CommunityScreen() {
   const navigation = useNavigation();
   const [posts, setPosts] = useState(null);
   const [noMorePost, setNoMorePost] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [boardCategory, setBoardCategory] = useState("자유");
-
+  const [boardCategory, setBoardCategory] = useState("전체");
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  // 사용자 uid 가져오기
+  const { user } = useUserContext();
+  const uid = user["id"];
+  
   const pickerRef = useRef();
+
   useEffect(() => {
-
-
     // 컴포넌트가 처음 마운트될 때 포스트 목록을 조회한 후 `posts` 상태에 담기
-    getPosts().then(setPosts);
-
-    //navigation.header 설정
-    //headerLeft 는 좌측 헤더 설정정
-
+    getPosts().then((allPosts) => {
+      setPosts(allPosts);
+    });
   }, []);
+  
+  useEffect(() => {
+    if (posts) {
+      setFilteredPosts(posts.filter((post) => post.category === boardCategory));
+    }
+  }, [boardCategory, posts]);
+
+  
+  // 전체 게시물 조회
+  useEffect(() => {
+    if (posts) {
+      if (boardCategory === '전체') {
+        setFilteredPosts(posts);
+      } else if (boardCategory === '내 게시물') {
+        setFilteredPosts(posts.filter((post) => post.user.id == uid));
+      } else {
+        setFilteredPosts(posts.filter((post) => post.category === boardCategory));
+      }
+    }
+  }, [boardCategory, posts, uid]);
+
+
 
   // Page size 이후 글을 확인하려고 할 때 사용
   const onLoadMore = async () => {
@@ -31,12 +179,13 @@ function CommunityScreen() {
       return;
     }
     const lastPost = posts[posts.length - 1];
-    const olderPosts = await getOlderPosts(lastPost.id);
+    const olderPosts = await getOlderPosts(lastPost.id, boardCategory);
     if (olderPosts.length < PAGE_SIZE) {
       setNoMorePost(true);
     }
-    setPosts(posts.concat(olderPosts));
+    setPosts((prevPosts) => prevPosts.concat(olderPosts));
   };
+
 
   // 새로고침에 사용
   const onRefresh = async () => {
@@ -45,50 +194,49 @@ function CommunityScreen() {
     }
     const firstPost = posts[0];
     setRefreshing(true);
-    const newerPosts = await getNewerPosts(firstPost.id);
+    const newerPosts = await getNewerPosts(firstPost.id, boardCategory);
     setRefreshing(false);
     if (newerPosts.length === 0) {
       return;
     }
     setPosts(newerPosts.concat(posts));
   };
-
-
-
-    return (
-      <>
-        <View style={styles.block}>
-          <Picker
-            ref={pickerRef}
-            selectedValue={boardCategory}
-            onValueChange={(itemValue, itemIndex) =>
-              setBoardCategory(itemValue)
-            }>
-            <Picker.Item label="자유" value="자유" />
-            <Picker.Item label="상담" value="상담" />
-          </Picker>
-          <CameraButton />
-          <FlatList
-            data={posts}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.container}
-            onEndReached={onLoadMore}
-            onEndReachedThreshold={0.75}
-            ListFooterComponent={
-              !noMorePost && (
-                <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
-              )
-            }
-            refreshControl={
-              <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-            }
-          />
-        </View>
-      </>
-    )
+  return (
+    <>
+      <View style={styles.block}>
+        <Picker
+          ref={pickerRef}
+          selectedValue={boardCategory}
+          onValueChange={(itemValue, itemIndex) =>
+            setBoardCategory(itemValue)
+          }>
+          <Picker.Item label="전체" value="전체" />
+          <Picker.Item label="자유" value="자유" />
+          <Picker.Item label="상담" value="상담" />
+          <Picker.Item label="내 게시물" value="내 게시물" />
+          
+        </Picker>
+        <CameraButton />
+        <FlatList
+          data={filteredPosts}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.container}
+          onEndReached={onLoadMore}
+          onEndReachedThreshold={0.75}
+          ListFooterComponent={
+            !noMorePost && (
+              <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
+            )
+          }
+          refreshControl={
+            <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+          }
+        />
+      </View>
+    </>
+  );
 }
-
 const renderItem = ({item}) => (
   <PostCard
     createdAt={item.createdAt}
@@ -116,6 +264,17 @@ const styles = StyleSheet.create({
 });
 
 export default CommunityScreen;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
