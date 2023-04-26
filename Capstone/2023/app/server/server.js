@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // POST request to insert data into MySQL database
 app.post('/pet', (req, res) => {
-  const { petname, gender, weight, birth, kind, id } = req.body;
+  const { petname, gender, weight, birth, kind, id, unique_id } = req.body;
   
   const pet = {
     petname: petname,
@@ -19,7 +19,8 @@ app.post('/pet', (req, res) => {
     weight: weight,
     birth: birth,
     kind: kind,
-    uid: id
+    uid: id,
+    unique_id : unique_id
   };
 
   // Inserting data into pet_info table
@@ -38,6 +39,17 @@ app.get('/pet', (req, res) => {
   connection.query(sql, (err, result) => {
     if (err) throw err;
     res.json(result);
+  });
+});
+
+// 삭제코드
+app.delete('/pet/:unique_id', (req, res) => {
+  const unique_id = req.query.unique_id;
+  const sql = `DELETE FROM pet_info WHERE unique_id = '${unique_id}'`;
+
+  connection.query(sql, (err, result) => {
+    if (err) throw err;
+    res.json({ message: `Pet with unique_id ${unique_id} has been deleted` });
   });
 });
 

@@ -12,6 +12,10 @@ function HomeScreen() {
   const [weight, setWeight] = useState("");
   const [birth, setBirth] = useState("");
   const [kind, setKind] = useState("");
+
+  //삭제를 위한 코드 (지울 예정)
+  const [unique_id , setUnique_id ] = useState("");
+  
   const [saving, setSaving] = useState(false);
   const [petInfo, setPetInfo] = useState(null);
   const { user } = useUserContext();
@@ -41,7 +45,7 @@ function HomeScreen() {
 
     fetchPetInfo();
   }, [uid]);
-
+  // 펫 정보 서버에 저장
   const savePet = async () => {
     setSaving(true);
     try {
@@ -57,6 +61,7 @@ function HomeScreen() {
           weight,
           birth,
           kind,
+          unique_id,
         }),
       });
       const data = await response.json();
@@ -70,6 +75,23 @@ function HomeScreen() {
       setSaving(false);
     }
   };
+  //펫 정보 삭제
+  const handleDeletePet = async (unique_id) => {
+    try {
+      await fetch(`http://127.0.0.1:4000/pet/${unique_id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      // create a new petInfo array that excludes the deleted pet
+      const updatedPetInfo = petInfo.filter((pet) => pet.unique_id !== unique_id);
+      setPetInfo(updatedPetInfo);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -81,7 +103,7 @@ function HomeScreen() {
           resizeMode="cover"
         />
       )}      
-      <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContent} style={styles.scrollView}>
+      {/* <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContent} style={styles.scrollView}>
         {petInfo && petInfo.map((pet, index) => (
           <View key={index} style={styles.petInfoContainer}>
           <Text style={styles.subtitle}></Text>
@@ -90,6 +112,26 @@ function HomeScreen() {
           <Text style={styles.petInfoText}>Weight: {pet.weight}</Text>
           <Text style={styles.petInfoText}>Birth date: {pet.birth}</Text>
           <Text style={styles.petInfoText}>Kind: {pet.kind}</Text>
+        </View>
+      ))}
+    </ScrollView> */}
+
+
+    <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContent} style={styles.scrollView}>
+      {petInfo && petInfo.map((pet) => (
+        <View key={pet.unique_id} style={styles.petInfoContainer}>
+          <Text style={styles.subtitle}></Text>
+          <Text style={styles.petInfoText}>Name: {pet.petname}</Text>
+          <Text style={styles.petInfoText}>Gender: {pet.gender}</Text>
+          <Text style={styles.petInfoText}>Weight: {pet.weight}</Text>
+          <Text style={styles.petInfoText}>Birth date: {pet.birth}</Text>
+          <Text style={styles.petInfoText}>Kind: {pet.kind}</Text>
+          <Text style={styles.petInfoText}>unique_id: {pet.unique_id}</Text>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={() => handleDeletePet(pet.unique_id)} style={styles.deleteButton}>
+              <Text style={styles.buttonText}>Delete</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       ))}
     </ScrollView>
@@ -156,6 +198,7 @@ function HomeScreen() {
       </TouchableOpacity>
 
     </View>
+    
   );
 }
 
@@ -236,6 +279,25 @@ const styles = StyleSheet.create({
   petInfoText: {
     fontSize: 14,
     marginBottom: 5,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    flexDirection: 'row-reverse',
+    margin: 8,
+  },
+  deleteButton: {
+    backgroundColor: 'red',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    marginLeft: 8,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
   },
   //--------------------------------------------------------------------
   // 모달 창 스타일
