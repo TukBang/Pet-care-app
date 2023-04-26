@@ -5,8 +5,12 @@ import { Calendar } from "react-native-calendars";
 import Ggupdeagi from "../Ggupdeagi";
 import { Pressable } from "react-native";
 
+
+// 난수 생성
+import {v4 as uuidv4} from 'uuid';
+const uuid = uuidv4();
+
 function HomeScreen() {
-  
   const [petname, setPetname] = useState("");
   const [gender, setGender] = useState("");
   const [weight, setWeight] = useState("");
@@ -17,7 +21,7 @@ function HomeScreen() {
   const [unique_id , setUnique_id ] = useState("");
   
   const [saving, setSaving] = useState(false);
-  const [petInfo, setPetInfo] = useState(null);
+  const [petInfo, setPetInfo] = useState([]);
   const { user } = useUserContext();
   const uid = user["id"];
   const [showModal, setShowModal] = useState(false);
@@ -33,11 +37,14 @@ function HomeScreen() {
     // GET request to retrieve pet information for the user
     const fetchPetInfo = async () => {
       try {
-        console.log(uid)
+        //console.log(uid)
         const response = await fetch(`http://127.0.0.1:4000/pet?uid=${uid}`);
         const data = await response.json();
-        setPetInfo(data); // Assuming there is only one pet per user
-        console.log(data);
+
+        setPetInfo(data);
+
+        //console.log(data);
+        
       } catch (error) {
         console.error(error);
       }
@@ -45,10 +52,24 @@ function HomeScreen() {
 
     fetchPetInfo();
   }, [uid]);
+
   // 펫 정보 서버에 저장
+  //http://121.170.118.190:4000/   //진식 주소
   const savePet = async () => {
     setSaving(true);
+    
     try {
+
+      console.log(JSON.stringify({
+        petname,
+        id: uid,
+        gender,
+        weight,
+        birth,
+        kind,
+        unique_id: uuid,
+      }));
+      // const response = await fetch("http://121.170.118.190:4000/pet", {
       const response = await fetch("http://127.0.0.1:4000/pet", {
         method: "POST",
         headers: {
@@ -61,36 +82,46 @@ function HomeScreen() {
           weight,
           birth,
           kind,
-          unique_id,
+          unique_id: uuid,
         }),
       });
+
       const data = await response.json();
       console.log(data);
       setPetInfo(data);
     } catch (error) {
       console.error(error);
+
     } finally {
       // check if component is still mounted before updating state
       if (!saving) return;
       setSaving(false);
     }
+    
   };
+
   //펫 정보 삭제
   const handleDeletePet = async (unique_id) => {
+
     try {
-      await fetch(`http://127.0.0.1:4000/pet/${unique_id}`, {
+      await fetch(`http://127.0.0.1:4000/pet`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          unique_id: unique_id,
+        }),
       });
   
       // create a new petInfo array that excludes the deleted pet
       const updatedPetInfo = petInfo.filter((pet) => pet.unique_id !== unique_id);
       setPetInfo(updatedPetInfo);
+
     } catch (error) {
       console.error(error);
     }
+
   };
 
   return (
@@ -103,38 +134,35 @@ function HomeScreen() {
           resizeMode="cover"
         />
       )}      
-      {/* <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContent} style={styles.scrollView}>
-        {petInfo && petInfo.map((pet, index) => (
-          <View key={index} style={styles.petInfoContainer}>
-          <Text style={styles.subtitle}></Text>
-          <Text style={styles.petInfoText}>Name: {pet.petname}</Text>
-          <Text style={styles.petInfoText}>Gender: {pet.gender}</Text>
-          <Text style={styles.petInfoText}>Weight: {pet.weight}</Text>
-          <Text style={styles.petInfoText}>Birth date: {pet.birth}</Text>
-          <Text style={styles.petInfoText}>Kind: {pet.kind}</Text>
-        </View>
-      ))}
-    </ScrollView> */}
-
-
-    <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContent} style={styles.scrollView}>
-      {petInfo && petInfo.map((pet) => (
-        <View key={pet.unique_id} style={styles.petInfoContainer}>
-          <Text style={styles.subtitle}></Text>
-          <Text style={styles.petInfoText}>Name: {pet.petname}</Text>
-          <Text style={styles.petInfoText}>Gender: {pet.gender}</Text>
-          <Text style={styles.petInfoText}>Weight: {pet.weight}</Text>
-          <Text style={styles.petInfoText}>Birth date: {pet.birth}</Text>
-          <Text style={styles.petInfoText}>Kind: {pet.kind}</Text>
-          <Text style={styles.petInfoText}>unique_id: {pet.unique_id}</Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={() => handleDeletePet(pet.unique_id)} style={styles.deleteButton}>
-              <Text style={styles.buttonText}>Delete</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ))}
-    </ScrollView>
+      <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContent} style={styles.scrollView}>
+        {
+          petInfo && (function() {
+            const petElements = [];
+            for (let i = 0; i < petInfo.length; i++) {
+              const pet = petInfo[i];
+              petElements.push(
+                <View key={pet.unique_id} style={styles.petInfoContainer}>
+                  <Text style={styles.subtitle}></Text>
+                  <Text style={styles.petInfoText}>Name: {pet.petname}</Text>
+                  <Text style={styles.petInfoText}>Gender: {pet.gender}</Text>
+                  <Text style={styles.petInfoText}>Weight: {pet.weight}</Text>
+                  <Text style={styles.petInfoText}>Birth date: {pet.birth}</Text>
+                  <Text style={styles.petInfoText}>Kind: {pet.kind}</Text>
+                  <Text style={styles.petInfoText}>unique_id: {pet.unique_id}</Text>
+                  <View style={styles.buttonContainer}>
+                    <TouchableOpacity onPress={() => {handleDeletePet(pet.unique_id);
+                      console.log(pet.unique_id)
+                    }} style={styles.deleteButton}>
+                      <Text style={styles.buttonText}>Delete</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              );
+            }
+            return petElements;
+          })()
+        }
+      </ScrollView>
     <Modal
       visible={showModal}
       transparent={true}
@@ -143,7 +171,7 @@ function HomeScreen() {
       <Pressable style={styles.background}>
         <View style={styles.whiteBox}>
           
-            <Text style={styles.modalTitle}>새로운 반려동물을 등록해주세요</Text>
+            <Text style={styles.modalTitle}>반려동물을 등록해주세요</Text>
             <TextInput
               style={styles.modalInput}
               placeholder="이름"
@@ -176,6 +204,13 @@ function HomeScreen() {
             />
             <TextInput
               style={styles.modalInput}
+              placeholder="Unique_id"
+              onChangeText={() => {}}
+              value={uuid}
+              editable={false}
+            />
+            <TextInput
+              style={styles.modalInput}
               placeholder="User ID"
               onChangeText={() => {}}
               value={uid}
@@ -184,16 +219,41 @@ function HomeScreen() {
             <View style={styles.modalButtons}>
               <Button
                 title="Cancel"
-                onPress={() => setShowModal(false)}
+                onPress={() => {
+                  setShowModal(false);
+                  setPetname('');
+                  setGender('');
+                  setWeight('');
+                  setBirth('');
+                  setKind('');
+                }}
                 color="gray"
               />
-              <Button title="Save" onPress={savePet} />
             </View>
+            <View style={styles.modalButtons}>
+              <Button 
+                title="Save"
+                onPress={() => {
+                  savePet();
+                  setShowModal(false);
+                }}
+              />
+            </View>
+            
           </View>
 
       </Pressable>
     </Modal>
-      <TouchableOpacity style={styles.addButton} onPress={() => setShowModal(true)}>
+    
+      <TouchableOpacity style={styles.addButton} onPress={() => {
+        setShowModal(true);
+        setPetname('');
+        setGender('');
+        setWeight('');
+        setBirth('');
+        setKind('');
+
+      }}>
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
 
@@ -250,6 +310,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   addButtonText: {
+    
     color: "#fff",
     fontSize: 24,
   },
@@ -303,63 +364,81 @@ const styles = StyleSheet.create({
   // 모달 창 스타일
 
   background: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)'
   },
   whiteBox: {
-    flexDirection: "column",
-    alignItems: 'center',
     width: '80%',
     backgroundColor: 'white',
-    borderRadius: 4,
-    elevation: 2
+    borderRadius: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: "#fff",
-    borderRadius: 5,
-    padding: 20,
-    width: "80%",
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 10,
+    paddingVertical: 20,
+    paddingHorizontal: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   modalTitle: {
-    fontWeight: "bold",
-    fontSize: 18,
-    marginBottom: 10,
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    textAlign: 'left',
   },
   modalInput: {
-    borderWidth: 1,
-    borderColor: "#ccc",
+    width: '100%',
+    borderWidth: 2,
     borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    width: "100%",
+    borderColor: '#CDCDCD',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginBottom: 15,
+    fontSize: 18,
   },
   modalButtonContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
     marginTop: 20,
+    alignItems: 'center',
   },
   modalButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 10,
     marginLeft: 10,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    borderRadius: 5,
+    backgroundColor: '#2E8B57',
   },
   modalButtonText: {
-    fontWeight: "bold",
-    fontSize: 16,
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   modalButtons: {
-    width: "100%"    
-  }
-  //--------------------------------------------------------------------
+    width: '100%',    
+    paddingVertical: 2,
+  },
 });
+  //--------------------------------------------------------------------
+
 
 export default HomeScreen;

@@ -20,7 +20,7 @@ app.post('/pet', (req, res) => {
     birth: birth,
     kind: kind,
     uid: id,
-    unique_id : unique_id
+    uuid : unique_id,
   };
 
   // Inserting data into pet_info table
@@ -28,6 +28,16 @@ app.post('/pet', (req, res) => {
     if (error) throw error;
 
     res.send(results);
+  });
+});
+
+//모든 pet_info 조회
+app.get('/pet', (req, res) => {
+  const sql = `SELECT * FROM pet_info`;
+
+  connection.query(sql, (err, result) => {
+    if (err) throw err;
+    res.json(result);
   });
 });
 
@@ -42,15 +52,23 @@ app.get('/pet', (req, res) => {
   });
 });
 
-// 삭제코드
-app.delete('/pet/:unique_id', (req, res) => {
-  const unique_id = req.query.unique_id;
+// DELETE request to delete a pet from MySQL database
+app.delete('/pet', (req, res) => {
+
+  const { unique_id } = req.body;
+
+  console.log('안녕');
+
+  //const unique_id = req.params.unique_id;
   const sql = `DELETE FROM pet_info WHERE unique_id = '${unique_id}'`;
+  
+  console.log(unique_id);
 
   connection.query(sql, (err, result) => {
     if (err) throw err;
-    res.json({ message: `Pet with unique_id ${unique_id} has been deleted` });
+    res.send(result);
   });
+  console.log('반갑');
 });
 
 
