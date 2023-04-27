@@ -185,10 +185,10 @@ import AnimatedMarkers from "../../components/Walking/MapView";
 const WalkingScreen = () => {
   return (
     <View style={{ height: 200 }}>
-      {/* <AnimatedMarkers /> */}
-      <Text>
+      <AnimatedMarkers />
+      {/* <Text>
         산책 미구현
-      </Text>
+      </Text> */}
     </View>
   );
 };

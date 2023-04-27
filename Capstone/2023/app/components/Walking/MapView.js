@@ -66,7 +66,7 @@ class AnimatedMarkers extends React.Component {
 
         if (Platform.OS === "android") {
           if (this.marker) {
-            this.marker._component.animateMarkerToCoordinate(
+            this.marker.animateMarkerToCoordinate(
               newCoordinate,
               500
             );
