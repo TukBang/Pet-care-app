@@ -23,7 +23,10 @@ function DiagModal({
     >
       <Pressable style={styles.background}>
         <View style={styles.whiteBox}>
-          <Image source={{ uri: selectedImage.path }}  style={styles.image} resizeMode='contain'/>
+          <Image
+            source={{ uri: selectedImage.path }} 
+            style={styles.image}
+            resizeMode='contain'/>
           <ActivityIndicator 
             size={50} 
             color="#2296F3"/>

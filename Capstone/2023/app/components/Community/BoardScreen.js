@@ -10,6 +10,8 @@ import useComments from "../../hooks/useComments";
 import { ActivityIndicator } from "react-native";
 import { RefreshControl } from "react-native";
 import events from "../../lib/events";
+import {format, formatDistanceToNow } from "date-fns";
+import ko from "date-fns/locale/ko";
 
 function BoardScreen({route}) {
     const {post} = route.params;
@@ -70,81 +72,92 @@ function BoardScreen({route}) {
         }
       }, [post.id, comments]);
     return (
-        <>
-            <View style={styles.block}>
-                <View style={styles.paddingBlock}>
-                    <View style={styles.head}>
-                        <Pressable style={styles.profile} onPress={onOpenProfile}>
-                            <Image
-                            source={
-                                post.user.photoURL
-                                ? {
-                                    uri: post.user.photoURL,
-                                }
-                                : require('../../assets/user.png')
-                            }
-                            resizeMode="cover"
-                            style={styles.avatar}
-                            />
-                            <Text style={styles.displayName}>{post.user.displayName}</Text>
-                            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.boardTitle}>
-                                {post.category} {post.title}
-                            </Text>
-                        </Pressable>
-                        {isMyPost && (
-                        <Pressable style={{alignSelf: 'flex-end'}} onPress={onPressMore} hitSlop={8}>
-                            <Icon name="more-vert" size={25} />
-                        </Pressable>
-                        )}
-                    </View>
-                    <Image
-                    source={{uri: post.photoURL}}
-                    style={styles.image}
-                    resizeMethod="resize"
-                    resizeMode="cover"
-                    />
-                </View>
-                
-                <View style={styles.paddingBlock}>
-                    <Text style={styles.description}>{post.description}</Text>
-                    <Text date={date} style={styles.date}>
-                        {date.toLocaleString()} 에 작성됐어요
-                    </Text>
-                    
-                </View>
-                <View>
-                    <TextInput
-                        value={txt}
-                        onChangeText={(value) => setTxt(value)}
-                        placeholder="댓글을 입력하세요"
-                    />
-                    <Button onPress={onSubmit} title="작성" />
-                </View>
-                <View style={{flex: 1}}>
-                    <FlatList
-                      data={filteredComments}
-                      renderItem={renderItemComment}
-                      keyExtractor={(item) => item.id}
-                      contentContainerStyle={styles.container}
-                    //   onEndReached={onLoadMoreComments}
-                    //   onEndReachedThreshold={0.75}
-                    //   ListFooterComponent={
-                    //       !noMoreComment && (
-                    //       <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
-                    //       )
-                    //   }
-                      refreshControl={
-                          <RefreshControl onRefresh={onRefreshComment} refreshing={refreshingComment} />
-                      }
-                    />
-                </View>
+      <>
+        <View style={styles.block}>
+          <View style={styles.paddingBlock}>
+            <View style={styles.head}>
+              <Pressable style={styles.profile} onPress={onOpenProfile}>
+                <Image
+                  source={
+                    post.user.photoURL ? { uri: post.user.photoURL } : require('../../assets/user.png')
+                  }
+                  resizeMode="cover"
+                  style={styles.avatar}
+                />
+                <Text style={styles.displayName}>{post.user.displayName + " 님"}</Text>
+                <Text 
+                  numberOfLines={2} 
+                  ellipsizeMode="tail" 
+                  style={styles.boardTitle}
+                >
+                  {"[" + post.category + "] - "}{post.title}
+                </Text>
+              </Pressable>
+              {isMyPost && (
+                <Pressable
+                  style={{marginBottom: 3, alignSelf: 'flex-end'}} 
+                  onPress={onPressMore} 
+                  hitSlop={8}
+                >
+                  <Icon name="more-vert" size={24} />
+                </Pressable>
+              )}
             </View>
-            <ActionSheetModal
-            visible={isSelecting}
-            actions={actions}
-            onClose={onClose}
+          </View>
+          <Text date={date} style={styles.date}>
+            {format(date, 'MM월 dd일 (EEE) hh시 mm분', {locale: ko})}에 작성됨
+          </Text>
+
+          <Image
+            source={{uri: post.photoURL}}
+            style={styles.image}
+            resizeMode="contain"
+            transform={[{scale: 1}]}
+          />
+            
+          <View style={styles.paddingBlock}>
+            <Text style={styles.description}>{post.description}</Text>                  
+          </View>
+
+          <View style={{marginBottom: 15}}>
+            <TextInput
+              style={styles.commentInput}
+              placeholder="댓글 입력"
+              placeholderTextColor={"#BCBCBC"}
+              value={txt}
+              onChangeText={(value) => setTxt(value)}
             />
-        </>
+            <Button onPress={onSubmit} title="작성" />
+          </View>
+          
+          <Text> 댓글 </Text>
+
+          <View style={{flex: 1, marginTop: 5}}>
+            <FlatList
+              data={filteredComments}
+              renderItem={renderItemComment}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={styles.container}
+            //   onEndReached={onLoadMoreComments}
+            //   onEndReachedThreshold={0.75}
+            //   ListFooterComponent={
+            //       !noMoreComment && (
+            //       <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
+            //       )
+            //   }
+              refreshControl={
+                <RefreshControl onRefresh={onRefreshComment} refreshing={refreshingComment} />
+              }
+            />
+          </View>
+        </View>
+
+        <ActionSheetModal
+          visible={isSelecting}
+          actions={actions}
+          onClose={onClose}
+        />
+      </>
     )
 }
 
@@ -165,55 +178,75 @@ const styles = StyleSheet.create({
         flex: 1,
         // paddingBottom: 16,
       },
-      avatar: {
-        width: 32,
-        height: 32,
-        borderRadius: 16,
-      },
       paddingBlock: {
-        paddingHorizontal: 16,
+        paddingHorizontal: 0,
       },
+
       head: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 5,
       },
+
+      avatar: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+      },
+      
+      
       profile: {
         flexDirection: 'row',
         alignItems: 'center',
       },
+
       displayName: {
-        lineHeight: 16,
+        lineHeight: 20,
         fontSize: 16,
-        marginLeft: 8,
+        marginLeft: 10,
         fontWeight: 'bold',
       },
-      image: {
-        backgroundColor: '#bdbdbd',
-        width: '90%',
-        aspectRatio: 1,
-        alignSelf:'center',
-        // marginBottom: 6,
-        marginTop: 6,
-        borderRadius: 5,
+
+      boardTitle: {
+        lineHeight: 20,
+        fontSize: 16,
+        marginLeft: 5,
+        fontWeight: 'bold',
       },
+
+      date: {
+        color: '#757575',
+        fontSize: 12,
+        lineHeight: 20,
+        marginTop: 5,
+        marginLeft: 3,
+        marginBottom: 10,
+      },
+
+      image: {
+        height: "30%",
+        width: "30%",
+        aspectRatio: 1,
+
+        marginTop: 5,
+        marginBottom: 10,
+      },
+
       description: {
         fontSize: 16,
         lineHeight: 24,
         marginBottom: 8,
       },
-      date: {
-        color: '#757575',
-        fontSize: 12,
-        lineHeight: 18,
-      },
-      boardTitle: {
-        // lineHeight: 20,
-        fontSize: 16,
-        marginLeft: 6,
-        fontWeight: 'bold',
-      },
+
+      commentInput: {
+        borderWidth: 2,
+        borderRadius: 5,
+        borderColor: "#CDCDCD",
+        paddingVertical: 5,
+        paddingHorizontal: 12,
+      },   
+      
       container: {
         paddingBottom: 48,
       },

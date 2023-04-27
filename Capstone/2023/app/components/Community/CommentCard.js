@@ -5,6 +5,8 @@ import useCommentActions from '../../hooks/useCommentAction';
 import ActionSheetModal from '../ActionSheetModal';
 import { useUserContext } from '../../contexts/UserContext';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {format, formatDistanceToNow } from "date-fns";
+import ko from "date-fns/locale/ko";
 
 function CommentCard({ user, txt, postId, createdAt,id}) {
   const date = useMemo(
@@ -49,11 +51,11 @@ function CommentCard({ user, txt, postId, createdAt,id}) {
                             </Pressable>
                         )}
                     </View>
-                    <Text style={{fontSize:15}}>
+                    <Text style={{fontSize:15, marginTop: 4, marginLeft: 1, marginBottom: 5}}>
                         {txt}
                     </Text>
                     <Text date={date} style={styles.date}>
-                        {date.toLocaleString()}
+                      {format(date, 'MM월 dd일 (EEE) hh시 mm분', {locale: ko})}
                     </Text>
                 </View>
             </View>
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
     color: '#757575',
     fontSize: 12,
     lineHeight: 18,
-    marginLeft: 14
+    marginLeft: 0,
   },
 });
 

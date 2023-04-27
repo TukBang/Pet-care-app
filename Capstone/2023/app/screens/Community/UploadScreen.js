@@ -1,6 +1,14 @@
-import React, {useEffect, useRef, useState, useCallback} from 'react';
-import { ActivityIndicator, Modal, Text } from 'react-native';
+import React, {
+  useEffect,
+  useRef, 
+  useState, 
+  useCallback
+} from 'react';
+
 import {
+  ActivityIndicator,
+  Modal,
+  Text,
   StyleSheet,
   TextInput,
   View,
@@ -8,7 +16,12 @@ import {
   useWindowDimensions,
   Platform
 } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
+
+import {
+  useNavigation, 
+  useRoute
+} from '@react-navigation/native';
+
 import IconRightButton from '../../components/Community/IconRightButton';
 import { useUserContext } from '../../contexts/UserContext';
 import { v4 } from 'uuid';
@@ -26,6 +39,10 @@ import Pressable from 'react-native/Libraries/Components/Pressable/Pressable';
 // DiagnosisScreen.js 에서 상담 게시판을 올리는데 사용
 
 function UploadScreen() {
+  let titlePlaceHolder = "제목"
+  let bodyPlaceHolder = "내용 입력"
+  let placeholderTextColor = "#BCBCBC"
+
   const route = useRoute();
   const navigation = useNavigation();
   const res = route.params.res;
@@ -45,6 +62,7 @@ function UploadScreen() {
     if( !isSolution ) {
       const asset = res.assets[0];
       const extension = asset.fileName.split('.').pop();
+
       // firebase storge 에서 /photo/uid/랜덤변수.확장자 링크?
       var reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
       if (Platform.OS === 'android') {
@@ -57,34 +75,32 @@ function UploadScreen() {
     } else {
       const extension = res.path.split('.').pop();
       var reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
+      
       //image : path to base64 변환
       const image = await RNFS.readFile(res.path, 'base64');
       if (Platform.OS === 'android') {
-        await reference.putString(image, 'base64', {
-          contentType: res.mime,
-        });
+        await reference.putString(image, 'base64', {contentType: res.mime});
       } else {
         await reference.putFile(res.path);
       }
     }
   
-  // reference 에서 getDownloadURL 함수를 통해 이미지 path 저장
-  const photoURL = await reference.getDownloadURL();
-  try{
-    await createPost({title,category,description, photoURL, user});
-    setIsLoading(false);
-    if (isSolution) {
-      setEndModalVisible(true);
-    } else {
-      navigation.pop()
-    }
-  
-  } catch (error) {
-    
-  }
-    events.emit('refresh');
+    // reference 에서 getDownloadURL 함수를 통해 이미지 path 저장
+    const photoURL = await reference.getDownloadURL();
+    try {
+      await createPost({title,category,description, photoURL, user});
+      setIsLoading(false);
+      
+      if (isSolution) {
+        setEndModalVisible(true);
+      } else {
+        navigation.pop()
+      }
+    } catch (error) {}
+
     // TODO: 포스트 목록 새로고침
-  }, [res, user, title,category,description, navigation]);
+    events.emit('refresh');
+  }, [res, user, title, category, description, navigation]);
 
   const onCloseModal = useCallback(() => {
     navigation.dispatch(
@@ -120,30 +136,34 @@ function UploadScreen() {
         <Picker.Item label="자유" value="자유" />
         <Picker.Item label="상담" value="상담" />
       </Picker>
-
+      
       <TextInput
-        style={styles.titleInput}
-        placeholder="제목을 입력하세요..."
-        returnKeyType="next"
-        textAlignVertical="top"
-        value={title}
+        style={styles.titleTextInput}
+        placeholder={titlePlaceHolder}
+        placeholderTextColor={placeholderTextColor}
         onChangeText={setTitle}
+        value={title}
+        returnKeyType="next"
       />
+
       <Image
         source= {{
           uri: isSolution ? res.path : res.assets[0]?.uri
         }}
-        style={[styles.image, {height: width}]}
-        resizeMode="cover"
+        style={styles.image}
+        resizeMode="contain"
+        transform={[{scale: 1}]}
       />
       <TextInput
-        style={styles.input}
-        multiline={true}
-        placeholder="이 사진에 대한 설명을 입력하세요..."
-        textAlignVertical="top"
-        value={description}
+        style={styles.bodyTextInput}
+        placeholder={bodyPlaceHolder}
+        placeholderTextColor={placeholderTextColor}
         onChangeText={setDescription}
+        value={description}
+        multiline={true}
       />
+      
+      
       {isLoading && (
         <Modal
           transparent={true}
@@ -165,22 +185,39 @@ const styles = StyleSheet.create({
   block: {
     flex: 1,
   },
-  image: {width: '100%'},
-  titleInput: {
-    paddingVertical: 0,
-    // flex: 1,
-    fontSize: 20,
-    // paddingBottom: 1,
-    color: '#263238',
+
+  titleTextInput: {
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    
+    // 밑줄
+    borderBottomWidth: 2,
+    borderBottomColor: '#FFA000',
+    
     fontWeight: 'bold',
-},
-  input: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 16,
-    flex: 1,
+    fontSize: 18,
+  },
+
+  container: {
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "#FFA000",
+  },
+
+  image: {
+    marginLeft: 15,
+    height: "50%",
+    width: '50%'
+  },
+
+  bodyTextInput: {
+    textAlignVertical: "top",
+    marginLeft: 10,
+    paddingVertical: 5,
+    height: 200,
     fontSize: 16,
   },
+  
   background: {
     backgroundColor: 'rgba(0,0,0,0.6)',
     flex: 1,
