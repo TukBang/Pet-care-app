@@ -42,6 +42,8 @@ function DiagnosisScreen() {
   let resultButtonText2 = `전문가와 상담하기`;
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  // 61.106.219.23
+  // 121.170.118.190
   // SelectedImage AI SERVER 전송
   const handlePostRequest = async () => {
     try {
@@ -144,16 +146,20 @@ function DiagnosisScreen() {
                 // 진단 결과 스크린
                 <View style={diagnosisResultStyles.resultScreenView}>
                   <View style={diagnosisResultStyles.resultView}>
-                    <View style={diagnosisResultStyles.DescribeTextView}>
-                      <View style={{width: "30%"}}>
+                    <View style={{width: "50%"}}>
                         <Text style={diagnosisResultStyles.resultTextTitle}>{diagnosisResultText1}</Text>
                         <Text style={diagnosisResultStyles.resultTextContent}>{diagnosisResultText2}</Text>
-                      </View>
-
-                      <View style={diagnosisResultStyles.imageView}>
-                        <Image source={{uri: selectedImage.path}} style={diagnosisResultStyles.image} resizeMode="center" />
-                      </View>
                     </View>
+
+                    <View style={diagnosisResultStyles.imageView}>
+                      <Image 
+                        source={{uri: selectedImage.path}} 
+                        style={diagnosisResultStyles.image} 
+                        resizeMode="contain"
+                        transform={[{scale: 1}]}
+                      />
+                    </View>
+
                   </View>
 
                   <View style={diagnosisResultStyles.chartView}>
@@ -262,21 +268,15 @@ const diagnosisResultStyles = StyleSheet.create({
   resultScreenView: {
     flexDirection: "column",
     height: 150,
-    alignItems: "flex-start",
     padding: 20,
   },
 
   resultView: {
+    flexDirection: "row",
+    justifyContent: 'space-between',
     marginBottom: 10,
   },
-
-  DescribeTextView: {
-    flexDirection: "row", 
-    height: 250,
-    width: 550,
-    alignItems: "flex-start",
-  },
-
+  
   resultTextTitle: {
     fontSize: 20,
     fontWeight: "bold",
@@ -288,13 +288,12 @@ const diagnosisResultStyles = StyleSheet.create({
 
   imageView: {
     overflow: "hidden",
-    width: 250,
-    height: 250,
-
-    marginLeft: -13,
+    width: "50%",
+    height: "100%",
   },
 
   image: {
+    overflow: "hidden",
     width: 250,
     height: 250,
   },
@@ -303,13 +302,18 @@ const diagnosisResultStyles = StyleSheet.create({
     // 정렬
     flexDirection: "row",
     height: 100,
-    alignItems: "flex-start",
     padding: 0,
 
     marginBottom: 118,
   },
 
   button_container: {
+    // 정렬
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    overflow: "hidden",
+
     // 여백
     marginTop: 20,
   },
@@ -320,7 +324,7 @@ const diagnosisResultStyles = StyleSheet.create({
     alignItems: 'center',
 
     height: 40,
-    width: 370,
+    width: 330,
 
     // 여백
     marginTop: 10,

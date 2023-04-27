@@ -51,6 +51,7 @@ function CommunityScreen() {
   return (
     <>
       <View style={styles.block}>
+        <CameraButton />
         <Picker
           ref={pickerRef}
           selectedValue={boardCategory}
@@ -62,8 +63,7 @@ function CommunityScreen() {
           <Picker.Item label="상담" value="상담" />
           <Picker.Item label="내 게시물" value="내 게시물" />
 
-        </Picker>
-        <CameraButton />
+        </Picker>        
         <FlatList
           data={filteredPosts}
           renderItem={renderItem}

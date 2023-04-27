@@ -1,10 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text,Image, TextInput, Button, Modal, ScrollView, TouchableOpacity } from "react-native";
+import React, {
+  useState,
+  useRef,
+  useEffect
+} from "react";
+
+import {
+  StyleSheet,
+  View,
+  Modal,
+  ScrollView,
+  Text,
+  TextInput,
+  Image,
+  Button,
+  TouchableOpacity,
+  Pressable,
+  Animated
+} from "react-native";
+
+import {  } from "react-native";
+
 import { useUserContext } from "../../contexts/UserContext";
 import { Calendar } from "react-native-calendars";
 import Ggupdeagi from "../Ggupdeagi";
-import { Pressable } from "react-native";
 
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 // 난수 생성
 import {v4 as uuidv4} from 'uuid';
@@ -17,7 +37,7 @@ function HomeScreen() {
   const [birth, setBirth] = useState("");
   const [kind, setKind] = useState("");
 
-  //삭제를 위한 코드 (지울 예정)
+  // 삭제를 위한 코드 (지울 예정)
   const [unique_id , setUnique_id ] = useState("");
   
   const [saving, setSaving] = useState(false);
@@ -25,6 +45,18 @@ function HomeScreen() {
   const { user } = useUserContext();
   const uid = user["id"];
   const [showModal, setShowModal] = useState(false);
+  
+  const animation = useRef(new Animated.Value(0)).current;
+
+  // Animation for Pressable Button
+  useEffect(()=> {
+    Animated.spring(animation, {
+      toValue: 0,
+      useNativeDriver: true,
+      tension: 45,
+      friction: 5,
+    }).start();
+  }, [animation]);
   
   useEffect(() => {
     return () => {
@@ -38,7 +70,7 @@ function HomeScreen() {
     const fetchPetInfo = async () => {
       try {
         //console.log(uid)
-        const response = await fetch(`http://127.0.0.1:4000/pet?uid=${uid}`);
+        const response = await fetch(`http://121.170.118.190:4000/pet?uid=${uid}`);
         const data = await response.json();
 
         setPetInfo(data);
@@ -70,7 +102,7 @@ function HomeScreen() {
         unique_id: uuid,
       }));
       // const response = await fetch("http://121.170.118.190:4000/pet", {
-      const response = await fetch("http://127.0.0.1:4000/pet", {
+      const response = await fetch("http://121.170.118.190:4000/pet", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -102,9 +134,8 @@ function HomeScreen() {
 
   //펫 정보 삭제
   const handleDeletePet = async (unique_id) => {
-
     try {
-      await fetch(`http://127.0.0.1:4000/pet`, {
+      await fetch(`http://121.170.118.190:4000/pet`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -136,6 +167,7 @@ function HomeScreen() {
         )} 
         <Text style={{fontSize:30, marginLeft:10}}>안녕하세요 {user.displayName} 님!</Text>
       </View>
+
       <Ggupdeagi />
            
       <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContent} style={styles.scrollView}>
@@ -154,9 +186,12 @@ function HomeScreen() {
                   <Text style={styles.petInfoText}>Kind: {pet.kind}</Text>
                   <Text style={styles.petInfoText}>unique_id: {pet.unique_id}</Text>
                   <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => {handleDeletePet(pet.unique_id);
-                      console.log(pet.unique_id)
-                    }} style={styles.deleteButton}>
+                    <TouchableOpacity 
+                      onPress={() => {
+                        handleDeletePet(pet.unique_id);
+                        console.log(pet.unique_id)
+                      }} 
+                      style={styles.deleteButton}>
                       <Text style={styles.buttonText}>Delete</Text>
                     </TouchableOpacity>
                   </View>
@@ -167,14 +202,13 @@ function HomeScreen() {
           })()
         }
       </ScrollView>
-    <Modal
-      visible={showModal}
-      transparent={true}
-      animationType="fade"
-    >
-      <Pressable style={styles.background}>
-        <View style={styles.whiteBox}>
-          
+      <Modal
+        visible={showModal}
+        transparent={true}
+        animationType="fade"
+      >
+        <Pressable style={styles.background}>
+          <View style={styles.whiteBox}>
             <Text style={styles.modalTitle}>반려동물을 등록해주세요</Text>
             <TextInput
               style={styles.modalInput}
@@ -243,23 +277,46 @@ function HomeScreen() {
                 }}
               />
             </View>
-            
           </View>
-
-      </Pressable>
-    </Modal>
-    
-      <TouchableOpacity style={styles.addButton} onPress={() => {
-        setShowModal(true);
-        setPetname('');
-        setGender('');
-        setWeight('');
-        setBirth('');
-        setKind('');
-
-      }}>
-        <Text style={styles.addButtonText}>+</Text>
-      </TouchableOpacity>
+        </Pressable>
+      </Modal>
+                
+      <Animated.View 
+        style={[styles.wrapper, {
+          transform: [{
+            translateY: animation.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 88],
+            }),
+          }],
+          
+          opacity: animation.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 0],
+          }),
+        }]}
+      >
+        <Pressable
+          style={({pressed}) => [
+            styles.addButton,
+            Platform.OS === 'ios' && {
+              opacity: pressed ? 0.6 : 1,
+            },
+          ]}
+          android_ripple={{color:'white'}}
+          onPress={() => {
+            console.log("this button");
+            setShowModal(true);
+            setPetname('');
+            setGender('');
+            setWeight('');
+            setBirth('');
+            setKind('');
+          }}>
+          <Icon name='add' size={24} style={{color: 'white'}} />
+        </Pressable>        
+      </Animated.View>
+      
 
     </View>
     
@@ -302,17 +359,33 @@ const styles = StyleSheet.create({
   saving: {
     marginTop: 10,
   },
-  addButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: "#2196F3",
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    justifyContent: "center",
-    alignItems: "center",
+
+  wrapper : {
+    position: 'absolute',
+    bottom: 15,
+    right: 15,
+    width: 58,
+    height: 58,
+    borderRadius: 28,
+
+    shadowColor: '#4D4D4D',
+    shadowOffset: {width: 0, height: 4},
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+
+    overflow: Platform.select({android: 'hidden'})
   },
+
+  addButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#FFA000',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  
   addButtonText: {
     
     color: "#fff",
