@@ -120,7 +120,8 @@ function HomeScreen() {
 
       const data = await response.json();
       console.log(data);
-      setPetInfo(data);
+      getPetInfo();      
+      setShowModal(false);
     } catch (error) {
       console.error(error);
 
@@ -131,6 +132,21 @@ function HomeScreen() {
     }
     
   };
+
+  const getPetInfo = async () => {
+    try {
+      //console.log(uid)
+      const response = await fetch(`http://121.170.118.190:4000/pet?uid=${uid}`);
+      const data = await response.json();
+
+      setPetInfo(data);
+
+      //console.log(data);
+      
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   //펫 정보 삭제
   const handleDeletePet = async (unique_id) => {
@@ -273,7 +289,6 @@ function HomeScreen() {
                 title="Save"
                 onPress={() => {
                   savePet();
-                  setShowModal(false);
                 }}
               />
             </View>
