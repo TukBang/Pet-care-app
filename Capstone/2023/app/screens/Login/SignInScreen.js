@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -7,20 +7,22 @@ import {
   Text,
   View,
   Alert,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import SignButtons from '../../components/Login/SignButtons';
-import SignInForm from '../../components/Login/SignForm';
-import { useUserContext } from '../../contexts/UserContext';
-import { signIn, signUp } from '../../lib/auth';
-import { getUser } from '../../lib/users';
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import SignButtons from "../../components/Login/SignButtons";
+import SignInForm from "../../components/Login/SignForm";
+import { useUserContext } from "../../contexts/UserContext";
+import { signIn, signUp } from "../../lib/auth";
+import { getUser } from "../../lib/users";
+
+// 로그인 화면 
 
 function SignInScreen({ navigation, route }) {
   const { isSignUp } = route.params || {};
   const [form, setForm] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
   const { setUser } = useUserContext();
@@ -35,12 +37,13 @@ function SignInScreen({ navigation, route }) {
     setForm({ ...form, [name]: value });
   };
 
+  //로그인 시도함수
   const onSubmit = async () => {
     Keyboard.dismiss();
     const { email, password, confirmPassword } = form;
 
     if (isSignUp && password !== confirmPassword) {
-      Alert.alert('실패', '비밀번호가 일치하지 않습니다.');
+      Alert.alert("실패", "비밀번호가 일치하지 않습니다.");
       console.log({ password, confirmPassword });
       return;
     }
@@ -48,24 +51,25 @@ function SignInScreen({ navigation, route }) {
     setLoading(true);
     const info = { email, password };
 
+    //로그인 예외 설정
     try {
       const { user } = isSignUp ? await signUp(info) : await signIn(info);
       const profile = await getUser(user.uid);
       if (!profile) {
-        navigation.navigate('Welcome', { uid: user.uid });
+        navigation.navigate("Welcome", { uid: user.uid });
       } else {
         setUser(profile);
       }
     } catch (e) {
       const messages = {
-        'auth/email-already-in-use': '이미 가입된 이메일입니다.',
-        'auth/wrong-password': '잘못된 비밀번호입니다.',
-        'auth/user-not-found': '존재하지 않는 계정입니다.',
-        'auth/invalid-email': '유효하지 않은 이메일 주소입니다.',
+        "auth/email-already-in-use": "이미 가입된 이메일입니다.",
+        "auth/wrong-password": "잘못된 비밀번호입니다.",
+        "auth/user-not-found": "존재하지 않는 계정입니다.",
+        "auth/invalid-email": "유효하지 않은 이메일 주소입니다.",
       };
-      console.log(e.code)
-      const msg = messages[e.code] || `${isSignUp ? '가입' : '로그인'} 실패`;
-      Alert.alert('실패', msg);
+      console.log(e.code);
+      const msg = messages[e.code] || `${isSignUp ? "가입" : "로그인"} 실패`;
+      Alert.alert("실패", msg);
     } finally {
       setLoading(false);
     }
@@ -74,7 +78,8 @@ function SignInScreen({ navigation, route }) {
   return (
     <KeyboardAvoidingView
       style={styles.keyboardAvoidingView}
-      behavior={Platform.select({ ios: 'padding' })}>
+      behavior={Platform.select({ ios: "padding" })}
+    >
       <SafeAreaView style={styles.fullscreen}>
         <Text style={styles.text}>Welcome to PCA</Text>
         <View style={styles.form}>
@@ -97,19 +102,19 @@ const styles = StyleSheet.create({
   },
   fullscreen: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   text: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: 'black',
+    fontWeight: "bold",
+    color: "black",
   },
   form: {
     marginTop: 64,
-    width: '100%',
+    width: "100%",
     paddingHorizontal: 16,
   },
 });
 
-export default SignInScreen
+export default SignInScreen;

@@ -13,16 +13,14 @@ import {
   Text,
   TouchableOpacity,
   Platform,
-  PermissionsAndroid
+  PermissionsAndroid,
 } from "react-native";
-import MapView, {
-  Marker,
-  AnimatedRegion,
-  Polyline,
-  PROVIDER_GOOGLE
-} from "react-native-maps";
+import MapView, { Marker, AnimatedRegion, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import haversine from "haversine";
-import Geolocation from '@react-native-community/geolocation'
+import Geolocation from "@react-native-community/geolocation";
+
+// 구글 지도 맵, 자취, 거리를 나타냄
+// WalkingScreen에서 사용
 
 // const LATITUDE = 29.95539;
 // const LONGITUDE = 78.07513;
@@ -45,8 +43,8 @@ class AnimatedMarkers extends React.Component {
         latitude: LATITUDE,
         longitude: LONGITUDE,
         latitudeDelta: 0,
-        longitudeDelta: 0
-      })
+        longitudeDelta: 0,
+      }),
     };
   }
 
@@ -55,21 +53,18 @@ class AnimatedMarkers extends React.Component {
 
     // this.watchID = navigator.geolocation.watchPosition(
     this.watchID = Geolocation.watchPosition(
-      position => {
+      (position) => {
         const { routeCoordinates, distanceTravelled } = this.state;
         const { latitude, longitude } = position.coords;
 
         const newCoordinate = {
           latitude,
-          longitude
+          longitude,
         };
 
         if (Platform.OS === "android") {
           if (this.marker) {
-            this.marker.animateMarkerToCoordinate(
-              newCoordinate,
-              500
-            );
+            this.marker.animateMarkerToCoordinate(newCoordinate, 500);
           }
         } else {
           coordinate.timing(newCoordinate).start();
@@ -79,17 +74,16 @@ class AnimatedMarkers extends React.Component {
           latitude,
           longitude,
           routeCoordinates: routeCoordinates.concat([newCoordinate]),
-          distanceTravelled:
-            distanceTravelled + this.calcDistance(newCoordinate),
-          prevLatLng: newCoordinate
+          distanceTravelled: distanceTravelled + this.calcDistance(newCoordinate),
+          prevLatLng: newCoordinate,
         });
       },
-      error => console.log(error),
+      (error) => console.log(error),
       {
         enableHighAccuracy: true,
         timeout: 20000,
         maximumAge: 1000,
-        distanceFilter: 10
+        distanceFilter: 10,
       }
     );
   }
@@ -103,10 +97,10 @@ class AnimatedMarkers extends React.Component {
     latitude: this.state.latitude,
     longitude: this.state.longitude,
     latitudeDelta: LATITUDE_DELTA,
-    longitudeDelta: LONGITUDE_DELTA
+    longitudeDelta: LONGITUDE_DELTA,
   });
 
-  calcDistance = newLatLng => {
+  calcDistance = (newLatLng) => {
     const { prevLatLng } = this.state;
     return haversine(prevLatLng, newLatLng) || 0;
   };
@@ -124,7 +118,7 @@ class AnimatedMarkers extends React.Component {
         >
           <Polyline coordinates={this.state.routeCoordinates} strokeWidth={5} />
           <Marker.Animated
-            ref={marker => {
+            ref={(marker) => {
               this.marker = marker;
             }}
             coordinate={this.state.coordinate}
@@ -146,33 +140,33 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "flex-end",
-    alignItems: "center"
+    alignItems: "center",
   },
   map: {
-    ...StyleSheet.absoluteFillObject
+    ...StyleSheet.absoluteFillObject,
   },
   bubble: {
     flex: 1,
     backgroundColor: "rgba(255,255,255,0.7)",
     paddingHorizontal: 18,
     paddingVertical: 12,
-    borderRadius: 20
+    borderRadius: 20,
   },
   latlng: {
     width: 200,
-    alignItems: "stretch"
+    alignItems: "stretch",
   },
   button: {
     width: 80,
     paddingHorizontal: 12,
     alignItems: "center",
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   buttonContainer: {
     flexDirection: "row",
     marginVertical: 20,
-    backgroundColor: "transparent"
-  }
+    backgroundColor: "transparent",
+  },
 });
 
 export default AnimatedMarkers;

@@ -1,71 +1,72 @@
-import 'react-native-get-random-values';
+import "react-native-get-random-values";
 import React, { useEffect, useRef } from "react";
 import { useState, createContext } from "react";
 import { v4 as uuidv4 } from "uuid";
-import logsStorage from '../storages/logsStorage';
+import logsStorage from "../storages/logsStorage";
+
+// 오프라인에 저장하는 데이터 위한 모듈
 
 const LogContext = createContext();
 
-export function LogContextProvider({children}) {
-    const initialLogsRef = useRef(null);
-    const [logs, setLogs] = useState(
-        Array.from({length: 0})
-        .map((_, index) => ({
-            id: uuidv4(),
-            title: `Log ${index}`,
-            body: `Log ${index}`,
-            date: new Date().toISOString(),
-        }))
-        .reverse()
-    );
-
-    const onCreate = ({title, body, date}) => {
-        const log = {
-            id: uuidv4(),
-            title,
-            body,
-            date,
-        };
-        setLogs([log,...logs]);
-
-
+export function LogContextProvider({ children }) {
+  const initialLogsRef = useRef(null);
+  const [logs, setLogs] = useState(
+    Array.from({ length: 0 })
+      .map((_, index) => ({
+        id: uuidv4(),
+        title: `Log ${index}`,
+        body: `Log ${index}`,
+        date: new Date().toISOString(),
+      }))
+      .reverse()
+  );
+  // uuid 로 난수 생성 후 id로 설정, 제목, 내용, 날짜로 구성
+  const onCreate = ({ title, body, date }) => {
+    const log = {
+      id: uuidv4(),
+      title,
+      body,
+      date,
     };
+    // logs를 log와 기존 로그를 합쳐 설정
+    setLogs([log, ...logs]);
+  };
 
-    const onModify = (modified) => {
-        const nextLogs = logs.map((log) =>
-        log.id === modified.id ? modified : log,
-        );
-        setLogs(nextLogs);
-    };
-    
-    const onRemove = (id) => {
-        const nextLogs = logs.filter((log) => log.id !== id);
-        setLogs(nextLogs);
-    };
+  //id가 일치하면 log를 교체하는 함수
+  const onModify = (modified) => {
+    const nextLogs = logs.map((log) => (log.id === modified.id ? modified : log));
+    setLogs(nextLogs);
+  };
 
-    useEffect(() => {
-        ( async () => {
-            const savedLogs = await logsStorage.get();
-            if (savedLogs) {
-                initialLogsRef.current = savedLogs;
-                setLogs(savedLogs);
-            }
-        })();
-    }, []);
+  //id를 제외한 log로 업데이트
+  const onRemove = (id) => {
+    const nextLogs = logs.filter((log) => log.id !== id);
+    setLogs(nextLogs);
+  };
 
-    useEffect(() => {
-        if (logs === initialLogsRef.current) {
-            return;
-        }
-        logsStorage.set(logs);
-    }, [logs]);
+  // useEffect 내에서 async 함수를 만들고 바로 호출
+  useEffect(() => {
+    (async () => {
+      const savedLogs = await logsStorage.get();
+      if (savedLogs) {
+        initialLogsRef.current = savedLogs;
+        setLogs(savedLogs);
+      }
+    })();
+  }, []);
 
+  useEffect(() => {
+    if (logs === initialLogsRef.current) {
+      return;
+    }
+    logsStorage.set(logs);
+  }, [logs]);
 
-    return(
-        <LogContext.Provider value={{logs, onCreate, onModify, onRemove}}>
-            {children}
-        </LogContext.Provider>
-    );
+  return (
+    <LogContext.Provider value={{ logs, onCreate, onModify, onRemove }}>
+      {children}
+    </LogContext.Provider>
+  );
 }
 
 export default LogContext;

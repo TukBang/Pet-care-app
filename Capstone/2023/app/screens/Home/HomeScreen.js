@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  useEffect
-} from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import {
   StyleSheet,
@@ -15,19 +11,19 @@ import {
   Button,
   TouchableOpacity,
   Pressable,
-  Animated
+  Animated,
 } from "react-native";
 
-import {  } from "react-native";
+import {} from "react-native";
 
 import { useUserContext } from "../../contexts/UserContext";
 import { Calendar } from "react-native-calendars";
 import Ggupdeagi from "../Ggupdeagi";
 
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 // 난수 생성
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 const uuid = uuidv4();
 
 function HomeScreen() {
@@ -38,18 +34,18 @@ function HomeScreen() {
   const [kind, setKind] = useState("");
 
   // 삭제를 위한 코드 (지울 예정)
-  const [unique_id , setUnique_id ] = useState("");
-  
+  const [unique_id, setUnique_id] = useState("");
+
   const [saving, setSaving] = useState(false);
   const [petInfo, setPetInfo] = useState([]);
   const { user } = useUserContext();
   const uid = user["id"];
   const [showModal, setShowModal] = useState(false);
-  
+
   const animation = useRef(new Animated.Value(0)).current;
 
   // Animation for Pressable Button
-  useEffect(()=> {
+  useEffect(() => {
     Animated.spring(animation, {
       toValue: 0,
       useNativeDriver: true,
@@ -57,7 +53,7 @@ function HomeScreen() {
       friction: 5,
     }).start();
   }, [animation]);
-  
+
   useEffect(() => {
     return () => {
       // cleanup function
@@ -76,7 +72,6 @@ function HomeScreen() {
         setPetInfo(data);
 
         //console.log(data);
-        
       } catch (error) {
         console.error(error);
       }
@@ -89,18 +84,19 @@ function HomeScreen() {
   //http://121.170.118.190:4000/   //진식 주소
   const savePet = async () => {
     setSaving(true);
-    
-    try {
 
-      console.log(JSON.stringify({
-        petname,
-        id: uid,
-        gender,
-        weight,
-        birth,
-        kind,
-        unique_id: uuid,
-      }));
+    try {
+      console.log(
+        JSON.stringify({
+          petname,
+          id: uid,
+          gender,
+          weight,
+          birth,
+          kind,
+          unique_id: uuid,
+        })
+      );
       // const response = await fetch("http://121.170.118.190:4000/pet", {
       const response = await fetch("http://121.170.118.190:4000/pet", {
         method: "POST",
@@ -120,17 +116,15 @@ function HomeScreen() {
 
       const data = await response.json();
       console.log(data);
-      getPetInfo();      
+      getPetInfo();
       setShowModal(false);
     } catch (error) {
       console.error(error);
-
     } finally {
       // check if component is still mounted before updating state
       if (!saving) return;
       setSaving(false);
     }
-    
   };
 
   const getPetInfo = async () => {
@@ -142,11 +136,10 @@ function HomeScreen() {
       setPetInfo(data);
 
       //console.log(data);
-      
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   //펫 정보 삭제
   const handleDeletePet = async (unique_id) => {
@@ -160,35 +153,45 @@ function HomeScreen() {
           unique_id: unique_id,
         }),
       });
-  
+
       // create a new petInfo array that excludes the deleted pet
       const updatedPetInfo = petInfo.filter((pet) => pet.unique_id !== unique_id);
       setPetInfo(updatedPetInfo);
-
     } catch (error) {
       console.error(error);
     }
-
   };
 
   return (
     <View style={styles.container}>
-      <View style={{margin:10,flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
+      {/* 홈화면 상단 프로필 표시 */}
+      <View
+        style={{
+          margin: 10,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         {user.photoURL && (
           <Image
-            source={{uri: user.photoURL}}
-            style={{width: 60, height: 60}}
+            source={{ uri: user.photoURL }}
+            style={{ width: 60, height: 60 }}
             resizeMode="cover"
           />
-        )} 
-        <Text style={{fontSize:30, marginLeft:10}}>안녕하세요 {user.displayName} 님!</Text>
+        )}
+        <Text style={{ fontSize: 30, marginLeft: 10 }}>안녕하세요 {user.displayName} 님!</Text>
       </View>
-
+      {/* 어플 요약 정보 표시 - 23.04.29 현재는 형태만 저장 */}
       <Ggupdeagi />
-           
-      <ScrollView horizontal={true} contentContainerStyle={styles.scrollViewContent} style={styles.scrollView}>
-        {
-          petInfo && (function() {
+      {/* 펫정보 표시 */}
+      <ScrollView
+        horizontal={true}
+        contentContainerStyle={styles.scrollViewContent}
+        style={styles.scrollView}
+      >
+        {petInfo &&
+          (function () {
             const petElements = [];
             for (let i = 0; i < petInfo.length; i++) {
               const pet = petInfo[i];
@@ -202,12 +205,13 @@ function HomeScreen() {
                   <Text style={styles.petInfoText}>Kind: {pet.kind}</Text>
                   <Text style={styles.petInfoText}>unique_id: {pet.unique_id}</Text>
                   <View style={styles.buttonContainer}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                       onPress={() => {
                         handleDeletePet(pet.unique_id);
-                        console.log(pet.unique_id)
-                      }} 
-                      style={styles.deleteButton}>
+                        console.log(pet.unique_id);
+                      }}
+                      style={styles.deleteButton}
+                    >
                       <Text style={styles.buttonText}>Delete</Text>
                     </TouchableOpacity>
                   </View>
@@ -215,14 +219,10 @@ function HomeScreen() {
               );
             }
             return petElements;
-          })()
-        }
+          })()}
       </ScrollView>
-      <Modal
-        visible={showModal}
-        transparent={true}
-        animationType="fade"
-      >
+      {/* 펫 등록 화면 모달 */}
+      <Modal visible={showModal} transparent={true} animationType="fade">
         <Pressable style={styles.background}>
           <View style={styles.whiteBox}>
             <Text style={styles.modalTitle}>반려동물을 등록해주세요</Text>
@@ -275,17 +275,17 @@ function HomeScreen() {
                 title="Cancel"
                 onPress={() => {
                   setShowModal(false);
-                  setPetname('');
-                  setGender('');
-                  setWeight('');
-                  setBirth('');
-                  setKind('');
+                  setPetname("");
+                  setGender("");
+                  setWeight("");
+                  setBirth("");
+                  setKind("");
                 }}
                 color="gray"
               />
             </View>
             <View style={styles.modalButtons}>
-              <Button 
+              <Button
                 title="Save"
                 onPress={() => {
                   savePet();
@@ -295,46 +295,49 @@ function HomeScreen() {
           </View>
         </Pressable>
       </Modal>
-                
-      <Animated.View 
-        style={[styles.wrapper, {
-          transform: [{
-            translateY: animation.interpolate({
+      {/* 펫 정보 추가 버튼 애니메이션 */}
+      <Animated.View
+        style={[
+          styles.wrapper,
+          {
+            transform: [
+              {
+                translateY: animation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, 88],
+                }),
+              },
+            ],
+
+            opacity: animation.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, 88],
+              outputRange: [1, 0],
             }),
-          }],
-          
-          opacity: animation.interpolate({
-            inputRange: [0, 1],
-            outputRange: [1, 0],
-          }),
-        }]}
+          },
+        ]}
       >
         <Pressable
-          style={({pressed}) => [
+          style={({ pressed }) => [
             styles.addButton,
-            Platform.OS === 'ios' && {
+            Platform.OS === "ios" && {
               opacity: pressed ? 0.6 : 1,
             },
           ]}
-          android_ripple={{color:'white'}}
+          android_ripple={{ color: "white" }}
           onPress={() => {
             console.log("this button");
             setShowModal(true);
-            setPetname('');
-            setGender('');
-            setWeight('');
-            setBirth('');
-            setKind('');
-          }}>
-          <Icon name='add' size={24} style={{color: 'white'}} />
-        </Pressable>        
+            setPetname("");
+            setGender("");
+            setWeight("");
+            setBirth("");
+            setKind("");
+          }}
+        >
+          <Icon name="add" size={24} style={{ color: "white" }} />
+        </Pressable>
       </Animated.View>
-      
-
     </View>
-    
   );
 }
 
@@ -375,58 +378,57 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 
-  wrapper : {
-    position: 'absolute',
+  wrapper: {
+    position: "absolute",
     bottom: 15,
     right: 15,
     width: 58,
     height: 58,
     borderRadius: 28,
 
-    shadowColor: '#4D4D4D',
-    shadowOffset: {width: 0, height: 4},
+    shadowColor: "#4D4D4D",
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
 
-    overflow: Platform.select({android: 'hidden'})
+    overflow: Platform.select({ android: "hidden" }),
   },
 
   addButton: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#FFA000',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#FFA000",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  
+
   addButtonText: {
-    
     color: "#fff",
     fontSize: 24,
   },
   // 스크롤 뷰 스타일
   scrollView: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
   },
   scrollViewContent: {
     padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
   },
   petInfoContainer: {
     width: 200,
     height: 200,
     borderRadius: 10,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: "#E5E5E5",
     marginRight: 20,
     padding: 10,
   },
   subtitle: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 10,
   },
   petInfoText: {
@@ -434,40 +436,40 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   buttonContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     right: 0,
-    flexDirection: 'row-reverse',
+    flexDirection: "row-reverse",
     margin: 8,
   },
   deleteButton: {
-    backgroundColor: 'red',
+    backgroundColor: "red",
     paddingVertical: 8,
     paddingHorizontal: 10,
     borderRadius: 20,
     marginLeft: 8,
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 12,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   //--------------------------------------------------------------------
   // 모달 창 스타일
 
   background: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.6)'
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
   },
   whiteBox: {
-    width: '80%',
-    backgroundColor: 'white',
+    width: "80%",
+    backgroundColor: "white",
     borderRadius: 10,
     paddingVertical: 20,
     paddingHorizontal: 25,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
@@ -475,17 +477,17 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
   },
   modalContent: {
-    width: '80%',
-    backgroundColor: 'white',
+    width: "80%",
+    backgroundColor: "white",
     borderRadius: 10,
     paddingVertical: 20,
     paddingHorizontal: 25,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
@@ -493,44 +495,43 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 15,
-    textAlign: 'left',
+    textAlign: "left",
   },
   modalInput: {
-    width: '100%',
+    width: "100%",
     borderWidth: 2,
     borderRadius: 5,
-    borderColor: '#CDCDCD',
+    borderColor: "#CDCDCD",
     paddingVertical: 8,
     paddingHorizontal: 12,
     marginBottom: 15,
     fontSize: 18,
   },
   modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
     marginTop: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   modalButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
     marginLeft: 10,
-    backgroundColor: '#2E8B57',
+    backgroundColor: "#2E8B57",
   },
   modalButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   modalButtons: {
-    width: '100%',    
+    width: "100%",
     paddingVertical: 2,
   },
 });
-  //--------------------------------------------------------------------
-
+//--------------------------------------------------------------------
 
 export default HomeScreen;

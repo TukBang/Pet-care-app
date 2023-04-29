@@ -1,16 +1,12 @@
 import React, { useRef } from "react";
-import { 
-  View,
-  StyleSheet,
-  TextInput
-} from "react-native";
+import { View, StyleSheet, TextInput } from "react-native";
 
-function WriteEditor({title, body, onChangeTitle, onChangeBody}) {
+function WriteEditor({ title, body, onChangeTitle, onChangeBody }) {
   const bodyRef = useRef();
 
-  let titlePlaceHolder = "제목"
-  let bodyPlaceHolder = "메모"
-  let placeholderTextColor = "#BCBCBC"
+  let titlePlaceHolder = "제목";
+  let bodyPlaceHolder = "메모";
+  let placeholderTextColor = "#BCBCBC";
 
   return (
     <View style={styles.block}>
@@ -20,42 +16,38 @@ function WriteEditor({title, body, onChangeTitle, onChangeBody}) {
         placeholder={titlePlaceHolder}
         placeholderTextColor={placeholderTextColor}
         onChangeText={onChangeTitle}
-
         value={title}
-
         returnKeyType="next"
-        onSubmitEditing={()=> {
-          bodyRef.current.focus()
+        onSubmitEditing={() => {
+          bodyRef.current.focus();
         }}
       />
-      
+
       {/* 메모 */}
       <TextInput
         style={styles.bodyTextInput}
         placeholder={bodyPlaceHolder}
         placeholderTextColor={placeholderTextColor}
         onChangeText={onChangeBody}
-                
         value={body}
-
         multiline={true}
         ref={bodyRef}
       />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-  block: {flex: 1, padding: 12},
-  
+  block: { flex: 1, padding: 12 },
+
   titleTextInput: {
     borderWidth: 2,
     borderRadius: 5,
     borderColor: "#CDCDCD",
     paddingVertical: 5,
     paddingHorizontal: 12,
-    
-    fontWeight: 'bold',
+
+    fontWeight: "bold",
     fontSize: 18,
     marginBottom: 15,
   },
@@ -68,7 +60,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 12,
     height: 400,
-    
+
     fontWeight: "bold",
     fontSize: 18,
   },

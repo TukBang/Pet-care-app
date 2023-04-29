@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MainScreen from "./MainScreen";
@@ -7,71 +7,59 @@ import SignInScreen from "./Login/SignInScreen";
 import WelcomeScreen from "./User/WelcomeScreen";
 import { useUserContext } from "../contexts/UserContext";
 import UploadScreen from "./Community/UploadScreen";
-import BoardScreen from "../components/Community/BoardScreen";
+import BoardScreen from "./Community/BoardScreen";
 import ModifyScreen from "./Community/ModifyScreen";
 import ModifyCommentScreen from "./Community/ModifyCommentScreen";
-// import MainScreen from "./screens/MainScreen";
-// import DetailScreen from "./components/DetailScreen";
 
 const Stack = createNativeStackNavigator();
 
-
+// 화면 스택이 구성되어 있는 모듈
 
 function RootStack() {
+  const { user } = useUserContext();
 
-  const {user} = useUserContext();
-
-  return(
+  return (
     <NavigationContainer independent={true}>
       <Stack.Navigator>
+        {/* 로그인 여부에 따라 로그인 화면 - 메인 화면 분기 */}
         {user ? (
           <>
+            <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Write" component={WriteScreen} options={{ headerShown: false }} />
             <Stack.Screen
-              name="Main"
-              component={MainScreen}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen name="Write" component={WriteScreen} options={{headerShown: false}}/>
-            <Stack.Screen
-            name="Upload"
-            component={UploadScreen}
-            options={{title: '새 게시물', headerBackTitle: '뒤로가기'}}
+              name="Upload"
+              component={UploadScreen}
+              options={{ title: "새 게시물", headerBackTitle: "뒤로가기" }}
             />
             <Stack.Screen
-            name="Board"
-            component={BoardScreen}
-            options={{title: '커뮤니티', headerBackTitle: '뒤로가기'}}
+              name="Board"
+              component={BoardScreen}
+              options={{ title: "커뮤니티", headerBackTitle: "뒤로가기" }}
             />
             <Stack.Screen
-            name="Modify"
-            component={ModifyScreen}
-            options={{title: '게시글 수정', headerBackTitle: '뒤로가기'}}
+              name="Modify"
+              component={ModifyScreen}
+              options={{ title: "게시글 수정", headerBackTitle: "뒤로가기" }}
             />
             <Stack.Screen
-            name="ModifyComment"
-            component={ModifyCommentScreen}
-            options={{title: '댓글 수정', headerBackTitle: '뒤로가기'}}
+              name="ModifyComment"
+              component={ModifyCommentScreen}
+              options={{ title: "댓글 수정", headerBackTitle: "뒤로가기" }}
             />
           </>
         ) : (
           <>
-            <Stack.Screen
-              name="SignIn"
-              component={SignInScreen}
-              options={{headerShown: false}}
-            />
+            <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />
             <Stack.Screen
               name="Welcome"
               component={WelcomeScreen}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
           </>
         )}
-        
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
 
 export default RootStack;

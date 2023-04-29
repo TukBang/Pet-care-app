@@ -1,42 +1,31 @@
-import React, {
-  useState,
-  useRef,
-  useEffect
-} from 'react';
+import React, { useState, useRef, useEffect } from "react";
 
-import {
-  View, 
-  Pressable, 
-  StyleSheet, 
-  Platform,
-  ActionSheetIOS,
-  Animated
-} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import { View, Pressable, StyleSheet, Platform, ActionSheetIOS, Animated } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import UploadModeModal from './UploadModeModal';
-import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { launchImageLibrary, launchCamera } from "react-native-image-picker";
 
-import ActionSheetModal from '../ActionSheetModal';
+import ActionSheetModal from "../ActionSheetModal";
 
-const TABBAR_HEIGHT = 49;
+
 const imagePickerOption = {
-    mediaType: 'photo',
-    maxWidth: 768,
-    maxHeight: 768,
-    includeBase64: Platform.OS === 'android',
-  };
+  mediaType: "photo",
+  maxWidth: 768,
+  maxHeight: 768,
+  includeBase64: Platform.OS === "android",
+};
+
+// CommunityScreen 에서 게시물 추가하기 위한 모달을 띄우는데 사용
 
 function CameraButton() {
-  const insets = useSafeAreaInsets();
+
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
-  
+
   const animation = useRef(new Animated.Value(0)).current;
   // Animation for Pressable Button
-  useEffect(()=> {
+  useEffect(() => {
     Animated.spring(animation, {
       toValue: 0,
       useNativeDriver: true,
@@ -45,38 +34,12 @@ function CameraButton() {
     }).start();
   }, [animation]);
 
-  const bottom = Platform.select({
-    android: TABBAR_HEIGHT / 2,
-    ios: TABBAR_HEIGHT / 2 + insets.bottom - 4,
-  });
-
-  const onPress = () => {
-    if (Platform.OS === 'android') {
-      setModalVisible(true);
+  const onPickImage = (res) => {
+    if (res.didCancel || !res) {
       return;
     }
-    ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: ['카메라로 촬영하기', '사진 선택하기', '취소'],
-          cancelButtonIndex: 2,
-        },
-        (buttonIndex) => {
-          if (buttonIndex === 0) {
-            onLaunchCamera();
-          } else if (buttonIndex === 1) {
-            onLaunchImageLibrary();
-          }
-        },
-      );
-    };
-
-    const onPickImage = (res) => {
-      if (res.didCancel || !res) {
-          return;
-      }
-      // console.log("PickImage", res);
-      navigation.push('Upload', {res, isSolution: false});
-    };
+    navigation.push("Upload", { res, isSolution: false });
+  };
 
   const onLaunchCamera = () => {
     launchCamera(imagePickerOption, onPickImage);
@@ -88,82 +51,92 @@ function CameraButton() {
 
   return (
     <>
-      <Animated.View 
-        style={[styles.wrapper, {
-          transform: [{
-            translateY: animation.interpolate({
+      {/* 버튼 클릭시 나타나는 애니메이션 */}
+      <Animated.View
+        style={[
+          styles.wrapper,
+          {
+            transform: [
+              {
+                translateY: animation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, 88],
+                }),
+              },
+            ],
+
+            opacity: animation.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, 88],
+              outputRange: [1, 0],
             }),
-          }],
-          
-          opacity: animation.interpolate({
-            inputRange: [0, 1],
-            outputRange: [1, 0],
-          }),
-        }]}
+          },
+        ]}
       >
+        {/* 모달 표시 */}
         <Pressable
-          style={({pressed}) => [
+          style={({ pressed }) => [
             styles.addButton,
-            Platform.OS === 'ios' && {
+            Platform.OS === "ios" && {
               opacity: pressed ? 0.6 : 1,
             },
           ]}
-          android_ripple={{color:'white'}}
+          android_ripple={{ color: "white" }}
           onPress={() => {
             setModalVisible(true);
-          }}>
-          <Icon name='add' size={24} style={{color: 'white'}} />
+          }}
+        >
+          <Icon name="add" size={24} style={{ color: "white" }} />
         </Pressable>
       </Animated.View>
-
+      {/* 카메라-사진 모달 */}
       <ActionSheetModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        actions={[{
-          icon: 'camera-alt',
-          text: '카메라로 촬영하기',
-          onPress: onLaunchCamera,
-        }, {
-          icon: 'photo',
-          text: '사진 선택하기',
-          onPress: onLaunchImageLibrary,
-        }]}
+        actions={[
+          {
+            icon: "camera-alt",
+            text: "카메라로 촬영하기",
+            onPress: onLaunchCamera,
+          },
+          {
+            icon: "photo",
+            text: "사진 선택하기",
+            onPress: onLaunchImageLibrary,
+          },
+        ]}
       />
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  wrapper : {
-    position: 'absolute',
+  wrapper: {
+    position: "absolute",
     bottom: 15,
     right: 15,
     width: 58,
     height: 58,
     borderRadius: 28,
-    
+
     zIndex: 5,
-    
-    shadowColor: '#4D4D4D',
-    shadowOffset: {width: 0, height: 4},
+
+    shadowColor: "#4D4D4D",
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
 
-    overflow: Platform.select({android: 'hidden'}),
-    
+    overflow: Platform.select({ android: "hidden" }),
   },
 
   addButton: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#FFA000',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
+    backgroundColor: "#FFA000",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default CameraButton;

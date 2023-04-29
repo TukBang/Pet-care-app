@@ -1,8 +1,8 @@
-import React, {useRef} from 'react';
-import { StyleSheet } from 'react-native';
-import BorderedInput from './BorderedInput';
+import React, { useRef } from "react";
+import { StyleSheet } from "react-native";
+import BorderedInput from "./BorderedInput";
 
-function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
+function SignForm({ isSignUp, onSubmit, form, createChangeTextHandler }) {
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
 
@@ -13,7 +13,7 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
         styles={styles.text}
         placeholder="이메일"
         value={form.email}
-        onChangeText={createChangeTextHandler('email')}
+        onChangeText={createChangeTextHandler("email")}
         autoCapitalize="none"
         autoCorrect={false}
         autoCompleteType="email"
@@ -27,9 +27,9 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
         secureTextEntry
         hasMarginBottom={isSignUp}
         value={form.password}
-        onChangeText={createChangeTextHandler('password')}
+        onChangeText={createChangeTextHandler("password")}
         ref={passwordRef}
-        returnKeyType={isSignUp ? 'next' : 'done'}
+        returnKeyType={isSignUp ? "next" : "done"}
         onSubmitEditing={() => {
           if (isSignUp) {
             confirmPasswordRef.current.focus();
@@ -44,7 +44,7 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
           placeholder="비밀번호 확인"
           secureTextEntry
           value={form.confirmPassword}
-          onChangeText={createChangeTextHandler('confirmPassword')}
+          onChangeText={createChangeTextHandler("confirmPassword")}
           ref={confirmPasswordRef}
           returnKeyType="done"
           onSubmitEditing={onSubmit}
@@ -56,8 +56,8 @@ function SignForm({isSignUp, onSubmit, form, createChangeTextHandler}) {
 
 const styles = StyleSheet.create({
   text: {
-    color: '#808080'
-  }
-})
+    color: "#808080",
+  },
+});
 
 export default SignForm;

@@ -1,27 +1,22 @@
 import React from "react";
-import {
-  Platform,
-  Pressable,
-  StyleSheet,
-  View
- } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Platform, Pressable, StyleSheet, View } from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
-function TransparentCircleButton({name, color, hasMarginRight, onPress}) {
+function TransparentCircleButton({ name, color, hasMarginRight, onPress }) {
   return (
-    <View
-      style={[styles.iconButtonWrapper, hasMarginRight && styles.marginRight]} >
+    <View style={[styles.iconButtonWrapper, hasMarginRight && styles.marginRight]}>
       <Pressable
-        style={({pressed}) => [
+        style={({ pressed }) => [
           styles.iconButton,
-          Platform.OS ==='ios' && pressed && { backgroundColor: '#000000' }
+          Platform.OS === "ios" && pressed && { backgroundColor: "#000000" },
         ]}
         onPress={onPress}
-        android_ripple={{color: '#ededed'}}>
-        <Icon name={name} size={24} color={color}/>
+        android_ripple={{ color: "#ededed" }}
+      >
+        <Icon name={name} size={24} color={color} />
       </Pressable>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -29,22 +24,22 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
 
   iconButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     width: 32,
     height: 32,
     borderRadius: 16,
   },
 
   buttons: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
-  
+
   marginRight: {
     marginRight: 8,
   },

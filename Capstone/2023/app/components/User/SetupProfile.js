@@ -1,44 +1,44 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
-import React, {useState} from 'react';
-import {Image, Platform, StyleSheet, View, Pressable, ActivityIndicator} from 'react-native';
-import { useUserContext } from '../../contexts/UserContext';
-import { signOut } from '../../lib/auth';
-import {createUser} from '../../lib/users';
-import BorderedInput from '../Login/BorderedInput';
-import CustomButton from '../Login/CustomButton';
-import { launchImageLibrary } from 'react-native-image-picker';
-import storage from '@react-native-firebase/storage'
+import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useState } from "react";
+import { Image, Platform, StyleSheet, View, Pressable, ActivityIndicator } from "react-native";
+import { useUserContext } from "../../contexts/UserContext";
+import { signOut } from "../../lib/auth";
+import { createUser } from "../../lib/users";
+import BorderedInput from "../Login/BorderedInput";
+import CustomButton from "../Login/CustomButton";
+import { launchImageLibrary } from "react-native-image-picker";
+import storage from "@react-native-firebase/storage";
 
 function SetupProfile() {
-  const [displayName, setDisplayName] = useState('');
+  const [displayName, setDisplayName] = useState("");
   const navigation = useNavigation();
 
-  const {setUser} = useUserContext();
-  
+  const { setUser } = useUserContext();
+
   const [response, setResponse] = useState(null);
-  const [ loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const {params} = useRoute();
-  const {uid} = params || {};
+  const { params } = useRoute();
+  const { uid } = params || {};
 
-  const onSubmit = async() => {
+  const onSubmit = async () => {
     setLoading(true);
 
     let photoURL = null;
-  
+
     if (response) {
       const asset = response.assets[0];
-      const extension = asset.fileName.split('.').pop(); // 확장자 추출
+      const extension = asset.fileName.split(".").pop(); // 확장자 추출
       const reference = storage().ref(`/profile/${uid}.${extension}`);
-  
-      if (Platform.OS === 'android') {
-        await reference.putString(asset.base64, 'base64', {
+
+      if (Platform.OS === "android") {
+        await reference.putString(asset.base64, "base64", {
           contentType: asset.type,
         });
       } else {
         await reference.putFile(asset.uri);
       }
-  
+
       photoURL = response ? await reference.getDownloadURL() : null;
     }
     const user = {
@@ -49,40 +49,36 @@ function SetupProfile() {
     createUser(user);
     setUser(user);
   };
-  
+
   const onCancel = () => {
     signOut();
     navigation.goBack();
   };
 
-  const onSelectImage =() => {
+  const onSelectImage = () => {
     launchImageLibrary(
       {
-        mediaType: 'photo',
+        mediaType: "photo",
         maxWidth: 512,
         maxHeight: 512,
-        includeBase64: Platform.OS==='android',
+        includeBase64: Platform.OS === "android",
       },
       (res) => {
-        if ( res.didCancel) {
+        if (res.didCancel) {
           return;
         }
         setResponse(res);
-      },
+      }
     );
   };
 
   return (
     <View style={styles.block}>
-      <Pressable onPress={onSelectImage} >
+      <Pressable onPress={onSelectImage}>
         <Image
           stlye={styles.circle}
-          source={
-              response
-              ? {uri: response?.assets[0]?.uri}
-              : require('../../assets/user.png')
-            
-            } />
+          source={response ? { uri: response?.assets[0]?.uri } : require("../../assets/user.png")}
+        />
       </Pressable>
 
       <View style={styles.form}>
@@ -108,20 +104,20 @@ function SetupProfile() {
 
 const styles = StyleSheet.create({
   block: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 24,
     paddingHorizontal: 16,
-    width: '100%',
+    width: "100%",
   },
   circle: {
-    backgroundColor: '#cdcdcd',
+    backgroundColor: "#cdcdcd",
     borderRadius: 64,
     width: 128,
     height: 128,
   },
   form: {
     marginTop: 16,
-    width: '100%',
+    width: "100%",
   },
   buttons: {
     marginTop: 48,

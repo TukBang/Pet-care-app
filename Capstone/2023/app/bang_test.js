@@ -1,5 +1,5 @@
-const myFunction = function ()  {
-  return "cono"
-}
+const myFunction = function () {
+  return "cono";
+};
 
-console.log(myFunction())
+console.log(myFunction());

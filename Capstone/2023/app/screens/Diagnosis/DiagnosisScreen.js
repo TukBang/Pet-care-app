@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import {
-  View, 
-  Text, 
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
-import RNFS from "react-native-fs"
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import RNFS from "react-native-fs";
 import PreDiagList from "../../components/Diagnosis/PreDiagList";
 import DiagModal from "../../components/Diagnosis/DiagModal";
 import ProbChart from "../../components/Diagnosis/HorizontalBarChart";
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 var aiResult = {
-  labels: ["구진, 플라크", "비듬, 각질, 상피성잔고리", "태선화, 과다색소침착", "농포, 여드름", "미란, 궤양", "결절, 종괴"],
+  labels: [
+    "구진, 플라크",
+    "비듬, 각질, 상피성잔고리",
+    "태선화, 과다색소침착",
+    "농포, 여드름",
+    "미란, 궤양",
+    "결절, 종괴",
+  ],
   predictions: [0, 0, 0, 0, 0, 0],
 };
 
@@ -29,8 +30,8 @@ function DiagnosisScreen() {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // 진단 선택 스크린
-  let DiagnosisText1 = `진단하려는 사진을 확인해주세요.`
-  let DiagnosisText2 = `  [Tip]\n  환부가 잘 보이고, 이미지가 클수록 정확도가 향상됩니다!`
+  let DiagnosisText1 = `진단하려는 사진을 확인해주세요.`;
+  let DiagnosisText2 = `  [Tip]\n  환부가 잘 보이고, 이미지가 클수록 정확도가 향상됩니다!`;
   let buttonText1 = `다시 선택하기`;
   let buttonText2 = `진단하기`;
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,28 +48,37 @@ function DiagnosisScreen() {
   // SelectedImage AI SERVER 전송
   const handlePostRequest = async () => {
     try {
-      const image = await RNFS.readFile(selectedImage.path, 'base64');
+      const image = await RNFS.readFile(selectedImage.path, "base64");
       const response = await fetch("http://121.170.118.190:5000/images", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           /* 더 많은 펫 정보들이 담겨서 가야 함 */
           /* 랜덤 이미지 이름은 추후에 사용자 정보와 펫 정보를 함께 담을 수 있도록
              식별하여 구성하도록 만들어야 함 (2023-04-15) */
-          name : Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + ".jpg",
-          image: image
+          name:
+            Math.random().toString(36).substring(2, 15) +
+            Math.random().toString(36).substring(2, 15) +
+            ".jpg",
+          image: image,
         }),
       });
 
       let predictions = await response.json();
       aiResult.predictions = [
-        predictions["L1"], predictions["L2"], predictions["L3"],
-        predictions["L4"], predictions["L5"], predictions["L6"]
+        predictions["L1"],
+        predictions["L2"],
+        predictions["L3"],
+        predictions["L4"],
+        predictions["L5"],
+        predictions["L6"],
       ];
 
       console.log(aiResult.predictions);
-      diagnosisResultText2 = `${aiResult.labels[aiResult.predictions.indexOf(Math.max(...aiResult.predictions))]}(이)가 의심됩니다.`;
-      console.log(diagnosisResultText2)
+      diagnosisResultText2 = `${
+        aiResult.labels[aiResult.predictions.indexOf(Math.max(...aiResult.predictions))]
+      }(이)가 의심됩니다.`;
+      console.log(diagnosisResultText2);
       setDiagState(true);
       setDiagEnd(true);
     } catch (error) {
@@ -78,117 +88,133 @@ function DiagnosisScreen() {
       setSelectedImage(null);
       setDiagtempView(false);
       setDiagState(false);
-      setDiagEnd(false)
+      setDiagEnd(false);
     }
   };
 
-  // 상담 게시판 이동 버튼 - 
+  // 상담 게시판 이동 버튼 -
   const goWrite = (res) => {
     console.log("PickImage", res);
-    navigation.push('Upload', {res, isSolution: true});
-  }
+    navigation.push("Upload", { res, isSolution: true });
+  };
 
   return (
-    <View style={{flex: 1}}>
-      {
-        !selectedImage ? ( <PreDiagList setSelectedImage={setSelectedImage} style={diagnosisSelectStyles.checklist} /> ) : (
+    <View style={{ flex: 1 }}>
+      {/* 이미지 선택 여부에 따라 화면 전환 */}
+      {!selectedImage ? (
+        <PreDiagList setSelectedImage={setSelectedImage} style={diagnosisSelectStyles.checklist} />
+      ) : (
         <>
           {
-            // 진단 선택 스크린
+            // 진단 화면을 표기하기 위한 임시변수
             !diagtempView ? (
-            <>
-              <Text style={diagnosisSelectStyles.text1}>{DiagnosisText1}</Text>
-              <Text style={diagnosisSelectStyles.text2}>{DiagnosisText2}</Text>
-              <View style={diagnosisSelectStyles.imageView}>
-                <Image 
-                  source={{ uri: selectedImage.path }}
-                  style={diagnosisSelectStyles.image}
-                  resizeMode="contain"
+              <>
+                <Text style={diagnosisSelectStyles.text1}>{DiagnosisText1}</Text>
+                <Text style={diagnosisSelectStyles.text2}>{DiagnosisText2}</Text>
+                <View style={diagnosisSelectStyles.imageView}>
+                  <Image
+                    source={{ uri: selectedImage.path }}
+                    style={diagnosisSelectStyles.image}
+                    resizeMode="contain"
+                  />
+                </View>
+
+                <View style={diagnosisSelectStyles.button_container}>
+                  <TouchableOpacity
+                    style={diagnosisSelectStyles.button}
+                    onPress={() => {
+                      setDiagState(false);
+                      // AI 서버에 이미지 전송
+                      handlePostRequest();
+
+                      // 진단 모달 띄우기
+                      setDiagtempView(true);
+                      setDiagModalVisible(true);
+                    }}
+                  >
+                    <Text style={diagnosisSelectStyles.buttonText}>{buttonText2}</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={diagnosisSelectStyles.button}
+                    onPress={() => setSelectedImage(null)}
+                  >
+                    <Text style={diagnosisSelectStyles.buttonText}>{buttonText1}</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            ) : (
+              <>
+                {/* 진단 중 팝업 모달 */}
+                <DiagModal
+                  diagState={diagState}
+                  selectedImage={selectedImage}
+                  visible={diagmodalVisible}
+                  onClose={() => {
+                    setDiagModalVisible(false);
+                  }}
                 />
-              </View>
-              
-              <View style={diagnosisSelectStyles.button_container}>
-                <TouchableOpacity 
-                  style={diagnosisSelectStyles.button}
-                  onPress={() => {
-                    setDiagState(false);
-                    // AI 서버에 이미지 전송
-                    handlePostRequest();
-                    
-                    // 진단 모달 띄우기
-                    setDiagtempView(true);
-                    setDiagModalVisible(true);
-                    }}>
-                  <Text style={diagnosisSelectStyles.buttonText}>{buttonText2}</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity 
-                  style={diagnosisSelectStyles.button}
-                  onPress={() => setSelectedImage(null)}>
-                  <Text style={diagnosisSelectStyles.buttonText}>{buttonText1}</Text>
-                </TouchableOpacity>
-              </View>
-              
-            </>
-          ) : (
-          <>
-            {/* 진단 중 팝업 모달 */}
-            <DiagModal 
-              diagState={diagState}
-              selectedImage={selectedImage}
-              visible={diagmodalVisible}
-              onClose={() => {
-                setDiagModalVisible(false);
-              }}
-               />
-            {
-              diagEnd ? (
-                // 진단 결과 스크린
-                <View style={diagnosisResultStyles.resultScreenView}>
-                  <View style={diagnosisResultStyles.resultView}>
-                    <View style={{width: "50%"}}>
-                        <Text style={diagnosisResultStyles.resultTextTitle}>{diagnosisResultText1}</Text>
-                        <Text style={diagnosisResultStyles.resultTextContent}>{diagnosisResultText2}</Text>
+                {diagEnd ? (
+                  // 진단 결과 스크린
+                  <View style={diagnosisResultStyles.resultScreenView}>
+                    {/* 진단 결과 이미지 및 문구 */}
+                    <View style={diagnosisResultStyles.resultView}>
+                      <View style={{ width: "50%" }}>
+                        <Text style={diagnosisResultStyles.resultTextTitle}>
+                          {diagnosisResultText1}
+                        </Text>
+                        <Text style={diagnosisResultStyles.resultTextContent}>
+                          {diagnosisResultText2}
+                        </Text>
+                      </View>
+                      <View style={diagnosisResultStyles.imageView}>
+                        <Image
+                          source={{ uri: selectedImage.path }}
+                          style={diagnosisResultStyles.image}
+                          resizeMode="contain"
+                          transform={[{ scale: 1 }]}
+                        />
+                      </View>
+                    </View>
+                    {/* 차트 표시 */}
+                    <View style={diagnosisResultStyles.chartView}>
+                      <ProbChart prediction={aiResult["predictions"]} />
                     </View>
 
-                    <View style={diagnosisResultStyles.imageView}>
-                      <Image 
-                        source={{uri: selectedImage.path}} 
-                        style={diagnosisResultStyles.image} 
-                        resizeMode="contain"
-                        transform={[{scale: 1}]}
-                      />
-                    </View>
-
-                  </View>
-
-                  <View style={diagnosisResultStyles.chartView}>
-                      <ProbChart 
-                        prediction={aiResult["predictions"]}
-                      />
-                  </View>
-
-                  <View style={diagnosisResultStyles.button_container}>
-                      <TouchableOpacity style={diagnosisResultStyles.button}
+                    <View style={diagnosisResultStyles.button_container}>
+                      <TouchableOpacity
+                        style={diagnosisResultStyles.button}
                         onPress={() => {
                           setSelectedImage(null);
                           setDiagtempView(false);
-                          setDiagEnd(false)}}>
+                          setDiagEnd(false);
+                        }}
+                      >
                         <Text style={diagnosisResultStyles.buttonText}>{resultButtonText1}</Text>
                       </TouchableOpacity>
-
-                      <TouchableOpacity style={diagnosisResultStyles.button}
-                        onPress={() => { 
-                          console.log(selectedImage)
-                          goWrite(selectedImage) 
-                        }}>
+                      {/* gowrite 함수에 selectedImage 인자 전달  - 상담 게시글 작성 이동*/}
+                      <TouchableOpacity
+                        style={diagnosisResultStyles.button}
+                        onPress={() => {
+                          console.log(selectedImage);
+                          goWrite(selectedImage);
+                        }}
+                      >
                         <Text style={diagnosisResultStyles.buttonText}>{resultButtonText2}</Text>
                       </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-              ) : (
-                <Text></Text>
-              )}</>)}</>)}</View>);
+                ) : (
+                  // 예외 없음
+                  <Text></Text>
+                )}
+              </>
+            )
+          }
+        </>
+      )}
+    </View>
+  );
 }
 
 // 진단 선택 스타일
@@ -198,7 +224,7 @@ const diagnosisSelectStyles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 10,
 
-    fontSize: 20
+    fontSize: 20,
   },
 
   text2: {
@@ -206,29 +232,29 @@ const diagnosisSelectStyles = StyleSheet.create({
     marginLeft: 10,
 
     fontSize: 15,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
 
   imageView: {
-    alignItems: 'center',
+    alignItems: "center",
 
     height: 300,
     width: "100%",
 
     // 여백
-    marginBottom: 30
+    marginBottom: 30,
   },
 
   image: {
     width: 300,
-    height: 300
+    height: 300,
   },
 
   button_container: {
     // 정렬
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
     overflow: "hidden",
 
     // 여백
@@ -239,8 +265,8 @@ const diagnosisSelectStyles = StyleSheet.create({
 
   button: {
     // 정렬
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
 
     height: 40,
     width: 330,
@@ -252,15 +278,14 @@ const diagnosisSelectStyles = StyleSheet.create({
     borderRadius: 5,
 
     // 배경색
-    backgroundColor: '#2296F3'
+    backgroundColor: "#2296F3",
   },
 
   // 버튼 텍스트
   buttonText: {
     fontSize: 15,
-    color: "#FFFFFF"
+    color: "#FFFFFF",
   },
-
 });
 
 // 진단 결과 스타일
@@ -273,17 +298,17 @@ const diagnosisResultStyles = StyleSheet.create({
 
   resultView: {
     flexDirection: "row",
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     marginBottom: 10,
   },
-  
+
   resultTextTitle: {
     fontSize: 20,
     fontWeight: "bold",
   },
 
   resultTextContent: {
-    fontSize: 15,    
+    fontSize: 15,
   },
 
   imageView: {
@@ -309,9 +334,9 @@ const diagnosisResultStyles = StyleSheet.create({
 
   button_container: {
     // 정렬
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
     overflow: "hidden",
 
     // 여백
@@ -320,8 +345,8 @@ const diagnosisResultStyles = StyleSheet.create({
 
   button: {
     // 정렬
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
 
     height: 40,
     width: 330,
@@ -333,13 +358,13 @@ const diagnosisResultStyles = StyleSheet.create({
     borderRadius: 5,
 
     // 배경색
-    backgroundColor: '#2296F3'
+    backgroundColor: "#2296F3",
   },
 
   // 버튼 텍스트
   buttonText: {
     fontSize: 15,
-    color: "#FFFFFF"
+    color: "#FFFFFF",
   },
 });
 

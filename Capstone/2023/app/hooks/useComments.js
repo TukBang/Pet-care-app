@@ -1,14 +1,16 @@
-import {useEffect, useState, useCallback} from 'react';
-import {getNewerComments, getOlderComments, getComments, PAGE_SIZE} from '../lib/comment';
-import { useUserContext } from '../contexts/UserContext';
-import useCommentEventEffect from './useCommentEventEffect';
+import { useEffect, useState, useCallback } from "react";
+import { getNewerComments, getOlderComments, getComments, PAGE_SIZE } from "../lib/comment";
+import { useUserContext } from "../contexts/UserContext";
+import useCommentEventEffect from "./useCommentEventEffect";
 
+// 비슷한 함수의 재사용을 막기위해 정리
+// useposts와 같은 원리
 
 export default function useComments(userId) {
   const [comments, setComments] = useState(null);
   const [noMoreComment, setNoMoreComment] = useState(false);
   const [refreshingComment, setrefreshingComment] = useState(false);
-  const {user} = useUserContext();
+  const { user } = useUserContext();
 
   const onLoadMoreComments = async () => {
     if (noMoreComment || !comments || comments.length < PAGE_SIZE) {
@@ -40,11 +42,11 @@ export default function useComments(userId) {
     (postId) => {
       setComments(comments.filter((post) => post.id !== postId));
     },
-    [comments],
+    [comments]
   );
 
   useEffect(() => {
-    getComments({userId}).then((_comments) => {
+    getComments({ userId }).then((_comments) => {
       setComments(_comments);
       if (_comments.length < PAGE_SIZE) {
         setNoMoreComment(true);
@@ -53,7 +55,7 @@ export default function useComments(userId) {
   }, [userId]);
 
   const updateComment = useCallback(
-    ({postId, title,description}) => {
+    ({ postId, title, description }) => {
       // id가 일치하는 포스트를 찾아서 description 변경
       const nextcomments = comments.map((comment) =>
         post.id === postId
@@ -62,18 +64,18 @@ export default function useComments(userId) {
               title,
               description,
             }
-          : post,
+          : post
       );
       setComments(nextcomments);
     },
-    [comments],
+    [comments]
   );
 
   useCommentEventEffect({
     refreshComment: onRefreshComment,
     removeComment,
     enabled: !userId || userId === user.id,
-    updateComment
+    updateComment,
   });
 
   return {

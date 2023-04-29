@@ -1,16 +1,14 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import RootStack from "./screens/RootStack";
 import { LogContextProvider } from "./contexts/LogContext";
 import { UserContextProvider } from "./contexts/UserContext";
 
-// const Stack = createNativeStackNavigator();
-
-
+// 총 화면 구성
 
 function App() {
-  return(
+  return (
     <UserContextProvider>
       <NavigationContainer>
         <LogContextProvider>
@@ -18,8 +16,7 @@ function App() {
         </LogContextProvider>
       </NavigationContainer>
     </UserContextProvider>
-  )
+  );
 }
-
 
 export default App;
