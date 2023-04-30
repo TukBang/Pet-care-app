@@ -20,30 +20,67 @@ import { useUserContext } from "../../contexts/UserContext";
 import { Calendar } from "react-native-calendars";
 import Ggupdeagi from "../Ggupdeagi";
 
+// 아이콘 받기위해 사용
 import Icon from "react-native-vector-icons/MaterialIcons";
-
+// 펫 정보 firebase에 저장
+import { createPetInfo } from "../../lib/petInfo";
+// 저장된 펫 정보를 불러오기위해 사용
+import { getPetInfoByUserID } from "../../lib/petInfo";
+// 펫 정보 삭제를 위해 사용
+import { deletePetInfo } from "../../lib/petInfo";
 // 난수 생성
 import { v4 as uuidv4 } from "uuid";
 const uuid = uuidv4();
 
 function HomeScreen() {
-  const [petname, setPetname] = useState("");
-  const [gender, setGender] = useState("");
-  const [weight, setWeight] = useState("");
-  const [birth, setBirth] = useState("");
-  const [kind, setKind] = useState("");
-
-  // 삭제를 위한 코드 (지울 예정)
-  const [unique_id, setUnique_id] = useState("");
-
-  const [saving, setSaving] = useState(false);
-  const [petInfo, setPetInfo] = useState([]);
+  
   const { user } = useUserContext();
   const uid = user["id"];
+  const [petInfo, setPetInfo] = useState({
+    petName: "",
+    petAge: "",
+    petWeight: "",
+    petGender: "",
+    petKind: "",
+  });
   const [showModal, setShowModal] = useState(false);
+  // 펫 정보 불러오기 위함
+  const [petList, setPetList] = useState([]);
 
   const animation = useRef(new Animated.Value(0)).current;
 
+  // 펫 정보 불러오기
+  useEffect(() => {
+    if (user) {
+      getPetInfoByUserID(uid).then((pets) => {
+        setPetList(pets);
+      });
+    }
+  }, [user]);
+
+  // 펫 정보 저장하기
+  const handleSavePetInfo = () => {
+    createPetInfo({ ...petInfo, userID: uid })
+      .then(() => {
+        console.log("펫 정보 저장 성공");
+        // 저장 후에 최신 데이터로 업데이트
+        getPetInfoByUserID(uid).then((pets) => {
+          setPetList(pets);
+        });
+      })
+      .catch((error) => {
+        console.error("펫 정보 저장 실패", error);
+      });
+  };
+
+  // 펫 정보 삭제하기
+  const handleDeletePet = async (petID) => {
+    await deletePetInfo(petID);
+    setPetList(petList.filter((pet) => pet.id !== petID));
+    const updatedPetList = petList.filter((pet) => pet.id !== petID);
+    setPetList(updatedPetList);
+  };
+  
   // Animation for Pressable Button
   useEffect(() => {
     Animated.spring(animation, {
@@ -53,114 +90,6 @@ function HomeScreen() {
       friction: 5,
     }).start();
   }, [animation]);
-
-  useEffect(() => {
-    return () => {
-      // cleanup function
-      setSaving(false); // cancel saving if component unmounts
-    };
-  }, []);
-
-  useEffect(() => {
-    // GET request to retrieve pet information for the user
-    const fetchPetInfo = async () => {
-      try {
-        //console.log(uid)
-        const response = await fetch(`http://121.170.118.190:4000/pet?uid=${uid}`);
-        const data = await response.json();
-
-        setPetInfo(data);
-
-        //console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchPetInfo();
-  }, [uid]);
-
-  // 펫 정보 서버에 저장
-  //http://121.170.118.190:4000/   //진식 주소
-  const savePet = async () => {
-    setSaving(true);
-
-    try {
-      console.log(
-        JSON.stringify({
-          petname,
-          id: uid,
-          gender,
-          weight,
-          birth,
-          kind,
-          unique_id: uuid,
-        })
-      );
-      // const response = await fetch("http://121.170.118.190:4000/pet", {
-      const response = await fetch("http://121.170.118.190:4000/pet", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          petname,
-          id: uid,
-          gender,
-          weight,
-          birth,
-          kind,
-          unique_id: uuid,
-        }),
-      });
-
-      const data = await response.json();
-      console.log(data);
-      getPetInfo();
-      setShowModal(false);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      // check if component is still mounted before updating state
-      if (!saving) return;
-      setSaving(false);
-    }
-  };
-
-  const getPetInfo = async () => {
-    try {
-      //console.log(uid)
-      const response = await fetch(`http://121.170.118.190:4000/pet?uid=${uid}`);
-      const data = await response.json();
-
-      setPetInfo(data);
-
-      //console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  //펫 정보 삭제
-  const handleDeletePet = async (unique_id) => {
-    try {
-      await fetch(`http://121.170.118.190:4000/pet`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          unique_id: unique_id,
-        }),
-      });
-
-      // create a new petInfo array that excludes the deleted pet
-      const updatedPetInfo = petInfo.filter((pet) => pet.unique_id !== unique_id);
-      setPetInfo(updatedPetInfo);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <View style={styles.container}>
@@ -184,111 +113,92 @@ function HomeScreen() {
       </View>
       {/* 어플 요약 정보 표시 - 23.04.29 현재는 형태만 저장 */}
       <Ggupdeagi />
-      {/* 펫정보 표시 */}
-      <ScrollView
-        horizontal={true}
-        contentContainerStyle={styles.scrollViewContent}
-        style={styles.scrollView}
-      >
-        {petInfo &&
-          (function () {
-            const petElements = [];
-            for (let i = 0; i < petInfo.length; i++) {
-              const pet = petInfo[i];
-              petElements.push(
-                <View key={pet.unique_id} style={styles.petInfoContainer}>
-                  <Text style={styles.subtitle}></Text>
-                  <Text style={styles.petInfoText}>Name: {pet.petname}</Text>
-                  <Text style={styles.petInfoText}>Gender: {pet.gender}</Text>
-                  <Text style={styles.petInfoText}>Weight: {pet.weight}</Text>
-                  <Text style={styles.petInfoText}>Birth date: {pet.birth}</Text>
-                  <Text style={styles.petInfoText}>Kind: {pet.kind}</Text>
-                  <Text style={styles.petInfoText}>unique_id: {pet.unique_id}</Text>
-                  <View style={styles.buttonContainer}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        handleDeletePet(pet.unique_id);
-                        console.log(pet.unique_id);
-                      }}
-                      style={styles.deleteButton}
-                    >
-                      <Text style={styles.buttonText}>Delete</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              );
-            }
-            return petElements;
-          })()}
-      </ScrollView>
+      <View style={styles.petListScrollView}>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollViewContent}
+        >
+          {petList.map((pet) => (
+            <View key={pet.id} style={styles.petInfoContainer}>
+              <Text style={styles.subtitle}>이름: {pet.petName}</Text>
+              <Text style={styles.petInfoText}>나이 :{pet.petAge}</Text>
+              <Text style={styles.petInfoText}>무게 : {pet.petWeight}</Text>
+              <Text style={styles.petInfoText}>성별 : {pet.petGender}</Text>
+              <Text style={styles.petInfoText}>품종 : {pet.petKind}</Text>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => handleDeletePet(pet.id)}
+                >
+                  <Text style={styles.buttonText}>Delete</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+      
       {/* 펫 등록 화면 모달 */}
       <Modal visible={showModal} transparent={true} animationType="fade">
         <Pressable style={styles.background}>
           <View style={styles.whiteBox}>
             <Text style={styles.modalTitle}>반려동물을 등록해주세요</Text>
+
             <TextInput
               style={styles.modalInput}
+              value={petInfo.petName}
+              onChangeText={(text) => setPetInfo({ ...petInfo, petName: text })}
               placeholder="이름"
-              onChangeText={(text) => setPetname(text)}
-              value={petname}
             />
             <TextInput
               style={styles.modalInput}
+              value={petInfo.petGender}
+              onChangeText={(text) => setPetInfo({ ...petInfo, petGender: text })}
               placeholder="성별"
-              onChangeText={(text) => setGender(text)}
-              value={gender}
             />
             <TextInput
               style={styles.modalInput}
+              value={petInfo.petWeight}
+              onChangeText={(text) => setPetInfo({ ...petInfo, petWeight: text })}
               placeholder="무게"
-              onChangeText={(text) => setWeight(text)}
-              value={weight}
             />
             <TextInput
               style={styles.modalInput}
-              placeholder="생년월일 ( 예) 000000 )"
-              onChangeText={(text) => setBirth(text)}
-              value={birth}
+              value={petInfo.petAge}
+              onChangeText={(text) => setPetInfo({ ...petInfo, petAge: text })}
+              placeholder="나이"
             />
             <TextInput
               style={styles.modalInput}
-              placeholder="품종"
-              onChangeText={(text) => setKind(text)}
-              value={kind}
+              value={petInfo.petKind}
+              onChangeText={(text) => setPetInfo({ ...petInfo, petKind: text })}
+              placeholder="종류"
             />
-            <TextInput
-              style={styles.modalInput}
-              placeholder="Unique_id"
-              onChangeText={() => {}}
-              value={uuid}
-              editable={false}
-            />
-            <TextInput
-              style={styles.modalInput}
-              placeholder="User ID"
-              onChangeText={() => {}}
-              value={uid}
-              editable={false}
-            />
-            <View style={styles.modalButtons}>
-              <Button
-                title="Cancel"
-                onPress={() => {
-                  setShowModal(false);
-                  setPetname("");
-                  setGender("");
-                  setWeight("");
-                  setBirth("");
-                  setKind("");
-                }}
-                color="gray"
-              />
-            </View>
+
             <View style={styles.modalButtons}>
               <Button
                 title="Save"
                 onPress={() => {
-                  savePet();
+                  handleSavePetInfo();
+                  setPetInfo({
+                    petName: "",
+                    petAge: "",
+                    petWeight: "",
+                    petGender: "",
+                    petKind: "",
+                  });
+                  setShowModal(false);
+                  
+                }}
+              />
+            </View>
+
+            <View style = {styles.modalButtons}>
+                <Button
+                title="Cancle"
+                onPress={() => {
+                  setShowModal(false);
                 }}
               />
             </View>
@@ -327,12 +237,9 @@ function HomeScreen() {
           onPress={() => {
             console.log("this button");
             setShowModal(true);
-            setPetname("");
-            setGender("");
-            setWeight("");
-            setBirth("");
-            setKind("");
-          }}
+
+          }
+        }
         >
           <Icon name="add" size={24} style={{ color: "white" }} />
         </Pressable>
@@ -453,6 +360,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 12,
     fontWeight: "bold",
+  },
+  petListScrollView: {
+    flexGrow: 1,
   },
   //--------------------------------------------------------------------
   // 모달 창 스타일
