@@ -1,6 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/MaterialIcons";
+
 import HomeScreen from "./Home/HomeScreen";
 import CalendarScreen from "./Calendar/CalendarScreen";
 import WalkingScreen from "./Walking/WalkingScreen";
@@ -45,6 +46,7 @@ function MainScreen() {
         options={{
           title: "홈",
           tabBarIcon: ({ color, size }) => <Icon name="home" color={color} size={size} />,
+          headerShown: true,
         }}
       />
       <Tab.Screen
@@ -69,5 +71,4 @@ function MainScreen() {
     </Tab.Navigator>
   );
 }
-
 export default MainScreen;

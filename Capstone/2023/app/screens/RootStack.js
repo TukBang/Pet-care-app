@@ -10,6 +10,7 @@ import UploadScreen from "./Community/UploadScreen";
 import BoardScreen from "./Community/BoardScreen";
 import ModifyScreen from "./Community/ModifyScreen";
 import ModifyCommentScreen from "./Community/ModifyCommentScreen";
+import ProfileSetting from "./User/ProfileSetting";
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +46,11 @@ function RootStack() {
               name="ModifyComment"
               component={ModifyCommentScreen}
               options={{ title: "댓글 수정", headerBackTitle: "뒤로가기" }}
+            />
+            <Stack.Screen
+              name="ProfileSetting"
+              component={ProfileSetting}
+              options={{ title: "프로필 화면", headerBackTitle: "뒤로가기" }}
             />
           </>
         ) : (

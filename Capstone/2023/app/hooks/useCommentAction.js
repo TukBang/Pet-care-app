@@ -13,7 +13,6 @@ export default function useCommentActions({ id, comment }) {
   const route = useRoute();
 
   const remove = async () => {
-
     //댓글을 지우면 자동 새로고침
     await removeComment(id);
     events.emit("removeComment", id);

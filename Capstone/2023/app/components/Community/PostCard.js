@@ -3,7 +3,6 @@ import { View, StyleSheet, Text, Image, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 function PostCard({ user, category, title, photoURL, description, createdAt, id }) {
-
   const date = useMemo(
     () => (createdAt ? new Date(createdAt._seconds * 1000) : new Date()),
     [createdAt]

@@ -3,13 +3,13 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import {
   ActivityIndicator,
   Modal,
-  Text,
   StyleSheet,
   TextInput,
   View,
   Image,
   useWindowDimensions,
   Platform,
+  Pressable,
 } from "react-native";
 
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -25,7 +25,6 @@ import { Picker } from "@react-native-picker/picker";
 import EndModal from "../../components/Diagnosis/EndModal";
 import { CommonActions } from "@react-navigation/native";
 import events from "../../lib/events";
-import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 
 // CameraButton 에 Modal 에서 이미지를 선택하면 나오는 게시글 작성 화면
 // DiagnosisScreen.js 에서 상담 게시판을 올리는데 사용

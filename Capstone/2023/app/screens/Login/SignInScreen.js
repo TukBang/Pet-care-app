@@ -15,7 +15,7 @@ import { useUserContext } from "../../contexts/UserContext";
 import { signIn, signUp } from "../../lib/auth";
 import { getUser } from "../../lib/users";
 
-// 로그인 화면 
+// 로그인 화면
 
 function SignInScreen({ navigation, route }) {
   const { isSignUp } = route.params || {};

@@ -5,14 +5,20 @@ import PostCard from "../../components/Community/PostCard";
 import usePosts from "../../hooks/usePosts";
 import { Picker } from "@react-native-picker/picker";
 import { useUserContext } from "../../contexts/UserContext";
+import { useRoute } from "@react-navigation/native";
 
 // 커뮤니티 메인화면
 
 function CommunityScreen() {
   const [boardCategory, setBoardCategory] = useState("전체");
+  const route = useRoute();
+  useEffect(() => {
+    if (route.params?.boardCategory) {
+      setBoardCategory(route.params.boardCategory);
+    }
+  }, [route.params?.boardCategory]);
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { posts, noMorePost, refreshing, onLoadMore, onRefresh, removePost } = usePosts();
-
 
   // 사용자 uid 가져오기
   const { user } = useUserContext();

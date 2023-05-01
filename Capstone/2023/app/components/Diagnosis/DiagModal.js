@@ -4,7 +4,6 @@ import { StyleSheet, Modal, View, Pressable, Text, ActivityIndicator, Image } fr
 // 진단 중 표기되는 Modal
 
 function DiagModal({ diagState, selectedImage, visible, onClose, timeout = 1 }) {
-
   // 시간 초과 시 onClose() 함수 실행
   useEffect(() => {
     if (diagState === true) {

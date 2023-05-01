@@ -21,7 +21,7 @@ export default function usePostActions({ id, title, photoURL, description }) {
       description,
     });
   };
-  
+
   //게시글 삭제
   const remove = async () => {
     await removePost(id);

@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     // lineHeight: 24,
     marginBottom: 8,
-  }
+  },
 });
 
 export default React.memo(DetailPostCards);

@@ -5,7 +5,6 @@ import CheckBox from "@react-native-community/checkbox";
 //진단 메인화면
 
 function CheckList({ setModalVisible }) {
-
   //진단 문구
   let explainText1 = `피부 진단 AI 기술을 사용하여 6가지 증상을 진단합니다.
    1. 구진, 플라크
