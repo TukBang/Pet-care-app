@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "express": "^4.18.2",
-    "mysql2": "^3.2.1",
-    "react-native-simple-modal": "^9.0.1",
-    "react-native-vector-icons": "^9.2.0",
-    "uuid": "^9.0.0"
-  }
-}
