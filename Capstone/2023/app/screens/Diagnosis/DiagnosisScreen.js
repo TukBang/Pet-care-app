@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { 
+  useState,
+  useEffect,
+} from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import RNFS from "react-native-fs";
 import PreDiagList from "../../components/Diagnosis/PreDiagList";
 import DiagModal from "../../components/Diagnosis/DiagModal";
 import ProbChart from "../../components/Diagnosis/HorizontalBarChart";
 import { useNavigation, useRoute } from "@react-navigation/native";
+
+// user information (account id)
+import { useUserContext } from "../../contexts/UserContext";
+
+// get the pet infomation
+import { getPetInfoByUserID } from "../../lib/petInfo";
 
 var aiResult = {
   labels: [
@@ -21,6 +30,14 @@ var aiResult = {
 var diagnosisResultText2 = `(이)가 의심됩니다.`;
 
 function DiagnosisScreen() {
+  // get the user information
+  const { user } = useUserContext();
+  const uid = user["id"];
+
+  // get the pet information
+  const [petList, setPetList] = useState([]);
+
+  // variable for the screen transition
   const [selectedImage, setSelectedImage] = useState(null);
   const [diagmodalVisible, setDiagModalVisible] = useState(false);
   const [diagState, setDiagState] = useState(false);
@@ -43,20 +60,50 @@ function DiagnosisScreen() {
   let resultButtonText2 = `전문가와 상담하기`;
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  // 펫 정보 불러오기
+  useEffect(() => {
+    if (user) {
+      getPetInfoByUserID(uid).then((pets) => {
+        setPetList(pets);
+      });
+    }
+  }, [user]);
+  
+  // temp petList
+  console.log(petList[0]);
+
   // 61.106.219.238:5000
   // 121.170.118.190:5000
   // SelectedImage AI SERVER 전송
-  const handlePostRequest = async () => {
+  const handlePostRequest = async (index) => {
     try {
       const image = await RNFS.readFile(selectedImage.path, "base64");
-      const response = await fetch("http://121.170.118.190:5000/images", {
-        method: "POST",
+      const petName = petList[index].petName;
+      const petSpecies = petList[index].petKind;
+      const petAge = petList[index].petAge;
+      const petWeight = petList[index].petWeight;
+      const petGender = petList[index].petGender;
+      console.log(JSON.stringify({
+        /* 더 많은 펫 정보들이 담겨서 가야 함 */
+        /* 랜덤 이미지 이름은 추후에 사용자 정보와 펫 정보를 함께 담을 수 있도록
+           식별하여 구성하도록 만들어야 함 (2023-04-15) */
+        name:    petName,
+        species: petSpecies,
+        gender:  petGender,
+        weight:  petWeight,
+        age:     petAge,
+      }))
+      const response = await fetch("http://61.106.219.238:5000/images", {
+        method: "POST",  
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          /* 더 많은 펫 정보들이 담겨서 가야 함 */
-          /* 랜덤 이미지 이름은 추후에 사용자 정보와 펫 정보를 함께 담을 수 있도록
-             식별하여 구성하도록 만들어야 함 (2023-04-15) */
-          name:
+          /* 더 많은 펫 정보들을 담을 수 있다면 추후 추가 필요 (2023-05-02) */
+          name:    petName,
+          species: petSpecies,
+          gender:  petGender,
+          weight:  petWeight,
+          age:     petAge,
+          imageName:
             Math.random().toString(36).substring(2, 15) +
             Math.random().toString(36).substring(2, 15) +
             ".jpg",
@@ -74,13 +121,12 @@ function DiagnosisScreen() {
         predictions["L6"],
       ];
 
-      console.log(aiResult.predictions);
       diagnosisResultText2 = `${
         aiResult.labels[aiResult.predictions.indexOf(Math.max(...aiResult.predictions))]
       }(이)가 의심됩니다.`;
-      console.log(diagnosisResultText2);
+
       setDiagState(true);
-      setDiagEnd(true);
+      setDiagEnd(true);      
     } catch (error) {
       // 서버 오류나서 진단 실패되면 진행
       // 초기화면으로 갈 수 있도록 설정
@@ -93,9 +139,10 @@ function DiagnosisScreen() {
   };
 
   // 상담 게시판 이동 버튼 -
-  const goWrite = (res) => {
+  const goWrite = (res, predictions) => {
     console.log("PickImage", res);
-    navigation.push("Upload", { res, isSolution: true });
+    console.log("predictions", predictions) ;
+    navigation.push("Upload", { res, predictions, isSolution: true });
   };
 
   return (
@@ -119,13 +166,17 @@ function DiagnosisScreen() {
                   />
                 </View>
 
+                {/* 어떤 펫을 진단하는지 카테고리 형식으로 선택할 수 있는 요소 구성 필요함 */}
+                {/* 현재는 임시로 불러들인 펫 리스트의 첫번째를 전송함 (2023-05-02) */}
+
                 <View style={diagnosisSelectStyles.button_container}>
                   <TouchableOpacity
                     style={diagnosisSelectStyles.button}
                     onPress={() => {
                       setDiagState(false);
                       // AI 서버에 이미지 전송
-                      handlePostRequest();
+                      // 0번째 펫을 선택하도록 설정 (카테고리 선택 요소에 따라 바뀔 수 있도록 변경 필요 2023-05-02)
+                      handlePostRequest(0);
 
                       // 진단 모달 띄우기
                       setDiagtempView(true);
@@ -167,6 +218,7 @@ function DiagnosisScreen() {
                           {diagnosisResultText2}
                         </Text>
                       </View>
+
                       <View style={diagnosisResultStyles.imageView}>
                         <Image
                           source={{ uri: selectedImage.path }}
@@ -192,12 +244,12 @@ function DiagnosisScreen() {
                       >
                         <Text style={diagnosisResultStyles.buttonText}>{resultButtonText1}</Text>
                       </TouchableOpacity>
-                      {/* gowrite 함수에 selectedImage 인자 전달  - 상담 게시글 작성 이동*/}
+                      {/* gowrite 함수에 selectedImage 인자 전달 - 상담 게시글 작성 이동*/}
                       <TouchableOpacity
                         style={diagnosisResultStyles.button}
                         onPress={() => {
                           console.log(selectedImage);
-                          goWrite(selectedImage);
+                          goWrite(selectedImage, aiResult["predictions"]);
                         }}
                       >
                         <Text style={diagnosisResultStyles.buttonText}>{resultButtonText2}</Text>

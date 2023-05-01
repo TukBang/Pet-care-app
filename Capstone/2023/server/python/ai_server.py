@@ -109,7 +109,7 @@ class ImageResource(Resource):
             try:
                 image_data = base64.b64decode(image_data)
                 image = Image.open(io.BytesIO(image_data))
-                image_name = data.get('name', 'unnamed.jpg')
+                image_name = data.get('imageName', 'unnamed.jpg')
                 save_path = os.path.join(image_path, image_name)
                 image.save(save_path)
 
@@ -124,7 +124,7 @@ class ImageResource(Resource):
                 pred = model.forward(image)
                 probs = softmax(pred[0].to("cpu").detach().numpy())
 
-                ret_data = jsonify({'name': image_name, 
+                ret_data = jsonify({'imageName': image_name, 
                                     'L1': probs[0], 'L2': probs[1],
                                     'L3': probs[2], 'L4': probs[3],
                                     'L5': probs[4], 'L6': probs[5]})

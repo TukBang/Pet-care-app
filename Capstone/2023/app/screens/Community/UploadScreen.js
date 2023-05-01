@@ -37,6 +37,7 @@ function UploadScreen() {
   const route = useRoute();
   const navigation = useNavigation();
   const res = route.params.res;
+  const predictions = route.params.predictions;
   const { width } = useWindowDimensions();
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
@@ -50,6 +51,8 @@ function UploadScreen() {
   const { user } = useUserContext();
 
   console.log(res);
+  console.log("Hello World!");
+  console.log(predictions);
   const onSubmit = useCallback(async () => {
     setIsLoading(true);
     if (!isSolution) {
