@@ -11,6 +11,7 @@ import BoardScreen from "./Community/BoardScreen";
 import ModifyScreen from "./Community/ModifyScreen";
 import ModifyCommentScreen from "./Community/ModifyCommentScreen";
 import ProfileSetting from "./User/ProfileSetting";
+import PetProfile from "../components/Home/PetProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,11 @@ function RootStack() {
               name="ProfileSetting"
               component={ProfileSetting}
               options={{ title: "프로필 화면", headerBackTitle: "뒤로가기" }}
+            />
+            <Stack.Screen
+              name="PetProfile"
+              component={PetProfile}
+              options={{ title: "펫 정보 화면", headerBackTitle: "뒤로가기" }}
             />
           </>
         ) : (

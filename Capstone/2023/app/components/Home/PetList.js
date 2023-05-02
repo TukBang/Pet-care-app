@@ -24,8 +24,9 @@ import { deletePetInfo } from "../../lib/petInfo";
 import { useUserContext } from "../../contexts/UserContext";
 // 화면이동을 위해 사용
 import { useNavigation } from "@react-navigation/native";
-import PetProfile from "../../components/Home/PetProfile";
-
+// 이미지피커
+import ImagePicker from "react-native-image-crop-picker";
+import ActionSheetModal from "../ActionSheetModal";
 
 function PetList() {
   const { user } = useUserContext();
@@ -40,8 +41,10 @@ function PetList() {
   const [showModal, setShowModal] = useState(false);
   // 펫 정보 불러오기 위함
   const [petList, setPetList] = useState([]);
-  const navigation = useNavigation();
   const animation = useRef(new Animated.Value(0)).current;
+  const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+
 
   // 펫 정보 불러오기
   useEffect(() => {
@@ -86,10 +89,48 @@ function PetList() {
     setPetList(updatedPetList);
   };
 
+  // 스크롤 뷰 펫 누르면 펫 정보 띄우기
   const handlePressPet = (petId) => {
-    navigation.navigate("PetProfile", { petId });
+    navigation.navigate("PetProfile", { petId: petId });
   };
 
+  const imagePickerOption = {
+    mediaType: "photo",
+    maxWidth: 768,
+    maxHeight: 768,
+    includeBase64: Platform.OS === "android",
+  };
+
+  // 카메라 실행 함수
+  const onLaunchCamera = () => {
+    ImagePicker.openCamera(imagePickerOption)
+      .then((image) => {
+        ImagePicker.openCropper({
+          path: image.path,
+          width: image.width,
+          height: image.height,
+        })
+          .then(onCropImage)
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
+  };
+
+  // 이미지 선택 함수
+  const onLaunchImageLibrary = () => {
+    ImagePicker.openPicker(imagePickerOption)
+      .then((image) => {
+        ImagePicker.openCropper({
+          path: image.path,
+          width: image.width,
+          height: image.height,
+        })
+          .then(onCropImage)
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
+  };
+  
   // Animation for Pressable Button
   useEffect(() => {
     Animated.spring(animation, {
@@ -125,15 +166,14 @@ function PetList() {
               </View> */}
             </View>
           ))}
-            <View style={styles.petInfoContainer}>
-              <TouchableOpacity
-                style={styles.addButton}
-                onPress={() => setShowModal(true)}
-              >
-                <Text style={styles.addButtonText}>+</Text>
-              </TouchableOpacity>
-            </View>
-
+          <View style={styles.petInfoContainer}>
+            <TouchableOpacity
+              style={styles.addButton}
+              onPress={() => setShowModal(true)}
+            >
+              <Text style={styles.addButtonText}>+</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </View>
       {/* 펫 등록 화면 모달 */}
@@ -172,6 +212,28 @@ function PetList() {
               onChangeText={(text) => setPetInfo({ ...petInfo, petKind: text })}
               placeholder="종류"
             />
+            <TouchableOpacity
+              onPress={() => setModalVisible(true)}
+
+            >
+              <Text>아아</Text>
+            </TouchableOpacity>
+            <ActionSheetModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                actions={[
+                  {
+                    icon: "camera-alt",
+                    text: "카메라로 촬영하기",
+                    onPress: onLaunchCamera,
+                  },
+                  {
+                    icon: "photo",
+                    text: "사진 선택하기",
+                    onPress: onLaunchImageLibrary,
+                  },
+                ]}
+              />
 
             <View style={styles.modalButtons}>
               <Button

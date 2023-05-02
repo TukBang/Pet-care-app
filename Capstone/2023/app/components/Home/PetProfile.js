@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
-import { getPetInfoById } from "../../lib/petInfo";
+import { getPetInfo } from "../../lib/petInfo";
+
+
 
 function PetProfile({ route }) {
   const { petId } = route.params;
   const [petInfo, setPetInfo] = useState(null);
-
+  console.log(petId);
   useEffect(() => {
-    getPetInfoById(petId)
+    getPetInfo(petId)
       .then((pet) => {
         setPetInfo(pet);
       })
@@ -15,11 +17,11 @@ function PetProfile({ route }) {
         console.error("펫 정보 불러오기 실패", error);
       });
   }, [petId]);
-
+  console.log(petInfo);
   if (!petInfo) {
     return null;
   }
-console.log(petInfo.petName);
+  
   return (
     <View style={styles.container}>
       <View style={styles.petImageContainer}>
