@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
+  Image,
   TouchableOpacity,
   ScrollView,
   StyleSheet,
@@ -19,8 +20,10 @@ import { createPetInfo } from "../../lib/petInfo";
 import { getPetInfoByUserID } from "../../lib/petInfo";
 // 펫 정보 삭제를 위해 사용
 import { deletePetInfo } from "../../lib/petInfo";
-
+// user uid 를 위해 사용
 import { useUserContext } from "../../contexts/UserContext";
+// 이미지 선택을 위해 사용
+import PreDiagList from "../../components/Diagnosis/PreDiagList";
 
 function PetList() {
   const { user } = useUserContext();
@@ -41,11 +44,22 @@ function PetList() {
   // 펫 정보 불러오기
   useEffect(() => {
     if (user) {
-      getPetInfoByUserID(uid).then((pets) => {
-        setPetList(pets);
-      });
+      // uid를 통해서 펫 정보 가져옴
+      getPetInfoByUserID(uid)
+        .then((pets) => {
+          // createdAt 값이 null인 경우를 대비하여 예외처리 추가 (에러방지)
+          // 펫 정보 오름차순 정렬
+          const sortedPets = pets.sort((a, b) => {
+            const dateA = a.createdAt ? a.createdAt.toDate() : 0;
+            const dateB = b.createdAt ? b.createdAt.toDate() : 0;
+            return dateA - dateB;
+          });
+
+          setPetList(sortedPets);
+        })
+        .catch((error) => console.error("펫 정보 불러오기 실패", error));
     }
-  }, [user]);
+  }, [user, petList]);
 
   // 펫 정보 저장하기
   const handleSavePetInfo = () => {
@@ -90,21 +104,28 @@ function PetList() {
         >
           {petList.map((pet) => (
             <View key={pet.id} style={styles.petInfoContainer}>
-              <Text style={styles.subtitle}>이름: {pet.petName}</Text>
-              <Text style={styles.petInfoText}>나이 :{pet.petAge}</Text>
-              <Text style={styles.petInfoText}>무게 : {pet.petWeight}</Text>
-              <Text style={styles.petInfoText}>성별 : {pet.petGender}</Text>
-              <Text style={styles.petInfoText}>품종 : {pet.petKind}</Text>
-              <View style={styles.buttonContainer}>
+              <View style={styles.petImageContainer}>
+                <Image source={pet.petImage} style={styles.petImage} />
+              </View>
+              {/* <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={styles.deleteButton}
                   onPress={() => handleDeletePet(pet.id)}
                 >
                   <Text style={styles.buttonText}>Delete</Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
             </View>
           ))}
+            <View style={styles.petInfoContainer}>
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => setShowModal(true)}
+              >
+                <Text style={styles.addButtonText}>+</Text>
+              </TouchableOpacity>
+            </View>
+
         </ScrollView>
       </View>
       {/* 펫 등록 화면 모달 */}
@@ -173,7 +194,7 @@ function PetList() {
         </Pressable>
       </Modal>
       {/* 펫 정보 추가 버튼 애니메이션 */}
-      <Animated.View
+      {/* <Animated.View
         style={[
           styles.wrapper,
           {
@@ -206,9 +227,9 @@ function PetList() {
             setShowModal(true);
           }}
         >
-          <Icon name="add" size={24} style={{ color: "white" }} />
+          <Icon name="add" size={50} style={{ color: "white" }} />
         </Pressable>
-      </Animated.View>
+      </Animated.View> */}
     </>
   );
 }
@@ -254,17 +275,19 @@ const styles = StyleSheet.create({
   },
 
   addButton: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: "#FFA000",
+    width: 60,
+    height: 60,
+    borderRadius: 40,
+    backgroundColor: "#BFBFBF",
     justifyContent: "center",
     alignItems: "center",
+    flexDirection: "row",
   },
-
   addButtonText: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 50,
+    textAlign: "center",
+    marginTop: -5,
   },
   // 스크롤 뷰 스타일
   scrollView: {
@@ -277,28 +300,33 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   petInfoContainer: {
-    width: 200,
-    height: 200,
-    borderRadius: 10,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     backgroundColor: "#E5E5E5",
-    marginRight: 20,
+    marginRight: 10,
     padding: 10,
+    position: "relative",
   },
-  subtitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
+  petImageContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    overflow: "hidden",
+    position: "absolute",
+    top: 10,
+    left: 10,
   },
-  petInfoText: {
-    fontSize: 14,
-    marginBottom: 5,
+  petImage: {
+    width: "100%",
+    height: "100%",
   },
   buttonContainer: {
-    position: "absolute",
-    top: 0,
-    right: 0,
     flexDirection: "row-reverse",
-    margin: 8,
+    position: "absolute",
+    bottom: 10,
+    left: 10,
+    right: 10,
   },
   deleteButton: {
     backgroundColor: "red",
