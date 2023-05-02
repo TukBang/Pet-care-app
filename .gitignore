@@ -3,3 +3,6 @@ Capstone/2023/app/server/realtimeDatabase.txt
 Capstone/node_modules/*
 Capstone/node_modules
 Capstone/.package-lock.json
+Capstone/package-lock.json
+Capstone/package.json
+Capstone/yarn.lock

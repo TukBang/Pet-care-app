@@ -6,6 +6,7 @@ import { useUserContext } from "../../contexts/UserContext";
 import auth from "@react-native-firebase/auth";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { signOut } from "../../lib/auth";
+import PetProfile from "../../components/Home/PetProfile";
 
 function ProfileSetting() {
   const { user, setUser } = useUserContext();

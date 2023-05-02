@@ -22,8 +22,10 @@ import { getPetInfoByUserID } from "../../lib/petInfo";
 import { deletePetInfo } from "../../lib/petInfo";
 // user uid 를 위해 사용
 import { useUserContext } from "../../contexts/UserContext";
-// 이미지 선택을 위해 사용
-import PreDiagList from "../../components/Diagnosis/PreDiagList";
+// 화면이동을 위해 사용
+import { useNavigation } from "@react-navigation/native";
+import PetProfile from "../../components/Home/PetProfile";
+
 
 function PetList() {
   const { user } = useUserContext();
@@ -38,7 +40,7 @@ function PetList() {
   const [showModal, setShowModal] = useState(false);
   // 펫 정보 불러오기 위함
   const [petList, setPetList] = useState([]);
-
+  const navigation = useNavigation();
   const animation = useRef(new Animated.Value(0)).current;
 
   // 펫 정보 불러오기
@@ -84,6 +86,10 @@ function PetList() {
     setPetList(updatedPetList);
   };
 
+  const handlePressPet = (petId) => {
+    navigation.navigate("PetProfile", { petId });
+  };
+
   // Animation for Pressable Button
   useEffect(() => {
     Animated.spring(animation, {
@@ -105,7 +111,9 @@ function PetList() {
           {petList.map((pet) => (
             <View key={pet.id} style={styles.petInfoContainer}>
               <View style={styles.petImageContainer}>
-                <Image source={pet.petImage} style={styles.petImage} />
+                <TouchableOpacity onPress={() => handlePressPet(pet.id)}>
+                  <Image source={pet.petImage} style={styles.petImage} />
+                </TouchableOpacity>
               </View>
               {/* <View style={styles.buttonContainer}>
                 <TouchableOpacity
@@ -193,43 +201,7 @@ function PetList() {
           </View>
         </Pressable>
       </Modal>
-      {/* 펫 정보 추가 버튼 애니메이션 */}
-      {/* <Animated.View
-        style={[
-          styles.wrapper,
-          {
-            transform: [
-              {
-                translateY: animation.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, 88],
-                }),
-              },
-            ],
 
-            opacity: animation.interpolate({
-              inputRange: [0, 1],
-              outputRange: [1, 0],
-            }),
-          },
-        ]}
-      >
-        <Pressable
-          style={({ pressed }) => [
-            styles.addButton,
-            Platform.OS === "ios" && {
-              opacity: pressed ? 0.6 : 1,
-            },
-          ]}
-          android_ripple={{ color: "white" }}
-          onPress={() => {
-            console.log("this button");
-            setShowModal(true);
-          }}
-        >
-          <Icon name="add" size={50} style={{ color: "white" }} />
-        </Pressable>
-      </Animated.View> */}
     </>
   );
 }

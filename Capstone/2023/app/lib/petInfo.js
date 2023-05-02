@@ -2,13 +2,15 @@ import firestore from "@react-native-firebase/firestore";
 
 export const petInfoCollection = firestore().collection("petInfo");
 
+require("../assets/user.png");
+require("../assets/dog.png");
 // 펫 정보 생성
 
 export function createPetInfo({ petName, petAge, petWeight, petGender, petKind, userID, imageUri }) {
   const docRef = petInfoCollection.doc();
   const petID = docRef.id;
   // 기본 펫 이미지 설정
-  const petImage = imageUri || require("../assets/user.png"); // 기본 이미지 경로 할당
+  const petImage = imageUri || require("../assets/dog.png"); // 기본 이미지 경로 할당
   return docRef.set({
     petID,
     petName,
