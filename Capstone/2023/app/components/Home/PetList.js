@@ -189,10 +189,7 @@ function PetList() {
             <View key={pet.id} style={styles.petInfoContainer}>
               <View style={styles.petImageContainer}>
                 <TouchableOpacity onPress={() => handlePressPet(pet.id)}>
-                  <Image source={pet.petImage} style={styles.petImage} />
-                  <Text>
-                    {pet.id}
-                  </Text>
+                  <Image source={{ uri: pet.petImage }} style={styles.petImage} />
                 </TouchableOpacity>
               </View>
               {/* <View style={styles.buttonContainer}>

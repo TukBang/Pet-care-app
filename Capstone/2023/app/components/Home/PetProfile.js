@@ -25,7 +25,7 @@ function PetProfile({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.petImageContainer}>
-        <Image source={petInfo.petImage} style={styles.petImage} />
+        <Image source={{uri: petInfo.petImage}} style={styles.petImage} />
       </View>
       <View style={styles.petInfoContainer}>
         <Text style={styles.petInfoText}>이름 : {petInfo.petName}</Text>
