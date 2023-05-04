@@ -28,6 +28,10 @@ import { useNavigation } from "@react-navigation/native";
 import ImagePicker from "react-native-image-crop-picker";
 import ActionSheetModal from "../ActionSheetModal";
 
+import storage from "@react-native-firebase/storage";
+import { v4 } from "uuid";
+import RNFS from "react-native-fs";
+
 function PetList() {
   const { user } = useUserContext();
   const uid = user["id"];
@@ -37,6 +41,7 @@ function PetList() {
     petWeight: "",
     petGender: "",
     petKind: "",
+    petImage: "",
   });
   const [showModal, setShowModal] = useState(false);
   // 펫 정보 불러오기 위함
@@ -44,7 +49,8 @@ function PetList() {
   const animation = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
-
+  // 카메라 경로저장 변수
+  const [cameraInfo, setCameraInfo] = useState(null);
 
   // 펫 정보 불러오기
   useEffect(() => {
@@ -67,8 +73,25 @@ function PetList() {
   }, [user, petList]);
 
   // 펫 정보 저장하기
-  const handleSavePetInfo = () => {
-    createPetInfo({ ...petInfo, userID: uid })
+  const handleSavePetInfo = async () => {
+
+    const extension = cameraInfo.path.split(".").pop();
+    var reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
+
+    //image : path to base64 변환
+    const image = await RNFS.readFile(cameraInfo.path, "base64");
+    if (Platform.OS === "android") {
+      await reference.putString(image, "base64", { contentType: cameraInfo.mime });
+    } else {
+      await reference.putFile(cameraInfo.path);
+    }
+    const petImage = await reference.getDownloadURL();
+
+    console.log(extension);
+    console.log(reference);
+    console.log(petImage);
+
+    createPetInfo({ ...petInfo, userID: uid , petImage: petImage })
       .then(() => {
         console.log("펫 정보 저장 성공");
         // 저장 후에 최신 데이터로 업데이트
@@ -79,6 +102,7 @@ function PetList() {
       .catch((error) => {
         console.error("펫 정보 저장 실패", error);
       });
+
   };
 
   // 펫 정보 삭제하기
@@ -99,6 +123,18 @@ function PetList() {
     maxWidth: 768,
     maxHeight: 768,
     includeBase64: Platform.OS === "android",
+  };
+
+  const onCropImage = (res) => {
+    if (res.didCancel || !res) {
+      return;
+    }
+    
+    console.log(res);
+    console.log(res.path);
+    setCameraInfo(res);
+
+
   };
 
   // 카메라 실행 함수
@@ -154,6 +190,9 @@ function PetList() {
               <View style={styles.petImageContainer}>
                 <TouchableOpacity onPress={() => handlePressPet(pet.id)}>
                   <Image source={pet.petImage} style={styles.petImage} />
+                  <Text>
+                    {pet.id}
+                  </Text>
                 </TouchableOpacity>
               </View>
               {/* <View style={styles.buttonContainer}>
@@ -216,7 +255,10 @@ function PetList() {
               onPress={() => setModalVisible(true)}
 
             >
-              <Text>아아</Text>
+              <Image 
+                style={styles.petProfile}
+                resizeMode='cover' 
+                source={cameraInfo ? { uri: cameraInfo.path } : require("../../assets/dog.png")}  />
             </TouchableOpacity>
             <ActionSheetModal
                 visible={modalVisible}
@@ -418,6 +460,13 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: 2,
   },
+  // 펫 프로필 사진
+  petProfile: {
+    width: "30%",
+    height: "30%",
+    borderRadius: 50,
+    alignSelf: "center"
+  }
 });
 //--------------------------------------------------------------------
 
