@@ -41,7 +41,7 @@ function PetList() {
     petWeight: "",
     petGender: "",
     petKind: "",
-    petImage: "",
+    petImage: require("../../assets/dog.png"),
   });
   const [showModal, setShowModal] = useState(false);
   // 펫 정보 불러오기 위함
@@ -105,13 +105,7 @@ function PetList() {
 
   };
 
-  // 펫 정보 삭제하기
-  const handleDeletePet = async (petID) => {
-    await deletePetInfo(petID);
-    setPetList(petList.filter((pet) => pet.id !== petID));
-    const updatedPetList = petList.filter((pet) => pet.id !== petID);
-    setPetList(updatedPetList);
-  };
+
 
   // 스크롤 뷰 펫 누르면 펫 정보 띄우기
   const handlePressPet = (petId) => {
@@ -176,6 +170,8 @@ function PetList() {
       friction: 5,
     }).start();
   }, [animation]);
+
+
 
   return (
     <>
@@ -285,6 +281,7 @@ function PetList() {
                     petWeight: "",
                     petGender: "",
                     petKind: "",
+                    petImage: require("../../assets/dog.png"),
                   });
                   setShowModal(false);
                 }}
@@ -293,8 +290,16 @@ function PetList() {
 
             <View style={styles.modalButtons}>
               <Button
-                title="Cancle"
+                title="Cancel"
                 onPress={() => {
+                  setPetInfo({
+                    petName: "",
+                    petAge: "",
+                    petWeight: "",
+                    petGender: "",
+                    petKind: "",
+                    petImage: require("../../assets/dog.png"),
+                  });
                   setShowModal(false);
                 }}
               />
