@@ -121,10 +121,12 @@ class ImageResource(Resource):
 
                 image = Image.fromarray(cv2.merge(list(cv2.split(np.array(image))[::-1])))
                 image = test_transforms(image).to(device).unsqueeze(0)
-                pred = model.forward(image)
+                with torch.no_grad():
+                    model.eval()
+                    pred = model.forward(image)
                 probs = softmax(pred[0].to("cpu").detach().numpy())
 
-                ret_data = jsonify({'imageName': image_name, 
+                ret_data = jsonify({'name': image_name, 
                                     'L1': probs[0], 'L2': probs[1],
                                     'L3': probs[2], 'L4': probs[3],
                                     'L5': probs[4], 'L6': probs[5]})
