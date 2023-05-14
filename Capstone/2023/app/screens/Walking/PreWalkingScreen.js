@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 
 const PreWalkingScreen = ({onPress}) => {
@@ -15,5 +15,18 @@ const PreWalkingScreen = ({onPress}) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  // 버튼
+  button: {
+    // 정렬
+    justifyContent: "center",
+    alignItems: "center",
+
+    height: 40,
+    width: 330,
+    borderRadius: 5,
+  },
+})
 
 export default PreWalkingScreen;

@@ -15,7 +15,9 @@ const WalkingScreen = () => {
         <PreWalkingScreen onPress={() => setWalkingStart(true)}/>
       </View>
       ) : (
-      <AnimatedMarkers />
+      <View>
+        <AnimatedMarkers />
+      </View>
       )
     }
       {/* <Text>
