@@ -14,7 +14,7 @@ const LONGITUDE_DELTA = 0.009;
 const LATITUDE = 37.78825;
 const LONGITUDE = -122.4324;
 
-const AnimatedMarkers = () => {
+function AnimatedMarkers  () {
   const [mode, setMode] = useState("wait");
   const [kcal, setKcal] = useState(0);
   const [latitude, setLatitude] = useState(LATITUDE);
