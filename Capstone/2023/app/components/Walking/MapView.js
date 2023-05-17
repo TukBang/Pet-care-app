@@ -4,10 +4,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Image,
-  Pressable,
-  Button,
-  Modal,
   ActivityIndicator
 } from "react-native";
 import MapView, { Marker, AnimatedRegion, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
@@ -19,6 +15,8 @@ import { v4 } from "uuid";
 import RNFS from "react-native-fs";
 import { useUserContext } from "../../contexts/UserContext";
 import { createWalkInfo } from "../../lib/walkInfo";
+import MapInfo from "./MapInfo";
+import MapUploadModal from "./MapUploadModal";
 
 const LATITUDE_DELTA = 0.009; 
 const LONGITUDE_DELTA = 0.009;
@@ -26,21 +24,18 @@ const LATITUDE = 0;
 const LONGITUDE = 0;
 
 function AnimatedMarkers  () {
-  // const [mode, setMode] = useState("wait");
   const [kcal, setKcal] = useState(0); // 칼로리
   const [latitude, setLatitude] = useState(LATITUDE); // 초기 Latitude 값
   const [longitude, setLongitude] = useState(LONGITUDE); // 초기 Longtitude 값
   const [routeCoordinates, setRouteCoordinates] = useState([]); // 다녀왔던 길을 배열 [Latitude, Longtitude]의 형태로 저장
   const [distanceTravelled, setDistanceTravelled] = useState(0); // 누적 거리
   const [prevLatLng, setPrevLatLng] = useState({}); // 이전의 Latitude, Longtitude 를 저장 -> 새로운 것과 함께 거리측정에 사용
-  const [initialRegion, setInitialRegion] = useState(null); // 시작 위치를 현재 위치로 하기 위한 함수
   const [isTracking, setIsTracking] = useState(false); // 위치 기록 추적 상태
-  const [isTrackOver, setIsTrackOver] = useState(false);
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(false); // 모달 표시 여부를 관리하는 상태 변수
   const [resultImage, setResultImage] = useState('');
-  const [isSavingWalkInfo, setIsSavingWalkInfo] = useState(false); // 산책 정보 저장 중인지 여부
+  
   const {user} = useUserContext();
   const uid = user["id"];
 
@@ -50,144 +45,79 @@ function AnimatedMarkers  () {
     latitudeDelta: 0,
     longitudeDelta: 0,
   }));
+
   const markerRef = useRef(null);
   const mapRef = useRef(null);
 
-  const Timer = ({ elapsedTime }) => {
-    const formatTime = (time) => {
-      const minutes = Math.floor(time / 60000);
-      const seconds = Math.floor((time % 60000) / 1000);
-      return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    };
-  
-    return (
-      <Text>
-        {formatTime(elapsedTime)}
-      </Text>
+
+
+
+
+  useEffect(()  => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        console.log(latitude)
+        console.log(longitude)
+
+        setPrevLatLng({
+          latitude: latitude,
+          longitude: longitude,
+        });
+      },
+      error => {
+        console.log(error);
+      }
     );
-  };
-
-
-  const startTracking = async() => {
-    if(!isTracking) {
-      setRouteCoordinates([]); // 위치 기록 초기화
-      setDistanceTravelled(0); // 이동 거리 초기화
-      setPrevLatLng({});
-      setKcal(calcKcal(0));
-      setStartTime(Date.now()); // 시작 시간 기록
-      setElapsedTime(0); // 경과 시간 초기화
-      setResultImage('');
-      setIsTracking(true);
-    }
-  };
-
-  const stopTracking = async () => {
-    if (isTracking) {
-      setIsTracking(false);
-  
-      // 여태까지의 polyline이 모두 보이도록 지도의 축적을 조정
-      const coordinates = routeCoordinates.map((coord) => ({
-        latitude: coord.latitude,
-        longitude: coord.longitude,
-      }));
-      const edgePadding = { top: 50, right: 50, bottom: 50, left: 50 }; // 마커가 화면에 보이도록 여백 설정
-  
-      await mapRef.current.fitToCoordinates(coordinates, {
-        edgePadding,
-        animated: true,
-      });
-  
-      // 지도를 사진으로 캡처하여 저장
-      const result = await captureRef(mapRef, {
-        format: 'png', // 저장할 이미지 포맷 설정
-      });
-  
-      setResultImage(result);
-      setIsModalVisible(true);
-    }
-  };
-
-  const calcDistance = (newLatLng) => {
-    const distance = haversine(prevLatLng, newLatLng) || 0;
-    console.log('prevlat',prevLatLng)
-    console.log('newlat',newLatLng)
-    console.log('calcdistance',distance)
-    return distance;
-  };
-
-  const calcKcal = (distanceDelta) => {
-    const kcal = (distanceDelta / 0.1) * 7;
-    return kcal;
-  };
+  }, []);
 
   useEffect(() => {
-    if(isTracking) {
       Geolocation.setRNConfiguration({ skipPermissionRequests: true }); // iOS에서 위치 권한 요청을 스킵
+    
+      if(isTracking) {
+        var watchID = Geolocation.watchPosition( 
+          (position) => {
+            const { latitude, longitude } = position.coords;
 
-      Geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setInitialRegion({
-            latitude,
-            longitude,
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA
-          });
-        },
-        error => {
-          console.log(error);
-        }
-      );
-
-      var watchID = Geolocation.watchPosition( 
-        (position) => {
-          // const { routeCoordinates, distanceTravelled } = this.state;
-          const { latitude, longitude } = position.coords;
-
-          const newCoordinate = {
-            latitude,
-            longitude,
-          };
-          // console.log(latitude)
-          if (Platform.OS === "android") {
-            if (markerRef.current && markerRef.current._component) {
-              console.log(markerRef)
-              markerRef.current._component.animateMarkerToCoordinate(newCoordinate, 500);
+            const newCoordinate = {
+              latitude,
+              longitude,
+            };
+            // console.log(latitude)
+            if (Platform.OS === "android") {
+              if (markerRef.current && markerRef.current._component) {
+                console.log(markerRef)
+                markerRef.current._component.animateMarkerToCoordinate(newCoordinate, 500);
+              }
+            } else {
+              coordinate.current.timing(newCoordinate).start();
             }
-          } else {
-            coordinate.current.timing(newCoordinate).start();
-          }
 
+          console.log('newcorrdi',newCoordinate);
+          setPrevLatLng(newCoordinate);
           setLatitude(latitude);
           setLongitude(longitude);
           setRouteCoordinates((prevRouteCoordinates) => [...prevRouteCoordinates, newCoordinate]);
 
-          setPrevLatLng(newCoordinate);
-          
           const distanceDelta = calcDistance(newCoordinate);
           console.log('newcorrdi',newCoordinate)
           console.log('distancedelta',distanceDelta)
           console.log('disTravel',distanceTravelled)
-          // setDistanceTravelled(prevDistance => prevDistance + distanceDelta);
-          // setKcal(prevKcal => prevKcal + calcKcal(distanceDelta));
           const accumulateDistance = distanceTravelled + distanceDelta
-          // console.log(accumulateDistance)
           setDistanceTravelled(accumulateDistance);
           setKcal(calcKcal(accumulateDistance));
           
-          // setKcal(calcKcal(distanceTravelled));
-          
-        },
-        (error) => console.log(error),
-        {
-          enableHighAccuracy: true,
-          interval: 250,
-          timeout: 20000,
-          maximumAge: 1000,
-          distanceFilter: 5,
-        },
-      );
-    }
+          },
+          (error) => console.log(error),
+          {
+            enableHighAccuracy: true,
+            interval: 250,
+            timeout: 20000,
+            maximumAge: 1000,
+            distanceFilter: 5,
+          },
+        );
+      }
 
     return () => {
       if(isTracking) {
@@ -195,11 +125,7 @@ function AnimatedMarkers  () {
       }
     };
   }, [isTracking]);
-  
-
-
-
-  
+    
   useEffect(() => {
     if(isTracking){
     var interval = setInterval(() => {
@@ -209,15 +135,16 @@ function AnimatedMarkers  () {
     return () => clearInterval(interval);
   }, [elapsedTime, startTime]);
 
+
+
+
+
   const getMapRegion = () => ({
     latitude,
     longitude,
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
   });
-
-
-
 
   // 산책 정보 저장하기
   const handleSaveWalkInfo = async () => {
@@ -234,13 +161,12 @@ function AnimatedMarkers  () {
     }
     const walkImage = await reference.getDownloadURL();
 
-    // time, distance, kcal , userID, walkingImage
-    console.log(elapsedTime)
-    console.log(distanceTravelled)
-    console.log(kcal)
-    console.log(uid)
-    console.log(walkImage)
-    createWalkInfo({ time: elapsedTime,distance : distanceTravelled ,kcal : kcal,userID: uid , walkingImage: walkImage })
+    createWalkInfo({ 
+      time: elapsedTime, 
+      distance : distanceTravelled,
+      kcal : kcal,
+      userID: uid, 
+      walkingImage: walkImage })
 
   };
   
@@ -253,10 +179,68 @@ function AnimatedMarkers  () {
     // 나머지 코드들 실행
     setRouteCoordinates([]); // 위치 기록 초기화
     setDistanceTravelled(0); // 이동 거리 초기화
-    setPrevLatLng({});
+    setPrevLatLng(null);
     setKcal(calcKcal(0));
     setIsModalVisible(false);
+    console.log(prevLatLng)
   };
+
+  const startTracking = async() => {
+    if(!isTracking) {
+      setRouteCoordinates([]); // 위치 기록 초기화
+      setDistanceTravelled(0); // 이동 거리 초기화
+      setKcal(calcKcal(0));
+
+      setStartTime(Date.now()); // 시작 시간 기록
+      setElapsedTime(0); // 경과 시간 초기화
+      setResultImage('');
+
+      setIsTracking(true);
+    };
+  }
+
+  const stopTracking = async () => {
+    if (isTracking) {
+      setIsTracking(false);
+  
+      // 여태까지의 polyline이 모두 보이도록 지도의 축적을 조정
+      const coordinates = routeCoordinates.map((coord) => ({
+        latitude: coord.latitude,
+        longitude: coord.longitude,
+      }));
+      const edgePadding = { top: 50, right: 50, bottom: 50, left: 50 }; // 마커가 화면에 보이도록 여백 설정
+  
+      await mapRef.current.fitToCoordinates(coordinates, {
+        edgePadding,
+        animated: false,
+      });
+  
+      // 지도를 사진으로 캡처하여 저장
+      const result = await captureRef(mapRef, {
+        format: 'png', // 저장할 이미지 포맷 설정
+      });
+  
+      setResultImage(result);
+      setIsModalVisible(true);
+    }
+  };
+
+  const calcDistance = (newLatLng) => {
+    const distance = haversine({ latitude: latitude, longitude: longitude },
+      newLatLng) || 0;
+    console.log('prevlat',prevLatLng)
+    console.log('newlat',newLatLng)
+    console.log('calcdistance',distance)
+    return distance;
+  };
+
+  const calcKcal = (distanceDelta) => {
+    const kcal = (distanceDelta / 0.1) * 7;
+    return kcal;
+  };
+
+
+
 
   return (
     <>
@@ -276,50 +260,21 @@ function AnimatedMarkers  () {
           followUserLocation
           loadingEnabled
           region={getMapRegion()}
-          initialRegion={initialRegion}
         >
           <Polyline zIndex={5} coordinates={routeCoordinates} strokeWidth={5} strokeColor="green"/>
           <Marker.Animated
-            // ref={markerRef}
+            ref={markerRef}
             coordinate={coordinate.current}
             image={require('../../assets/dog.png')}
             // pinColor='green'
           />
         </MapView>
         {/* 산책 정보 기록 Contatiner */}
-        <View style={styles.infoContainer}>
-          <View>
-            <Text>Time :</Text>
-            <Timer elapsedTime={elapsedTime} />
-          </View>
-          <View style={styles.border} />
-          <Text>
-            Distance : {"\n"}
-            {parseFloat(distanceTravelled).toFixed(2)} km
-          </Text>
-          <View style={styles.border} />
-          <Text>
-            Kcal : {"\n"}
-            {parseFloat(kcal).toFixed(2)} kcal
-          </Text>
-        </View>
+        <MapInfo elapsedTime={elapsedTime} distanceTravelled={distanceTravelled} kcal={kcal}/>
         <Text>{latitude}</Text>
         <Text>{longitude}</Text>
-        <Text>{distanceTravelled}</Text>
-        <Text>{calcDistance(coordinate)}</Text>
-        <Text>{kcal}</Text>
       </View>
-      <Modal visible={isModalVisible} onRequestClose={hideModal} transparent={true} animationType="fade">
-        <Pressable style={styles.background} onPress={hideModal}>
-          <View style={styles.whiteBox}>
-            <Text>산책 내용 저장</Text>
-            <Image source={{uri: resultImage}} style={styles.image} resizeMode="contain"/>
-            <Button title="닫기" onPress={hideModal} />
-             {/* Activity Indicator 표시 */}
-            {/* {isSavingWalkInfo && <ActivityIndicator />} */}
-          </View>
-        </Pressable>
-      </Modal>
+      <MapUploadModal isModalVisible={isModalVisible} hideModal={hideModal} resultImage={resultImage} />
     </>
   );
 };
@@ -331,7 +286,6 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "70%",
-    // justifyContent: "flex-end",
     alignItems: "center",
     paddingLeft: 20,
     paddingRight: 20,
@@ -340,43 +294,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     justifyContent: "flex-end",
-  },
-  infoContainer: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "stretch",
-    justifyContent: "space-between",
-    margin: 10,
-  },
-  border: {
-    width: 1,
-    height: "100%",
-    backgroundColor: "gray",
-  },
-  background: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
-  },
-  whiteBox: {
-    width: "80%",
-    backgroundColor: "white",
-    borderRadius: 10,
-    paddingVertical: 20,
-    paddingHorizontal: 25,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  image: {
-    marginTop: 10,
-    marginBottom: 15,
-    width: 200,
-    height: 200,
-    alignSelf: 'center'
   },
 });
 
