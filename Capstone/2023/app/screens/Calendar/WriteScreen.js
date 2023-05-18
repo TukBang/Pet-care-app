@@ -9,12 +9,23 @@ import LogContext from "../../contexts/LogContext";
 import WriteHeader from "../../components/Calendar/WriteHeader";
 import WriteEditor from "../../components/Calendar/WriterEditor";
 
+// firebase에 저장
+import { createCalendar } from "../../lib/calendar";
+// user uid 를 위해 사용
+import { useUserContext } from "../../contexts/UserContext";
+
+import { calendarID } from "../../contexts/LogContext";
+import { id } from "date-fns/locale";
+import { v4 as uuidv4 } from "uuid";
+
 // 일정 작성 화면
 
 function WriteScreen({ route }) {
   const log = route.params?.log;
   const selectedDate = route.params.selectedDate;
   // console.log(selectedDate);
+  const { user } = useUserContext();
+  const uid = user["id"];
 
   const [title, setTitle] = useState(log?.title ?? "");
   const [body, setBody] = useState(log?.body ?? "");
@@ -23,25 +34,45 @@ function WriteScreen({ route }) {
 
   const { onCreate, onModify, onRemove } = useContext(LogContext);
 
+  const a = uuidv4();
   //저장함수
   const onSave = () => {
-    if (log) {
-      onModify({
-        id: log.id,
-        date: date.toISOString(),
-        title,
-        body,
+    createCalendar({
+      userID: uid,
+      calendarID: a,
+      title: title,
+      memo: body,
+      s_time: date.toISOString(),
+      e_time: date.toISOString(),
+      
+    })
+      .then(() => {
+        console.log('Data saved successfully');
+        //navigation.pop();
+      })
+      .catch((error) => {
+        console.error('Error saving data:', error);
+        // Handle error accordingly
       });
-    } else {
-      onCreate({
-        title,
-        body,
-        date: date.toISOString(),
-        // date: selectedDate.toISOString(),
-      });
-    }
-    navigation.pop();
-  };
+
+      if (log) {
+        onModify({
+          id: log.id,
+          date: date.toISOString(),
+          title,
+          body,
+        });
+      } else {
+        onCreate({
+          id: a,
+          title,
+          body,
+          date: date.toISOString(),
+          // date: selectedDate.toISOString(),
+        });
+      }
+      navigation.pop();
+    };
 
   // 삭제 여부를 물어보는 함수
   const onAskRemove = () => {

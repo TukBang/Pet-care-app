@@ -3,10 +3,12 @@ import React, { useEffect, useRef } from "react";
 import { useState, createContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 import logsStorage from "../storages/logsStorage";
+import { calendarCollection } from "../lib/calendar";
 
 // 오프라인에 저장하는 데이터 위한 모듈
 
 const LogContext = createContext();
+export let calendarID = '';
 
 export function LogContextProvider({ children }) {
   const initialLogsRef = useRef(null);
@@ -20,10 +22,11 @@ export function LogContextProvider({ children }) {
       }))
       .reverse()
   );
+
   // uuid 로 난수 생성 후 id로 설정, 제목, 내용, 날짜로 구성
-  const onCreate = ({ title, body, date }) => {
+  const onCreate = ({ id, title, body, date }) => {
     const log = {
-      id: uuidv4(),
+      id,
       title,
       body,
       date,
@@ -31,6 +34,8 @@ export function LogContextProvider({ children }) {
     // logs를 log와 기존 로그를 합쳐 설정
     setLogs([log, ...logs]);
   };
+
+
 
   //id가 일치하면 log를 교체하는 함수
   const onModify = (modified) => {
@@ -40,8 +45,22 @@ export function LogContextProvider({ children }) {
 
   //id를 제외한 log로 업데이트
   const onRemove = (id) => {
+    // Remove from UI (assuming logs state is used to render the logs)
     const nextLogs = logs.filter((log) => log.id !== id);
     setLogs(nextLogs);
+    console.log("333333");
+    console.log(id);
+    // Remove from Firestore
+    calendarCollection
+      .doc(id)
+      .delete()
+      .then(() => {
+        console.log('Data deleted successfully');
+      })
+      .catch((error) => {
+        console.error('Error deleting data:', error);
+        // Handle error accordingly
+      });
   };
 
   // useEffect 내에서 async 함수를 만들고 바로 호출
