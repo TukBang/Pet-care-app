@@ -145,6 +145,8 @@ function DiagnosisScreen() {
     navigation.push("Upload", { res, predictions, isSolution: true });
   };
 
+
+
   return (
     <View style={{ flex: 1 }}>
       {/* 이미지 선택 여부에 따라 화면 전환 */}

@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { FlatList, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
+import { useNavigation } from "@react-navigation/native";
 
 //진단 메인화면
 
 function CheckList({ setModalVisible }) {
+
+
   //진단 문구
   let explainText1 = `피부 진단 AI 기술을 사용하여 6가지 증상을 진단합니다.
    1. 구진, 플라크
@@ -39,6 +42,12 @@ function CheckList({ setModalVisible }) {
   // 진단 문구
 
   const isAllChecked = data.every((item) => item.checked);
+  const navigation = useNavigation()
+
+  // 챗봇 이동 버튼 -
+  const goChatBot = () => {
+    navigation.push("ChatBot");
+  };
 
   return (
     <View>
@@ -72,7 +81,9 @@ function CheckList({ setModalVisible }) {
           <Text style={[styles.buttonText, { color: buttonTextColor }]}>{buttonText1}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.button, { backgroundColor: "#2296F3" }]}>
+        <TouchableOpacity 
+          style={[styles.button, { backgroundColor: "#2296F3" }]}
+          onPress={goChatBot}>
           <Text style={[styles.buttonText, { color: "#FFFFFF" }]}>{buttonText2}</Text>
         </TouchableOpacity>
       </View>

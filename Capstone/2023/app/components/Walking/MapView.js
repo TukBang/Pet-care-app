@@ -53,26 +53,41 @@ function AnimatedMarkers  () {
 
 
 
-  useEffect(()  => {
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        console.log(latitude)
-        console.log(longitude)
+  // useEffect(()  => {
+  //   Geolocation.getCurrentPosition(
+  //     (position) => {
+  //       const { latitude, longitude } = position.coords;
+  //       console.log(latitude)
+  //       console.log(longitude)
 
-        setPrevLatLng({
-          latitude: latitude,
-          longitude: longitude,
-        });
-      },
-      error => {
-        console.log(error);
-      }
-    );
-  }, []);
+  //       setPrevLatLng({
+  //         latitude: latitude,
+  //         longitude: longitude,
+  //       });
+  //     },
+  //     error => {
+  //       console.log(error);
+  //     }
+  //   );
+  // }, []);
 
   useEffect(() => {
       Geolocation.setRNConfiguration({ skipPermissionRequests: true }); // iOS에서 위치 권한 요청을 스킵
+      Geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          console.log(latitude)
+          console.log(longitude)
+  
+          setPrevLatLng({
+            latitude: latitude,
+            longitude: longitude,
+          });
+        },
+        error => {
+          console.log(error);
+        }
+      );
     
       if(isTracking) {
         var watchID = Geolocation.watchPosition( 
@@ -94,7 +109,11 @@ function AnimatedMarkers  () {
             }
 
           console.log('newcorrdi',newCoordinate);
-          setPrevLatLng(newCoordinate);
+          setPrevLatLng(prevll => ({
+            ...prevll,
+            latitude: newCoordinate.latitude,
+            longitude: newCoordinate.longitude
+          }));
           setLatitude(latitude);
           setLongitude(longitude);
           setRouteCoordinates((prevRouteCoordinates) => [...prevRouteCoordinates, newCoordinate]);

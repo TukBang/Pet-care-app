@@ -51,6 +51,9 @@ function PreDiagList(props) {
       })
       .catch((error) => console.log(error));
   };
+
+  
+
   // 모달 표시 여부
   const [modalVisible, setModalVisible] = useState(false);
   return (
@@ -77,12 +80,7 @@ function PreDiagList(props) {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    marginLeft: 10,
-    fontSize: 20,
-  },
-  sentence: { marginLeft: 7 },
-  buttons: {},
+
 });
 
 export default PreDiagList;
