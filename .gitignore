@@ -5,4 +5,5 @@ Capstone/node_modules
 Capstone/.package-lock.json
 Capstone/package-lock.json
 Capstone/package.json
-Capstone/yarn.lock
+Capstone/2023/app/package-lock.json
+Capstone/2023/app/yarn.lock

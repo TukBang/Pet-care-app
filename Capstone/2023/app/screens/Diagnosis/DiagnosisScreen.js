@@ -83,16 +83,6 @@ function DiagnosisScreen() {
       const petAge = petList[index].petAge;
       const petWeight = petList[index].petWeight;
       const petGender = petList[index].petGender;
-      console.log(JSON.stringify({
-        /* 더 많은 펫 정보들이 담겨서 가야 함 */
-        /* 랜덤 이미지 이름은 추후에 사용자 정보와 펫 정보를 함께 담을 수 있도록
-           식별하여 구성하도록 만들어야 함 (2023-04-15) */
-        name:    petName,
-        species: petSpecies,
-        gender:  petGender,
-        weight:  petWeight,
-        age:     petAge,
-      }))
       const response = await fetch("http://61.106.219.238:5000/images", {
         method: "POST",  
         headers: { "Content-Type": "application/json" },
