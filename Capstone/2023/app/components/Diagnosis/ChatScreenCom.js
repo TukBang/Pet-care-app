@@ -20,7 +20,7 @@ const ChatScreenCom = () => {
         body: JSON.stringify({
           // user uid도 가져와서 보내고 싶음
           // 뒤로가기 누르면 채팅 내용을 삭제시키거나, 보존시킬 수 있게 해야 함
-          uid: "",
+          uid: "", // 여기에 보내는 사람의 uid를 채울 수 있게 해야함 (2023-05-21-2227)
           message: textMessage,
         }),
       });
@@ -30,10 +30,13 @@ const ChatScreenCom = () => {
       setResponseMessage(responseJson.message);
 
       // 서버에서 받은 메시지를 화면에 표시합니다.
-      const receivedMessage = generateResponseMessage(message);
+      const reponseMessage = generateResponseMessage(responseMessage);
       setMessages((previousMessages) =>
-        GiftedChat.append(previousMessages, receivedMessage)
+        GiftedChat.append(previousMessages, reponseMessage)
       );
+
+      // 여기서 TextInput 활성화
+      // setTextInputEnable(true);
     }
     catch (error) {
       console.log(error);
@@ -41,6 +44,7 @@ const ChatScreenCom = () => {
   };
 
   const generateSentMessage = (messages) => {
+    // setTextInputEnable(false);
     // 예시로, 상대방이 다시 보낸 메시지를 생성합니다.
     postMessage(messages);
 
@@ -62,28 +66,31 @@ const ChatScreenCom = () => {
     return sentMessage;
   };
 
-  const generateResponseMessage = (messages) => {
-    const receivedMessage = messages.map((message) => ({
+  const generateResponseMessage = (message) => {
+    const responseMessage = [{
       _id: Math.round(Math.random() * 1000000),
-      text: responseMessage, // 상대방이 보내는 메시지 텍스트
+      text: message, // 상대방이 보내는 메시지 텍스트
       createdAt: new Date(),
       user: {
         _id: 2, // 상대방 사용자 ID
         name: '상대방', // 상대방 사용자 이름
       },
-    }));
+    }];
 
-    return receivedMessage;
+    return responseMessage;
   };
 
   const onSend = (newMessages = []) => {
     // 내가 보낸 메시지를 생성하여 화면에 표시합니다.
+    console.log(newMessages)
     const sentMessage = generateSentMessage(newMessages);
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, sentMessage)
     );
   };
 
+  // prop TextInput 활성화 여부
+  // prop TextInput에 입력된 값
   return (
     <GiftedChat
       messages={messages}
