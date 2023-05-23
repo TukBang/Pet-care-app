@@ -1,5 +1,4 @@
-import React, { useState, useContext } from "react";
-
+import React, { useState, useContext, useEffect } from "react";
 import { StyleSheet, View, KeyboardAvoidingView, Platform, Alert } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
@@ -9,70 +8,41 @@ import LogContext from "../../contexts/LogContext";
 import WriteHeader from "../../components/Calendar/WriteHeader";
 import WriteEditor from "../../components/Calendar/WriterEditor";
 
-// firebase에 저장
-import { createCalendar } from "../../lib/calendar";
-// user uid 를 위해 사용
-import { useUserContext } from "../../contexts/UserContext";
-
-import { calendarID } from "../../contexts/LogContext";
-import { id } from "date-fns/locale";
-import { v4 as uuidv4 } from "uuid";
-
 // 일정 작성 화면
 
 function WriteScreen({ route }) {
   const log = route.params?.log;
   const selectedDate = route.params.selectedDate;
   // console.log(selectedDate);
-  const { user } = useUserContext();
-  const uid = user["id"];
 
   const [title, setTitle] = useState(log?.title ?? "");
   const [body, setBody] = useState(log?.body ?? "");
+  const [pet, setPet] = useState(log?.pet ?? "");
   const navigation = useNavigation();
   const [date, setDate] = useState(log ? new Date(log.date) : new Date());
 
   const { onCreate, onModify, onRemove } = useContext(LogContext);
 
-  const a = uuidv4();
   //저장함수
   const onSave = () => {
-    createCalendar({
-      userID: uid,
-      calendarID: a,
-      title: title,
-      memo: body,
-      s_time: date.toISOString(),
-      e_time: date.toISOString(),
-      
-    })
-      .then(() => {
-        console.log('Data saved successfully');
-        //navigation.pop();
-      })
-      .catch((error) => {
-        console.error('Error saving data:', error);
-        // Handle error accordingly
+    if (log) {
+      onModify({
+        id: log.id,
+        date: date.toISOString(),
+        title,
+        body,
+        pet,
       });
-
-      if (log) {
-        onModify({
-          id: log.id,
-          date: date.toISOString(),
-          title,
-          body,
-        });
-      } else {
-        onCreate({
-          id: a,
-          title,
-          body,
-          date: date.toISOString(),
-          // date: selectedDate.toISOString(),
-        });
-      }
-      navigation.pop();
-    };
+    } else {
+      onCreate({
+        title,
+        body,
+        date: date.toISOString(),
+        pet,
+      });
+    }
+    navigation.pop();
+  };
 
   // 삭제 여부를 물어보는 함수
   const onAskRemove = () => {
@@ -109,7 +79,7 @@ function WriteScreen({ route }) {
           onChangeDate={setDate}
         />
         {/* 헤더 아래 글쓰는 부분 (에디터) */}
-        <WriteEditor title={title} body={body} onChangeTitle={setTitle} onChangeBody={setBody} />
+        <WriteEditor title={title} body={body} onChangeTitle={setTitle} onChangeBody={setBody} onChangePet={setPet} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
