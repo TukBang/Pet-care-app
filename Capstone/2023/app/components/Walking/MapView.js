@@ -52,6 +52,35 @@ function AnimatedMarkers  () {
 
 
 
+  // useEffect(() => {
+  //   async function requestLocationPermission() {
+  //     try {
+  //       const granted = await PermissionsAndroid.request(
+  //         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  //         {
+  //           'title': 'Example App',
+  //           'message': 'Example App access to your location '
+  //         }
+  //       )
+  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //         console.log("You can use the location")
+  //         alert("You can use the location");
+  
+  //         // Change the value of the locationPermissionGranted to true after
+  //         // the user grants location access 
+  //         setLocationPermissionGranted(true);
+  //       } else {
+  //         console.log("location permission denied");
+  //         alert("Location permission denied");
+  //       }
+  //     } catch (err) {
+  //       console.warn(err);
+  //     }
+  //   }
+  
+  //   // Don't forget to call the method here
+  //   requestLocationPermission();
+  // })
 
   // useEffect(()  => {
   //   Geolocation.getCurrentPosition(

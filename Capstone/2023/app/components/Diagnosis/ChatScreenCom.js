@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
+import { useUserContext } from '../../contexts/UserContext';
+import { TextInput } from 'react-native/types';
 
 const ChatScreenCom = () => {
   const [messages, setMessages] = useState([]);
   const [responseMessage, setResponseMessage] = useState("");
+  const [textInputEnable, setTextInputEnable] = useState(true);
+  const {user} = useUserContext();
+  const uid = user["id"];
+  const userNickName = user['displayName']
 
   const postMessage = async (message) => {
     try {
@@ -11,41 +17,58 @@ const ChatScreenCom = () => {
       const textMessage = message[0].text;
       console.log("서버에 전달 될 메시지 내용: " + textMessage);
 
+            //임시로 주석화
+            
       // 서버에 메시지를 전달하는 로직을 구현합니다.
-      const response = await fetch("http://61.106.219.238:5000/chatbot", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          // user uid도 가져와서 보내고 싶음
-          // 뒤로가기 누르면 채팅 내용을 삭제시키거나, 보존시킬 수 있게 해야 함
-          uid: "", // 여기에 보내는 사람의 uid를 채울 수 있게 해야함 (2023-05-21-2227)
-          message: textMessage,
-        }),
-      });
+      // const response = await fetch("http://61.106.219.238:5000/chatbot", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     // user uid도 가져와서 보내고 싶음
+      //     // 뒤로가기 누르면 채팅 내용을 삭제시키거나, 보존시킬 수 있게 해야 함
+      //     uid: uid, // 여기에 보내는 사람의 uid를 채울 수 있게 해야함 (2023-05-21-2227)
+      //     // name: userNickName,
+      //     message: textMessage,
+      //   }),
+      // });
 
-      const responseJson = await response.json();
-      console.log("서버에서 받은 메시지 내용: " + responseJson.message);
-      setResponseMessage(responseJson.message);
+      // const responseJson = await response.json();
 
-      // 서버에서 받은 메시지를 화면에 표시합니다.
-      const reponseMessage = generateResponseMessage(responseMessage);
-      setMessages((previousMessages) =>
-        GiftedChat.append(previousMessages, reponseMessage)
-      );
+      // console.log("서버에서 받은 메시지 내용: " + responseJson.message);
+      // setResponseMessage(responseJson.message);
+
+      // 서버에서 받은 메시지를 화면에 표시합니다.   
+
+      // const reponseMessage = generateResponseMessage(responseMessage);
+      // setMessages((previousMessages) =>
+      //   GiftedChat.append(previousMessages, reponseMessage)
+      // );
+
+      ////////////////////
+
+      tmpfunctinon();
 
       // 여기서 TextInput 활성화
-      // setTextInputEnable(true);
+      setTextInputEnable(true);
+      console.log('실행끝')
     }
     catch (error) {
       console.log(error);
     }
   };
+  const tmpfunctinon = () => {
+    const tmpresponseMessage = ['하나둘']
+    setResponseMessage(tmpresponseMessage);
+    const reponseMessage = generateResponseMessage(responseMessage);
+    setMessages((previousMessages) =>
+      GiftedChat.append(previousMessages, reponseMessage)
+    );
+  }
 
   const generateSentMessage = (messages) => {
-    // setTextInputEnable(false);
-    // 예시로, 상대방이 다시 보낸 메시지를 생성합니다.
+    setTextInputEnable(false);
     postMessage(messages);
 
     // 데이터가 오기 전까지는, TextInput을 비활성화
@@ -58,8 +81,8 @@ const ChatScreenCom = () => {
       text: message.text,
       createdAt: new Date(),
       user: {
-        _id: 1, // 현재 사용자 ID
-        name: '나', // 현재 사용자 이름
+        _id: uid, // 현재 사용자 ID
+        name: userNickName, // 현재 사용자 이름
       },
     }));
 
@@ -67,13 +90,14 @@ const ChatScreenCom = () => {
   };
 
   const generateResponseMessage = (message) => {
+  // const generateResponseMessage = (message, id ,nn) => {
     const responseMessage = [{
       _id: Math.round(Math.random() * 1000000),
       text: message, // 상대방이 보내는 메시지 텍스트
       createdAt: new Date(),
       user: {
         _id: 2, // 상대방 사용자 ID
-        name: '상대방', // 상대방 사용자 이름
+        name: 'ChatBot', // 상대방 사용자 이름
       },
     }];
 
@@ -96,49 +120,11 @@ const ChatScreenCom = () => {
       messages={messages}
       onSend={onSend}
       user={{
-        _id: 1, // 현재 사용자 ID
+        _id: uid, // 현재 사용자 ID
       }}
-
+      textInputProps={{editable: textInputEnable}}
     />
   );
 };
 
 export default ChatScreenCom;
-
-// import React, { useState, useCallback, useEffect } from 'react'
-// import { GiftedChat } from 'react-native-gifted-chat'
-
-// function ChatScreenCom() {
-//   const [messages, setMessages] = useState([]);
-
-//   useEffect(() => {
-//     setMessages([
-//       {
-//         _id: 1,
-//         text: 'Hello developer',
-//         createdAt: new Date(),
-//         user: {
-//           _id: 2,
-//           name: 'React Native',
-//           avatar: 'https://placeimg.com/140/140/any',
-//         },
-//       },
-//     ])
-//   }, [])
-
-//   const onSend = useCallback((messages = []) => {
-//     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-//   }, [])
-
-//   return (
-//     <GiftedChat
-//       messages={messages}
-//       onSend={messages => onSend(messages)}
-//       user={{
-//         _id: 1,
-//       }}
-//     />
-//   )
-// }
-
-// export default ChatScreenCom;
