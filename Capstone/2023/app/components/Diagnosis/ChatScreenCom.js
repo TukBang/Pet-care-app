@@ -5,75 +5,58 @@ import { TextInput } from 'react-native/types';
 
 const ChatScreenCom = () => {
   const [messages, setMessages] = useState([]);
-  const [responseMessage, setResponseMessage] = useState("");
+  // rconst [responseMessage, setResponseMessage] = useState("");
   const [textInputEnable, setTextInputEnable] = useState(true);
+  const [textInputValue, setTextInputValue] = useState("챗봇에게 궁금한 것을 물어보세요!");
   const {user} = useUserContext();
   const uid = user["id"];
-  const userNickName = user['displayName']
+  const userNickName = user['displayName'];
+  const serverUrl = "http://121.170.118.190:5000/chatbot";
 
   const postMessage = async (message) => {
     try {
-      console.log(message);
       const textMessage = message[0].text;
       console.log("서버에 전달 될 메시지 내용: " + textMessage);
+      
+      // POST and Response
+      const response = await fetch(serverUrl, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          uid: uid,
+          message: textMessage,
+        })
+      });
+      const responseJson = await response.json();
 
-            //임시로 주석화
-            
-      // 서버에 메시지를 전달하는 로직을 구현합니다.
-      // const response = await fetch("http://61.106.219.238:5000/chatbot", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     // user uid도 가져와서 보내고 싶음
-      //     // 뒤로가기 누르면 채팅 내용을 삭제시키거나, 보존시킬 수 있게 해야 함
-      //     uid: uid, // 여기에 보내는 사람의 uid를 채울 수 있게 해야함 (2023-05-21-2227)
-      //     // name: userNickName,
-      //     message: textMessage,
-      //   }),
-      // });
-
-      // const responseJson = await response.json();
-
-      // console.log("서버에서 받은 메시지 내용: " + responseJson.message);
+      console.log("서버에서 받은 메시지 내용: " + responseJson.message);
       // setResponseMessage(responseJson.message);
 
-      // 서버에서 받은 메시지를 화면에 표시합니다.   
+      // 서버에서 받은 메시지를 화면에 표시합니다.
+      const receivedMessage = generateResponseMessage(responseJson.message);
+      setMessages((previousMessages) =>
+        GiftedChat.append(previousMessages, receivedMessage)
+      );
 
-      // const reponseMessage = generateResponseMessage(responseMessage);
-      // setMessages((previousMessages) =>
-      //   GiftedChat.append(previousMessages, reponseMessage)
-      // );
-
-      ////////////////////
-
-      tmpfunctinon();
-
-      // 여기서 TextInput 활성화
+      // Enable TextInput
       setTextInputEnable(true);
-      console.log('실행끝')
+      setTextInputValue("챗봇에게 궁금한 것을 물어보세요!")
     }
     catch (error) {
       console.log(error);
+
+      // Enable TextInput
+      setTextInputEnable(true);
+      setTextInputValue("서버 응답 실패!")
     }
   };
-  const tmpfunctinon = () => {
-    const tmpresponseMessage = ['하나둘']
-    setResponseMessage(tmpresponseMessage);
-    const reponseMessage = generateResponseMessage(responseMessage);
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, reponseMessage)
-    );
-  }
 
   const generateSentMessage = (messages) => {
+    // Disable TextInput
     setTextInputEnable(false);
-    postMessage(messages);
 
-    // 데이터가 오기 전까지는, TextInput을 비활성화
-    // 데이터가 오면, TextInput을 활성화
-    // 승훈이의 지식이 필요하다.
+    // 서버에 메시지를 전달합니다.
+    postMessage(messages);
 
     // 내가 보낸 메시지를 생성합니다.
     const sentMessage = messages.map((message) => ({
@@ -81,23 +64,23 @@ const ChatScreenCom = () => {
       text: message.text,
       createdAt: new Date(),
       user: {
-        _id: uid, // 현재 사용자 ID
+        _id: uid,           // 현재 사용자 ID
         name: userNickName, // 현재 사용자 이름
       },
     }));
 
+    setTextInputValue("서버 응답 대기 중...")
     return sentMessage;
   };
 
   const generateResponseMessage = (message) => {
-  // const generateResponseMessage = (message, id ,nn) => {
     const responseMessage = [{
       _id: Math.round(Math.random() * 1000000),
-      text: message, // 상대방이 보내는 메시지 텍스트
-      createdAt: new Date(),
+      text: message,          // 응답 텍스트
+      createdAt: new Date(),  // 보낸 시간
       user: {
-        _id: 2, // 상대방 사용자 ID
-        name: 'ChatBot', // 상대방 사용자 이름
+        _id: 2,               // 챗봇 사용자 ID
+        name: 'chatbot',      // 챗봇 이름
       },
     }];
 
@@ -122,7 +105,11 @@ const ChatScreenCom = () => {
       user={{
         _id: uid, // 현재 사용자 ID
       }}
-      textInputProps={{editable: textInputEnable}}
+      textInputProps={{
+        editable: textInputEnable,
+        multiline: false,
+        placeholder: textInputValue
+      }}
     />
   );
 };

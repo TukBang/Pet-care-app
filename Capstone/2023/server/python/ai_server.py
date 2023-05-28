@@ -3,6 +3,7 @@ import pickle as pkl
 import sys, os
 from pprint import *
 import numpy as np
+import pandas as pd
 
 # AI
 import cv2
@@ -31,8 +32,8 @@ import skin_disease.module.skin_disease_model as sdm
 # AI 불러오기
 # server AI model 가중치 저장 경로
 # Image 저장 경로
-model_path = "D:/Capstone/Capstone/model/server/"
-image_path = "D:/Capstone/Capstone/images/"
+model_path = "D:/Capstone/model/server/"
+image_path = "D:/Capstone/images/"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = sdm.Skin_Distinction_Model(model=efficientnet_v2_s(weights="DEFAULT"),
                                        out_features=6,
@@ -40,6 +41,11 @@ model = sdm.Skin_Distinction_Model(model=efficientnet_v2_s(weights="DEFAULT"),
                                        save_path=model_path).to(device)
 
 # initial
+# org-Tukorea_S2-9_Pet_Care_Application_BNL
+os.environ["OPENAI_ORGANIZATION"] = "org-MRE3IgCPLUw65a4D5cDpLAxK"
+os.environ["OPENAI_API_KEY"] = "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"
+openai.organization = os.getenv("OPENAI_ORGANIZATION")
+openai.api_key = os.getenv("OPENAI_API_KEY")
 last_use_user = list()
 chatbot = dict()
 
@@ -195,12 +201,31 @@ class ImageResource(Resource):
     def post(self):
         global image_path
         data = request.get_json()
-        image_data = data.get('image', None)
+        uid = data.get("uid", None)
+        name = data.get("name", None)
+        species = data.get("species", None)
+        gender = data.get("gender", None)
+        weight = data.get("weight", None)
+        age = data.get("age", None)
+        image_data = data.get("image", None)
+        image_name = data.get('imageName', 'unnamed.jpg')
+
+        # csv file save
+        if os.path.isfile(f"{model_path}diagnosis_result.csv"):
+            import csv
+            with open(f"{model_path}diagnosis_result.csv", "a") as csv_file:
+                csv_writer = csv.writer(csv_file)
+                csv_writer.writerow([uid, name, species, gender, weight, age, image_name])
+        else: 
+            columns = ["uid", "pet_name", "species", "gender", "weight", "age", "image_name"]
+            df = pd.DataFrame(columns=columns)
+            df.loc[0] = [uid, name, species, gender, weight, age, image_name]
+            df.to_csv(f"{model_path}diagnosis_result.csv", index=False)
+
         if image_data:
             try:
                 image_data = base64.b64decode(image_data)
                 image = Image.open(io.BytesIO(image_data))
-                image_name = data.get('imageName', 'unnamed.jpg')
                 save_path = os.path.join(image_path, image_name)
                 image.save(save_path)
 
@@ -263,10 +288,17 @@ def free_chatbot(chatbot, last_use_user):
     while True:
         time.sleep(60)
         now = datetime.datetime.now()
+        now_uid_list = list()
         for uid in last_use_user:
             if (now - chatbot[uid].last_use_time).seconds > 3600:
                 chatbot.pop(uid)
                 last_use_user.remove(uid)
+            else:
+                now_uid_list.append(uid)
+        
+        print("chatbot free thread is working...")
+        print("chatbot count: ", len(chatbot))
+        print("chatbot user list: ", now_uid_list)
 
 if __name__ == "__main__":
     if not os.path.exists(image_path):

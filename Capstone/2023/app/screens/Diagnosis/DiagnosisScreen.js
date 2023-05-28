@@ -44,6 +44,7 @@ function DiagnosisScreen() {
   const [diagEnd, setDiagEnd] = useState(false);
   const [diagtempView, setDiagtempView] = useState(false);
   const navigation = useNavigation();
+  const serverUrl = "http://121.170.118.190:5000/images";
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // 진단 선택 스크린
@@ -83,11 +84,12 @@ function DiagnosisScreen() {
       const petAge = petList[index].petAge;
       const petWeight = petList[index].petWeight;
       const petGender = petList[index].petGender;
-      const response = await fetch("http://61.106.219.238:5000/images", {
+      const response = await fetch(serverUrl, {
         method: "POST",  
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           /* 더 많은 펫 정보들을 담을 수 있다면 추후 추가 필요 (2023-05-02) */
+          uid:     uid,
           name:    petName,
           species: petSpecies,
           gender:  petGender,
