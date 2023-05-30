@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Pressable, Image } from "react-native";
 
-// 게시글 Submit 할 때 사용
+// Header Profile
 function HeaderProfile({ user, onPress }) {
   return (
     <View style={styles.block}>
@@ -24,15 +24,23 @@ function HeaderProfile({ user, onPress }) {
 
 const styles = StyleSheet.create({
   block: {
-    // marginRight: -8,
-    // borderRadius: 24,
-    overflow: "hidden",
+    width: 41,
+    height: 41,
+    marginRight: 20,
+    borderWidth: 2,
+    borderColor: '#827397',
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center'
+    // overflow: "hidden",
   },
   avatar: {
     width: 35,
     height: 35,
-    borderRadius: 16,
-    marginRight: 10,
+    borderRadius: 20,
+    overflow: "hidden",
+
+
   },
 });
 

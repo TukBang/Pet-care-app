@@ -17,7 +17,9 @@ function MainScreen() {
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarActiveTintColor: "#fb8c00",
+        tabBarActiveTintColor: "white",
+        // tabBarInactiveTintColor: "black",
+        tabBarActiveBackgroundColor: '#827397',
         tabBarShowLabel: true,
         headerShown: false,
       }}

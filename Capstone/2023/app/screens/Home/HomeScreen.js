@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
 import { useUserContext } from "../../contexts/UserContext";
-import Ggupdeagi from "../../components/Home/Ggupdeagi";
+import SimpleTodo from "../../components/Home/SimpleTodo";
 import PetList from "../../components/Home/PetList";
 import HeaderProfile from "../../components/Home/HeaderProfile";
+import Banner from "../../components/Home/Banner";
 
 function HomeScreen() {
   const { user } = useUserContext();
@@ -16,9 +16,6 @@ function HomeScreen() {
     navigation.push("ProfileSetting");
   };
 
-  {
-    /* 홈화면 헤더 프로필 표시 */
-  }
   useEffect(() => {
     navigation.setOptions({
       headerTitle: "",
@@ -28,8 +25,9 @@ function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      <Banner />
       {/* 어플 요약 정보 표시 - 23.04.29 현재는 형태만 저장 */}
-      <Ggupdeagi />
+      <SimpleTodo />
       <PetList />
     </View>
   );
@@ -40,7 +38,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "flex-start",
-    // justifyContent: "center",
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   profile: {
     margin: 10,
@@ -48,6 +47,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+
+
 });
 //--------------------------------------------------------------------
 
