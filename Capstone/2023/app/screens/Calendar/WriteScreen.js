@@ -58,7 +58,7 @@ function WriteScreen({ route }) {
         console.error('Error saving data:', error);
         // Handle error accordingly
       });
-
+// test
     if (log) {
       onModify({
         id: calendarUid,
