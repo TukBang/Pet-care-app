@@ -1,10 +1,10 @@
 import React, { useCallback } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import Icon from "react-native-vector-icons/MaterialIcons";
 import { useUserContext } from "../../contexts/UserContext";
 import auth from "@react-native-firebase/auth";
-import Icon from "react-native-vector-icons/MaterialIcons";
+
 import { signOut } from "../../lib/auth";
 import PetProfile from "../../components/Home/PetProfile";
 
@@ -15,12 +15,12 @@ function ProfileSetting() {
 
   const currentUser = auth().currentUser;
   const creationTime = currentUser.metadata.creationTime;
-  const dateObj = new Date(creationTime);
   const year = dateObj.getFullYear();
   const month = dateObj.getMonth() + 1;
   const day = dateObj.getDate();
   const formattedDate = `${year}년 ${month}월 ${day}일`;
   const today = new Date();
+  const dateObj = new Date(creationTime);
   const timeDiff = today.getTime() - dateObj.getTime();
   const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
 

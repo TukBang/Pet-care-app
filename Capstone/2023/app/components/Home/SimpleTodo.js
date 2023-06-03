@@ -17,10 +17,14 @@ function SimpleTodo() {
     <View style={styles.container} >
       {/* 가장 가까운 일정 표기 */}
       <View style={[styles.block, { marginBottom: 5 }]}>
-        <Text style={styles.header}>간편 일정</Text>
+        <Text style={styles.header}>함께하기</Text>
       </View>
       {/* 박스 형태로 확인할 수 있는 뷰 */}
       <View style={Boxstyles.boxContainer}>
+        <TouchableOpacity style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
+            <Text style={Boxstyles.boxTitle}>최근 일정</Text>
+            <Text style={Boxstyles.boxSentence}>{todoRecent ? todoRecent : '일정이 없어요!'}</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
           {isWalked ? (
             <>
@@ -36,9 +40,56 @@ function SimpleTodo() {
           <Text style={Boxstyles.boxSentence}>마지막 산책 : {whenWalked}</Text>
           <Image style={Boxstyles.image} source={require("../../assets/dog_walking.png")} />
         </TouchableOpacity>
+      </View>
+
+      {/* /////////////////////////////////////////////////////// */}
+      {/* 이부분 화면 전환 바꿔줘야해 */}
+      {/* /////////////////////////////////////////////////////// */}
+      
+      <View style={Boxstyles.boxContainer}>
         <TouchableOpacity style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
-          <Text style={Boxstyles.boxTitle}>최근 일정</Text>
-          <Text style={Boxstyles.boxSentence}>{todoRecent ? todoRecent : '일정이 없어요!'}</Text>
+            <Text style={Boxstyles.boxTitle}>진단 기록</Text>
+            <Text style={Boxstyles.boxSentence}>{todoRecent ? todoRecent : '일정이 없어요!'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
+          {isWalked ? (
+            <>
+              <Text style={[Boxstyles.boxTitle,{fontSize: 20}]}>오늘도 즐거웠어요!</Text>
+              <Text style={Boxstyles.boxSentence}>내일도 같이가요!</Text>
+            </>
+          ): (
+            <>
+              <Text style={Boxstyles.boxTitle}>나의 게시글</Text>
+              <Text style={Boxstyles.boxSentence}>바꿔야해</Text>
+            </>
+          )}
+          <Text style={Boxstyles.boxSentence}>바꿔야해 : {whenWalked}</Text>
+
+        </TouchableOpacity>
+      </View>
+
+            {/* /////////////////////////////////////////////////////// */}
+      {/* 이부분 화면 전환 바꿔줘야해 */}
+      {/* /////////////////////////////////////////////////////// */}
+      
+      <View style={Boxstyles.boxContainer}>
+        <TouchableOpacity style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
+            <Text style={Boxstyles.boxTitle}>상담 하기</Text>
+            <Text style={Boxstyles.boxSentence}>{todoRecent ? todoRecent : '일정이 없어요!'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
+          {isWalked ? (
+            <>
+              <Text style={[Boxstyles.boxTitle,{fontSize: 20}]}>오늘도 즐거웠어요!</Text>
+              <Text style={Boxstyles.boxSentence}>내일도 같이가요!</Text>
+            </>
+          ): (
+            <>
+              <Text style={Boxstyles.boxTitle}>Chat Bot</Text>
+              <Text style={Boxstyles.boxSentence}>바꿔야해</Text>
+            </>
+          )}
+
         </TouchableOpacity>
       </View>
     </View>
@@ -55,6 +106,7 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   header: {
+    paddingTop: 10,
     color: "black",
     fontWeight: "bold",
     paddingBottom: 10,
@@ -83,22 +135,27 @@ const Boxstyles = StyleSheet.create({
   boxContainer: {
     flexDirection: "row",
     alignItems: 'center',
-    height: '50%'
-  },
+    justifyContent: 'center', // 추가
+    // height: '30%',
+    padding: 5,
+    },
   boxView: {
-    flex: 1,
     width: '50%',
-    height: '100%',
-    borderRadius: 10,
-    backgroundColor: "green",
+    height: 100,
+    borderRadius: 15,
+    backgroundColor: "#F9F2F2",
     padding: 7,
+    marginRight: 5,
+    marginLeft: 5,
   },
   boxTitle: {
-    color: "white",
+    color: "black",
     fontSize: 22,
+    fontWeight: "bold",
+    
   },
   boxSentence: {
-    color: "white",
+    color: "black",
     fontSize: 15,
   },
   image: {
@@ -107,7 +164,7 @@ const Boxstyles = StyleSheet.create({
     position: 'absolute',
     resizeMode: 'contain',
     bottom: 0,
-    right: 10,
+    right: 1,
   }
 })
 export default SimpleTodo;

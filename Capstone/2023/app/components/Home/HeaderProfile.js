@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Pressable, Image } from "react-native";
+import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 
 // Header Profile
 function HeaderProfile({ user, onPress }) {
@@ -30,17 +30,19 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#827397',
     borderRadius: 20,
+  },
+  container: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
     // overflow: "hidden",
+    paddingHorizontal: 10,
   },
   avatar: {
     width: 35,
     height: 35,
     borderRadius: 20,
-    overflow: "hidden",
-
-
+    overflow: 'hidden',
   },
 });
 

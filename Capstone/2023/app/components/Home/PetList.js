@@ -14,6 +14,7 @@ import {
 } from "react-native";
 // 아이콘 받기위해 사용
 import Icon from "react-native-vector-icons/MaterialIcons";
+// import Icon from "react-native-vector-icons/MaterialIcons";
 // 펫 정보 firebase에 저장
 import { createPetInfo } from "../../lib/petInfo";
 // 저장된 펫 정보를 불러오기위해 사용
@@ -31,6 +32,8 @@ import ActionSheetModal from "../ActionSheetModal";
 import storage from "@react-native-firebase/storage";
 import { v4 } from "uuid";
 import RNFS from "react-native-fs";
+
+import { Picker } from '@react-native-picker/picker';
 
 function PetList() {
   const { user } = useUserContext();
@@ -183,7 +186,6 @@ function PetList() {
 
   return (
     <>
-      <Text style={styles.titleText}>My Pets</Text>
       <View style={styles.petListScrollView}>
         <ScrollView
           horizontal={true}
@@ -200,14 +202,7 @@ function PetList() {
                 <Image source={pet.petImage ? { uri: pet.petImage } : require("../../assets/dog.png")} style={styles.petImage} />
                 <Text style={styles.petText}>{pet.petName}</Text>
               </View>
-              {/* <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.deleteButton}
-                  onPress={() => handleDeletePet(pet.id)}
-                >
-                  <Text style={styles.buttonText}>Delete</Text>
-                </TouchableOpacity>
-              </View> */}
+              
             </TouchableOpacity>
           ))}
           <TouchableOpacity
@@ -217,7 +212,7 @@ function PetList() {
             <Text style={styles.addButtonText}>+</Text>
           </TouchableOpacity>
         </ScrollView>
-      </View>
+        </View>
       {/* 펫 등록 화면 모달 */}
       <Modal visible={showModal} transparent={true} animationType="fade">
         <Pressable style={styles.background}>
@@ -389,33 +384,39 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   petListContainer: {
-    // flex: 1,
-    width: 90,
-    height: 45,
-    borderRadius: 40,
-    backgroundColor: "#827397",
+    width: 150,
+    height: 180,
+    borderRadius: 15,
+    backgroundColor: "#F9F2F2",
     marginRight: 10,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-  },
-  petInfoContainer: {
-    // flex: 1,
-    paddingLeft: 5,
-    flexDirection: 'row',
-    // alignItems: 'flex-start',
-    justifyContent: 'center',
-    
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 10,
+
   },
   petImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 30,
+    width: 140,
+    height: 140,
+    borderRadius: 15,
     overflow: "hidden",
-    marginRight: 5,
+    marginBottom: 5,
+    marginTop: 5,
+    marginRight: 6,
+    alignSelf: 'center',
   },
   petText: {
     fontSize: 15,
-    color: 'white',
+    color: 'black',
+    textAlign: 'center',
+    marginLeft: 5,
+  },
+  petInfoContainer: {
+    paddingLeft: 5,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    
   },
   buttonContainer: {
     flexDirection: "row-reverse",
