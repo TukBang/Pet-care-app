@@ -118,7 +118,7 @@ const Boxstyles = StyleSheet.create({
     width: '50%',
     height: 180,
     borderRadius: 15,
-    backgroundColor: "#F9F2F2",
+    backgroundColor: "#FFFAF3",
     padding: 12,
     marginRight: 5,
     marginLeft: 5,
