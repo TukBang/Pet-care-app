@@ -186,6 +186,7 @@ function PetList() {
 
   return (
     <>
+      <Text style={styles.titleText}> 나의 반려동물 </Text>
       <View style={styles.petListScrollView}>
         <ScrollView
           horizontal={true}
@@ -362,13 +363,13 @@ const styles = StyleSheet.create({
     width: 90,
     height: 45,
     borderRadius: 40,
-    backgroundColor: "#827397",
+    backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
   },
   addButtonText: {
-    color: "white",
+    color: "black",
     fontSize: 25,
     textAlign: "center",
     // marginTop: -5,
@@ -387,12 +388,12 @@ const styles = StyleSheet.create({
     width: 150,
     height: 180,
     borderRadius: 15,
-    backgroundColor: "#F9F2F2",
+    backgroundColor: "white",
     marginRight: 10,
     alignItems: 'center',
     justifyContent: 'flex-start',
     marginBottom: 10,
-
+    elevation: 10,
   },
   petImage: {
     width: 140,
@@ -495,7 +496,7 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "bold",
     // marginLeft: 16,
-    // paddingTop: 10,
+    paddingTop: 20,
     marginBottom: 10,
     fontSize: 25,
   },

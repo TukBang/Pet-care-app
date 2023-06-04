@@ -59,36 +59,11 @@ function SimpleTodo() {
             </>
           ): (
             <>
-              <Text style={Boxstyles.boxTitle}>나의 게시글</Text>
+              <Text style={Boxstyles.boxTitle}>상담 하기</Text>
               <Text style={Boxstyles.boxSentence}>바꿔야해</Text>
             </>
           )}
           <Text style={Boxstyles.boxSentence}>바꿔야해 : {whenWalked}</Text>
-
-        </TouchableOpacity>
-      </View>
-
-            {/* /////////////////////////////////////////////////////// */}
-      {/* 이부분 화면 전환 바꿔줘야해 */}
-      {/* /////////////////////////////////////////////////////// */}
-      
-      <View style={Boxstyles.boxContainer}>
-        <TouchableOpacity style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
-            <Text style={Boxstyles.boxTitle}>상담 하기</Text>
-            <Text style={Boxstyles.boxSentence}>{todoRecent ? todoRecent : '일정이 없어요!'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
-          {isWalked ? (
-            <>
-              <Text style={[Boxstyles.boxTitle,{fontSize: 20}]}>오늘도 즐거웠어요!</Text>
-              <Text style={Boxstyles.boxSentence}>내일도 같이가요!</Text>
-            </>
-          ): (
-            <>
-              <Text style={Boxstyles.boxTitle}>Chat Bot</Text>
-              <Text style={Boxstyles.boxSentence}>바꿔야해</Text>
-            </>
-          )}
 
         </TouchableOpacity>
       </View>
@@ -109,7 +84,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     color: "black",
     fontWeight: "bold",
-    paddingBottom: 10,
+    paddingBottom: 2,
     fontSize: 25,
   },
   detail: {
@@ -141,12 +116,13 @@ const Boxstyles = StyleSheet.create({
     },
   boxView: {
     width: '50%',
-    height: 100,
+    height: 180,
     borderRadius: 15,
     backgroundColor: "#F9F2F2",
-    padding: 7,
+    padding: 12,
     marginRight: 5,
     marginLeft: 5,
+    elevation:7,
   },
   boxTitle: {
     color: "black",

@@ -78,7 +78,6 @@ function Disease() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     justifyContent: "center",
     paddingBottom: 20,
   },
@@ -105,6 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9F2F2",
     borderRadius: 15,
     padding: 10,
+    elevation: 7,
   },
   diseaseTitle: {
     fontSize: 18,
