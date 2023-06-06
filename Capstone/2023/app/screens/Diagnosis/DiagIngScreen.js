@@ -89,46 +89,46 @@ import React, {
     }
   };
     
-    return(
-        <>
-                <Text style={diagnosisSelectStyles.text1}>{DiagnosisText1}</Text>
-                <Text style={diagnosisSelectStyles.text2}>{DiagnosisText2}</Text>
-                <View style={diagnosisSelectStyles.imageView}>
-                  <Image
-                    source={{ uri: selectedImage.path }}
-                    style={diagnosisSelectStyles.image}
-                    resizeMode="contain"
-                  />
-                </View>
+  return(
+      <>
+        <Text style={diagnosisSelectStyles.text1}>{DiagnosisText1}</Text>
+        <Text style={diagnosisSelectStyles.text2}>{DiagnosisText2}</Text>
+        <View style={diagnosisSelectStyles.imageView}>
+          <Image
+            source={{ uri: selectedImage.path }}
+            style={diagnosisSelectStyles.image}
+            resizeMode="contain"
+          />
+        </View>
 
-                {/* 어떤 펫을 진단하는지 카테고리 형식으로 선택할 수 있는 요소 구성 필요함 */}
-                {/* 현재는 임시로 불러들인 펫 리스트의 첫번째를 전송함 (2023-05-02) */}
+        {/* 어떤 펫을 진단하는지 카테고리 형식으로 선택할 수 있는 요소 구성 필요함 */}
+        {/* 현재는 임시로 불러들인 펫 리스트의 첫번째를 전송함 (2023-05-02) */}
 
-                <View style={diagnosisSelectStyles.button_container}>
-                  <TouchableOpacity
-                    style={diagnosisSelectStyles.button}
-                    onPress={() => {
-                      setDiagState(false);
-                      // AI 서버에 이미지 전송
-                      // 0번째 펫을 선택하도록 설정 (카테고리 선택 요소에 따라 바뀔 수 있도록 변경 필요 2023-05-02)
-                      handlePostRequest();
+        <View style={diagnosisSelectStyles.button_container}>
+          <TouchableOpacity
+            style={diagnosisSelectStyles.button}
+            onPress={() => {
+              setDiagState(false);
+              // AI 서버에 이미지 전송
+              // 0번째 펫을 선택하도록 설정 (카테고리 선택 요소에 따라 바뀔 수 있도록 변경 필요 2023-05-02)
+              handlePostRequest();
 
-                      // 진단 모달 띄우기
-                      setDiagtempView(true);
-                      setDiagModalVisible(true);
-                    }}
-                  >
-                    <Text style={diagnosisSelectStyles.buttonText}>{buttonText2}</Text>
-                  </TouchableOpacity>
+              // 진단 모달 띄우기
+              setDiagtempView(true);
+              setDiagModalVisible(true);
+            }}
+          >
+            <Text style={diagnosisSelectStyles.buttonText}>{buttonText2}</Text>
+          </TouchableOpacity>
 
-                  <TouchableOpacity
-                    style={diagnosisSelectStyles.button}
-                    onPress={() => setSelectedImage(null)}
-                  >
-                    <Text style={diagnosisSelectStyles.buttonText}>{buttonText1}</Text>
-                  </TouchableOpacity>
-                </View>
-              </>
+          <TouchableOpacity
+            style={diagnosisSelectStyles.button}
+            onPress={() => setSelectedImage(null)}
+          >
+            <Text style={diagnosisSelectStyles.buttonText}>{buttonText1}</Text>
+          </TouchableOpacity>
+        </View>
+      </>
 
     )
   }
@@ -136,72 +136,72 @@ import React, {
 
   // 진단 선택 스타일
 const diagnosisSelectStyles = StyleSheet.create({
-    text1: {
-      marginTop: 10,
-      marginBottom: 10,
-      marginLeft: 10,
-  
-      fontSize: 20,
-    },
-  
-    text2: {
-      marginBottom: 40,
-      marginLeft: 10,
-  
-      fontSize: 15,
-      fontWeight: "bold",
-    },
-  
-    imageView: {
-      alignItems: "center",
-  
-      height: 300,
-      width: "100%",
-  
-      // 여백
-      marginBottom: 30,
-    },
-  
-    image: {
-      width: 300,
-      height: 300,
-    },
-  
-    button_container: {
-      // 정렬
-      flexDirection: "column",
-      justifyContent: "space-between",
-      alignItems: "center",
-      overflow: "hidden",
-  
-      // 여백
-      marginTop: 20,
-      marginLeft: 30,
-      marginRight: 30,
-    },
-  
-    button: {
-      // 정렬
-      justifyContent: "center",
-      alignItems: "center",
-  
-      height: 40,
-      width: 330,
-  
-      // 여백
-      marginTop: 10,
-  
-      // 모양
-      borderRadius: 5,
-  
-      // 배경색
-      backgroundColor: "#2296F3",
-    },
-  
-    // 버튼 텍스트
-    buttonText: {
-      fontSize: 15,
-      color: "#FFFFFF",
-    },
-  });
-  export default DiagIngScreen
+  text1: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 10,
+
+    fontSize: 20,
+  },
+
+  text2: {
+    marginBottom: 40,
+    marginLeft: 10,
+
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+
+  imageView: {
+    alignItems: "center",
+
+    height: 300,
+    width: "100%",
+
+    // 여백
+    marginBottom: 30,
+  },
+
+  image: {
+    width: 300,
+    height: 300,
+  },
+
+  button_container: {
+    // 정렬
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    overflow: "hidden",
+
+    // 여백
+    marginTop: 20,
+    marginLeft: 30,
+    marginRight: 30,
+  },
+
+  button: {
+    // 정렬
+    justifyContent: "center",
+    alignItems: "center",
+
+    height: 40,
+    width: 330,
+
+    // 여백
+    marginTop: 10,
+
+    // 모양
+    borderRadius: 5,
+
+    // 배경색
+    backgroundColor: "#2296F3",
+  },
+
+  // 버튼 텍스트
+  buttonText: {
+    fontSize: 15,
+    color: "#FFFFFF",
+  },
+});
+export default DiagIngScreen
