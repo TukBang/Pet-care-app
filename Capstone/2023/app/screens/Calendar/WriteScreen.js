@@ -22,7 +22,7 @@ import { deleteCalendarRecordFromFirebase } from "../../lib/calendar";
 
 function WriteScreen({ route }) {
   const log = route.params?.log;
-  const selectedDate = route.params.selectedDate;
+  // const selectedDate = route.params.selectedDate;
   // console.log(selectedDate);
 
   const [title, setTitle] = useState(log?.title ?? "");
@@ -30,6 +30,7 @@ function WriteScreen({ route }) {
   const [pet, setPet] = useState(log?.pet ?? "");
   const navigation = useNavigation();
   const [date, setDate] = useState(log ? new Date(log.date) : new Date());
+  const [endDate, setEndDate] = useState(log ? new Date(log.date) : new Date());
 
   const { onCreate, onModify, onRemove } = useContext(LogContext);
   
@@ -46,7 +47,7 @@ function WriteScreen({ route }) {
       title: title,
       memo: body,
       s_time: date.toISOString(),
-      e_time: date.toISOString(),
+      e_time: endDate.toISOString(),
       userID: uid,
       petName: pet, // 펫 이름을 전달
     })
@@ -63,6 +64,7 @@ function WriteScreen({ route }) {
       onModify({
         id: calendarUid,
         date: date.toISOString(),
+        endDate: endDate.toISOString(),
         title,
         body,
         pet,
@@ -74,6 +76,7 @@ function WriteScreen({ route }) {
         body,
         pet,
         date: date.toISOString(),
+        endDate: endDate.toISOString(),
         // date: selectedDate.toISOString(),
       });
     }
@@ -150,7 +153,9 @@ function WriteScreen({ route }) {
           onAskRemove={onAskRemove}
           isEditing={!!log}
           date={date}
+          endDate={endDate}
           onChangeDate={setDate}
+          onEndChangeDate={setEndDate}
         />
         {/* 헤더 아래 글쓰는 부분 (에디터) */}
         <WriteEditor title={title} body={body} onChangeTitle={setTitle} onChangeBody={setBody} onChangePet={setPet} />

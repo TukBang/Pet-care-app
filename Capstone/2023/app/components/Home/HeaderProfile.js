@@ -2,38 +2,48 @@ import React from "react";
 import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
+// 그라데이션
+import LinearGradient from 'react-native-linear-gradient';
+
 // Header Profile
 function HeaderProfile({ user, onPress }) {
   return (
-    <View style={styles.container}>
-      {/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      일반회원, 전문가
-      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-      <Text style={styles.textStyle}> 일반회원</Text>
+    <LinearGradient
+      colors={['#FFF5EE', '#FFDFD4']}
+      //colors={['#FFF0E6', '#FFD7C6']}
+      style={{flex : 1}}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+      >
+      <View style={styles.container}>
+        {/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        일반회원, 전문가
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+        <Text style={styles.textStyle}> 일반회원</Text>
 
-      
-      {/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      엡 가이드 넣는 부분
-      /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-      <Icon style={styles.iconImage} name='help-outline' size={53} />
+        
+        {/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        엡 가이드 넣는 부분
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
+        <Icon style={styles.iconImage} name='help-outline' size={53} />
 
-      <View style={styles.block}>
-        <Pressable onPress={onPress}>
-          <Image
-            source={
-              user.photoURL
-                ? {
-                    uri: user.photoURL,
-                  }
-                : require("../../assets/user.png")
-            }
-            resizeMode="cover"
-            style={styles.avatar}
-          />
-        </Pressable>
+        <View style={styles.block}>
+          <Pressable onPress={onPress}>
+            <Image
+              source={
+                user.photoURL
+                  ? {
+                      uri: user.photoURL,
+                    }
+                  : require("../../assets/user.png")
+              }
+              resizeMode="cover"
+              style={styles.avatar}
+            />
+          </Pressable>
+        </View>
       </View>
-
-    </View>
+    </LinearGradient>
 
   );
 }

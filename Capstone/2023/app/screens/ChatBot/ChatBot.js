@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
-import ChatScreenCom from '../../components/Diagnosis/ChatScreenCom';
+import ChatScreenCom from './ChatScreenCom';
 
 function ChatBot() {
   return (

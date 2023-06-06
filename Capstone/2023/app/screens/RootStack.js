@@ -12,7 +12,7 @@ import ModifyScreen from "./Community/ModifyScreen";
 import ModifyCommentScreen from "./Community/ModifyCommentScreen";
 import ProfileSetting from "./User/ProfileSetting";
 import PetProfile from "../components/Home/PetProfile";
-import ChattingBot from "./Diagnosis/ChatBot";
+import ChattingBot from "./ChatBot/ChatBot";
 
 const Stack = createNativeStackNavigator();
 

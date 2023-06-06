@@ -15,12 +15,13 @@ function ProfileSetting() {
 
   const currentUser = auth().currentUser;
   const creationTime = currentUser.metadata.creationTime;
+  const dateObj = new Date(creationTime);
   const year = dateObj.getFullYear();
   const month = dateObj.getMonth() + 1;
   const day = dateObj.getDate();
   const formattedDate = `${year}년 ${month}월 ${day}일`;
   const today = new Date();
-  const dateObj = new Date(creationTime);
+  
   const timeDiff = today.getTime() - dateObj.getTime();
   const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
 
