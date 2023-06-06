@@ -9,13 +9,16 @@ import { signOut } from "../../lib/auth";
 import PetProfile from "../../components/Home/PetProfile";
 
 function ProfileSetting() {
-  const { user, setUser } = useUserContext();
+  const { user } = useUserContext();
 
   const navigation = useNavigation();
 
   const currentUser = auth().currentUser;
+  console.log(currentUser)
+  console.log(user)
   const creationTime = currentUser.metadata.creationTime;
   const dateObj = new Date(creationTime);
+  console.log(dateObj)
   const year = dateObj.getFullYear();
   const month = dateObj.getMonth() + 1;
   const day = dateObj.getDate();
