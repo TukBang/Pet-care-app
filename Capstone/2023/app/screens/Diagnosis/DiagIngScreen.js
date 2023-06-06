@@ -6,20 +6,11 @@ import React, {
   import RNFS from "react-native-fs";
   
 
-  var aiResult = {
-    labels: [
-      "구진, 플라크",
-      "비듬, 각질, 상피성잔고리",
-      "태선화, 과다색소침착",
-      "농포, 여드름",
-      "미란, 궤양",
-      "결절, 종괴",
-    ],
-    predictions: [0, 0, 0, 0, 0, 0],
-  };
+
 
 
   function DiagIngScreen ({
+    aiResult,setAiResult,
     petList,uid,
     selectedImage, setSelectedImage,
     setDiagState,setDiagEnd,setDiagtempView,setDiagModalVisible,
@@ -63,14 +54,25 @@ import React, {
       });
 
       let predictions = await response.json();
-      aiResult.predictions = [
-        predictions["L1"],
-        predictions["L2"],
-        predictions["L3"],
-        predictions["L4"],
-        predictions["L5"],
-        predictions["L6"],
-      ];
+      // aiResult.predictions = [
+      //   predictions["L1"],
+      //   predictions["L2"],
+      //   predictions["L3"],
+      //   predictions["L4"],
+      //   predictions["L5"],
+      //   predictions["L6"],
+      // ];
+      setAiResult((prevState) => ({
+        ...prevState,
+        predictions: [
+          predictions["L1"],
+          predictions["L2"],
+          predictions["L3"],
+          predictions["L4"],
+          predictions["L5"],
+          predictions["L6"],
+        ]
+      }))
 
       diagnosisResultText2 = `${
         aiResult.labels[aiResult.predictions.indexOf(Math.max(...aiResult.predictions))]

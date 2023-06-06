@@ -12,6 +12,19 @@ function SimpleTodo() {
   const [ isWalked, setIsWalked ] = useState(false);
   const [ whenWalked, setWhenWalked ] = useState('')
 
+  const onPressCalendar = () => {
+    navigation.navigate("CalendarScreen")
+  }
+  const onPressWalking = () => {
+    navigation.navigate("WalkingScreen")
+  }
+  const onPressDiagnosis = () => {
+    navigation.navigate("DiagnosisScreen")
+  }
+  const onPressConsult = () => {
+    navigation.navigate("CommunityScreen", {boardCategory : "상담"})
+  }
+
 
   return (
     <View style={styles.container} >
@@ -21,11 +34,11 @@ function SimpleTodo() {
       </View>
       {/* 박스 형태로 확인할 수 있는 뷰 */}
       <View style={Boxstyles.boxContainer}>
-        <TouchableOpacity style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => onPressCalendar()} style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
             <Text style={Boxstyles.boxTitle}>최근 일정</Text>
             <Text style={Boxstyles.boxSentence}>{todoRecent ? todoRecent : '일정이 없어요!'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => onPressWalking()} style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
           {isWalked ? (
             <>
               <Text style={[Boxstyles.boxTitle,{fontSize: 20}]}>오늘도 즐거웠어요!</Text>
@@ -37,7 +50,8 @@ function SimpleTodo() {
               <Text style={Boxstyles.boxSentence}>기다리고 있어요!</Text>
             </>
           )}
-          <Text style={Boxstyles.boxSentence}>마지막 산책 : {whenWalked}</Text>
+          <Text style={Boxstyles.boxSentence}>마지막 산책 : </Text>
+          <Text style={Boxstyles.boxSentence}>{whenWalked ? whenWalked : '아직 산책을 하지 않았어요!'}</Text>
           <Image style={Boxstyles.image} source={require("../../assets/dog_walking.png")} />
         </TouchableOpacity>
       </View>
@@ -47,11 +61,11 @@ function SimpleTodo() {
       {/* /////////////////////////////////////////////////////// */}
       
       <View style={Boxstyles.boxContainer}>
-        <TouchableOpacity style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => onPressDiagnosis()} style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
             <Text style={Boxstyles.boxTitle}>진단 기록</Text>
             <Text style={Boxstyles.boxSentence}>{todoRecent ? todoRecent : '일정이 없어요!'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => onPressConsult()} style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
           {isWalked ? (
             <>
               <Text style={[Boxstyles.boxTitle,{fontSize: 20}]}>오늘도 즐거웠어요!</Text>
