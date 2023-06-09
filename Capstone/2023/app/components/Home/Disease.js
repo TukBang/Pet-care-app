@@ -105,6 +105,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 10,
     elevation: 7,
+    marginBottom: 10,
   },
   diseaseTitle: {
     fontSize: 18,

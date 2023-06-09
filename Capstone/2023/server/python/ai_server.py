@@ -18,7 +18,7 @@ import threading
 import time, datetime
 
 # Web server based on Flask ()
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_restful import Resource, Api
 from PIL import Image
@@ -36,14 +36,14 @@ model_path = "D:/Capstone/model/server/"
 image_path = "D:/Capstone/images/"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = sdm.Skin_Distinction_Model(model=efficientnet_v2_s(weights="DEFAULT"),
-                                       out_features=6,
-                                       device=device,
-                                       save_path=model_path).to(device)
+                                   out_features=6,
+                                   device=device,
+                                   save_path=model_path).to(device)
 
 # initial
 # org-Tukorea_S2-9_Pet_Care_Application_BNL
 os.environ["OPENAI_ORGANIZATION"] = "org-MRE3IgCPLUw65a4D5cDpLAxK"
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = "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"
 openai.organization = os.getenv("OPENAI_ORGANIZATION")
 openai.api_key = os.getenv("OPENAI_API_KEY")
 last_use_user = list()
@@ -264,6 +264,8 @@ class ChatResource(Resource):
         data = request.get_json()
         uid = data.get('uid', None)
         message = data.get('message', None)
+        print(uid)
+        print(message)
         if not isinstance(message, type(None)) and not isinstance(uid, type(None)):
             try:
                 # 챗봇 생성
@@ -272,6 +274,7 @@ class ChatResource(Resource):
                     last_use_user.append(uid)
                 
                 ret_message = chatbot[uid].request_chat(message)
+                print(ret_message)
                 last_use_user.remove(uid)
                 last_use_user.append(uid)
 
@@ -284,7 +287,9 @@ class ChatResource(Resource):
             return {"error": "Please check your sent message"}, 400
 
 # last_use_user must be sorted by usage time
-def free_chatbot(chatbot, last_use_user):
+def free_chatbot():
+    global chatbot, last_use_user
+
     while True:
         time.sleep(60)
         now = datetime.datetime.now()
@@ -303,20 +308,19 @@ def free_chatbot(chatbot, last_use_user):
 if __name__ == "__main__":
     if not os.path.exists(image_path):
         os.makedirs(image_path)
+    
+    openai.Model.list()
 
     # chatbot 대화 내용 제거용 thread 생성
-    chatbot_thread = threading.Thread(target=free_chatbot, args=(chatbot, last_use_user))
-    chatbot_thread.daemon = True
+    chatbot_thread = threading.Thread(target=free_chatbot, daemon=True)    
     chatbot_thread.start()
 
     pprint(summary(model, input_size=(1, 3, 224, 224), verbose=0))
-    
-    # 예외 처리 필요
-    # 2023-03-30 6-CLASS Valid 63% Model
+
     with open(f"{model_path}last_history.pkl", "rb") as pkl_file:
         save_history_fig(history=pkl.load(pkl_file))
     get_evaluate_images(src_path=model_path, dst_path=image_path + "evaluate/")
-    # PCA, T-SNE 결과도 가져오기 추가
+    # 차원 축소 결과 가져오기 추가
 
     # 예외 처리 필요
     model.load_state_dict(torch.load(f"{model_path}high_acc.pth"))

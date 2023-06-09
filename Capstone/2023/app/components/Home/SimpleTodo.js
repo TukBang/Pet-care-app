@@ -8,7 +8,8 @@ import { useNavigation } from "@react-navigation/native";
 function SimpleTodo() {
 
   const navigation = useNavigation();
-  const [ todoRecent, setTodoRecent ] = useState('건강 검진 가기')
+  const [ todoRecent, setTodoRecent ] = useState()
+  const [ recentDiagnosis, setRecentDiagnosis ] = useState()
   const [ isWalked, setIsWalked ] = useState(false);
   const [ whenWalked, setWhenWalked ] = useState('')
 
@@ -47,7 +48,9 @@ function SimpleTodo() {
           ): (
             <>
               <Text style={Boxstyles.boxTitle}>산책 해주세요!</Text>
-              <Text style={Boxstyles.boxSentence}>기다리고 있어요!</Text>
+              {
+                // <Text style={Boxstyles.boxSentence}>기다리고 있어요!</Text>}
+              }
             </>
           )}
           <Text style={Boxstyles.boxSentence}>마지막 산책 : </Text>
@@ -63,7 +66,7 @@ function SimpleTodo() {
       <View style={Boxstyles.boxContainer}>
         <TouchableOpacity onPress={() => onPressDiagnosis()} style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
             <Text style={Boxstyles.boxTitle}>진단 기록</Text>
-            <Text style={Boxstyles.boxSentence}>{todoRecent ? todoRecent : '일정이 없어요!'}</Text>
+            <Text style={Boxstyles.boxSentence}>{recentDiagnosis ? recentDiagnosis : '진단 기록이 없어요!'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onPressConsult()} style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
           {isWalked ? (
@@ -74,10 +77,9 @@ function SimpleTodo() {
           ): (
             <>
               <Text style={Boxstyles.boxTitle}>상담 하기</Text>
-              <Text style={Boxstyles.boxSentence}>바꿔야해</Text>
+              <Text style={Boxstyles.boxSentence}>전문가에게 상담해보세요!</Text>
             </>
           )}
-          <Text style={Boxstyles.boxSentence}>바꿔야해 : {whenWalked}</Text>
 
         </TouchableOpacity>
       </View>

@@ -19,7 +19,7 @@ function HeaderProfile({ user, onPress }) {
         {/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         일반회원, 전문가
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-        <Text style={styles.textStyle}> 일반회원</Text>
+        <Text style={styles.textStyle}>일반회원</Text>
 
         
         {/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
   block: {
     width: 44,
     height: 44,
+    right: 20,
     marginRight: 20,
     borderWidth: 4,
     borderColor: 'gray',
@@ -71,11 +72,13 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   iconImage: {
-    marginRight: 7,
+    marginRight: 10,
+    right: 20,
     color: 'gray',
   },
   textStyle: {
-    marginRight: "54%",
+    marginRight: "64%",
+    left: 40,
     color: "black",
     fontWeight: "bold",
     fontSize: 20,
