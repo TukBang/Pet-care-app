@@ -72,7 +72,7 @@ function DetailPostCards({ user, category, title, photoURL, description, created
           source={{ uri: photoURL }}
           style={styles.image}
           resizeMode="contain"
-          transform={[{ scale: 1 }]}
+          // transform={[{ scale: 1 }]}
         />
         {/* 게시글 내용 */}
         <Text style={styles.description}>{description}</Text>
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    height: "100%",
+    // height: "100%",
     width: "100%",
     aspectRatio: 1,
 
