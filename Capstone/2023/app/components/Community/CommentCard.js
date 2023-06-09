@@ -49,7 +49,7 @@ function CommentCard({ user, txt, postId, createdAt, id }) {
                   resizeMode="cover"
                   style={styles.avatar}
                 />
-                <Text style={styles.displayName}>{user.displayName}</Text>
+                <Text style={styles.displayName}>{user.isExpert == 1 ? '[전문가] ' : ''}{user.displayName}</Text>
               </Pressable>
               {/* 내 게시물 여부(isMyPost(bool))에 따라 게시물 관리 버튼 표시 */}
               {isMyPost && (

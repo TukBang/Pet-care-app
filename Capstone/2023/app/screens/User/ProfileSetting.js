@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -9,7 +9,7 @@ import { signOut } from "../../lib/auth";
 import PetProfile from "../../components/Home/PetProfile";
 
 function ProfileSetting() {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
 
   const navigation = useNavigation();
 
@@ -27,6 +27,20 @@ function ProfileSetting() {
   
   const timeDiff = today.getTime() - dateObj.getTime();
   const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => 
+      <>
+        <TouchableOpacity style={styles.content} onPress={tryLogout}>
+          <Icon style={[styles.icon, styles.logout]} name="logout" size={30} />
+          <Text style={{}}>로그아웃</Text>
+        </TouchableOpacity>
+      </>,
+    });
+  }, [navigation]);
+
+
 
   const onCloseLogIn = useCallback(() => {
     navigation.dispatch(
@@ -73,16 +87,29 @@ function ProfileSetting() {
           <Text>지금까지 {dayDiff}일 동안 함께 하셨습니다</Text>
         </View>
       </View>
-      <View style={styles.border} />
-      <TouchableOpacity style={styles.content} onPress={goMyBoard}>
-        <Icon style={styles.icon} name="dashboard" size={30} />
-        <Text style={{}}>내 게시물</Text>
-      </TouchableOpacity>
-      <View style={styles.border} />
-      <TouchableOpacity style={styles.content} onPress={tryLogout}>
-        <Icon style={[styles.icon, styles.logout]} name="logout" size={30} />
-        <Text style={{}}>로그아웃</Text>
-      </TouchableOpacity>
+      
+      <View>
+        <Text>내 정보</Text>
+        <TouchableOpacity style={styles.content} onPress={goMyBoard}>
+          <Icon style={styles.icon} name="dashboard" size={35} />
+          <Text>내 게시물</Text>
+        </TouchableOpacity>
+        <View style={styles.border} />
+      </View>
+      <View>
+        <Text>상담</Text>
+        <TouchableOpacity style={styles.content} onPress={goMyBoard}>
+          <Icon style={styles.icon} name="contact-support" size={35} />
+          <View>
+            <Text>문의 하기</Text>
+          </View>
+        </TouchableOpacity>
+        <View style={styles.border} />
+        <TouchableOpacity style={styles.content} onPress={goMyBoard}>
+          <Icon style={styles.icon} name="work" size={35} />
+          <Text>전문가 계정 인증하기</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.border} />
     </View>
   );
@@ -119,9 +146,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   content: {
-    height: 40,
+    height: 60,
     flexDirection: "row",
     alignItems: "center",
+    // justifyContent: "center",
   },
   icon: {
     marginLeft: 10,

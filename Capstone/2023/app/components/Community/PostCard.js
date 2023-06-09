@@ -20,7 +20,7 @@ function PostCard({ user, category, title, photoURL, description, createdAt, id 
   };
 
   return (
-    <View style={styles.block}>
+    <>
       <View style={styles.paddingBlock}>
         <Pressable onPress={onOpenBoard}>
           <View style={styles.head}>
@@ -34,7 +34,7 @@ function PostCard({ user, category, title, photoURL, description, createdAt, id 
             <View>
               {category ? (
                 <Text numberOfLines={2} ellipsizeMode="tail" style={styles.boardTitle}>
-                  {category} {title}
+                  [{category}] {title}
                 </Text>
               ) : (
                 <Text style={styles.boardTitle}>[없음] {title}</Text>
@@ -68,14 +68,10 @@ function PostCard({ user, category, title, photoURL, description, createdAt, id 
         </View>
       </View>
       <View style={styles.border} />
-    </View>
+    </>
   );
 }
 const styles = StyleSheet.create({
-  block: {
-    // paddingTop: 16,
-    // paddingBottom: 16,
-  },
   border: {
     height: 1,
     backgroundColor: "gray",

@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    height: "60%",
-    width: "60%",
+    height: "100%",
+    width: "100%",
     aspectRatio: 1,
 
     // marginTop: 5,

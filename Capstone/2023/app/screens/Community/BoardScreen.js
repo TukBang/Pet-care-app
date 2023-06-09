@@ -8,6 +8,7 @@ import {
   TextInput,
   Button,
   FlatList,
+  ActivityIndicator
 } from "react-native";
 
 import { useUserContext } from "../../contexts/UserContext";
@@ -26,6 +27,7 @@ import DetailPostCard from "../../components/Community/DetailPostCard";
 function BoardScreen({ route }) {
   // route에서 post에 대한 파라미터를 불러온다.
   const { post_param } = route.params;
+  console.log(post_param)
   const { user: me } = useUserContext();
   //me.id ( 현재 로그인 되어있는 세션) 와 user.id (게시글의 주인)
   //을 비교하여 isMyPost 에 내 게시물인지 bool 형태로 저장
@@ -79,7 +81,10 @@ function BoardScreen({ route }) {
   useEffect(() => {
     if (posts) {
       setFilteredPosts(posts.filter((post) => post.id === post_param.id));
+      console.log(filteredPosts)  
+
     }
+    
   }, [post_param, posts]);
 
   //------------------------게시글 관련------------------------//
@@ -93,7 +98,10 @@ function BoardScreen({ route }) {
           renderItem={renderItemPost}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.container}
-          refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}
+          refreshControl={
+            <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+            
+          }
         />
         {/* 댓글 입력 공간 */}
         <View style={{ marginBottom: 15 }}>
@@ -115,13 +123,13 @@ function BoardScreen({ route }) {
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.container}
             // 댓글의 새로고침 부분
-            //   onEndReached={onLoadMoreComments}
-            //   onEndReachedThreshold={0.75}
-            //   ListFooterComponent={
-            //       !noMoreComment && (
-            //       <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
-            //       )
-            //   }
+            // onEndReached={onLoadMoreComments}
+            // onEndReachedThreshold={0.75}
+            // ListFooterComponent={
+            //     !noMoreComment && (
+            //     <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
+            //     )
+            // }
             refreshControl={
               <RefreshControl onRefresh={onRefreshComment} refreshing={refreshingComment} />
             }

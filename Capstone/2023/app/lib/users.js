@@ -9,6 +9,7 @@ export function createUser({ id, displayName, photoURL }) {
     id,
     displayName,
     photoURL,
+    isExpert : false,
   });
 }
 
