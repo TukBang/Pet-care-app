@@ -209,7 +209,7 @@ function AnimatedMarkers() {
     if (!isTracking) {
       setRouteCoordinates([]);  // 위치 기록 초기화
       distanceTravelled = 0;    // 누적 거리 초기화
-      count = 0;               // 카운트 초기화
+      count = 0;                // 카운트 초기화
       setKcal(0);               // 소모 칼로리 초기화
       setStartTime(Date.now()); // 시작 시간 기록
       setElapsedTime(0);        // 경과 시간 초기화

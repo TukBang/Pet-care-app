@@ -20,7 +20,8 @@ function SimpleTodo() {
     navigation.navigate("WalkingScreen")
   }
   const onPressDiagnosis = () => {
-    navigation.navigate("DiagnosisScreen")
+    // navigation.navigate("DiagnosisScreen")
+    navigation.navigate("DiagTabNavigator")
   }
   const onPressConsult = () => {
     navigation.navigate("CommunityScreen", {boardCategory : "상담"})
