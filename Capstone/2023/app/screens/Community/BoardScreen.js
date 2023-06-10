@@ -118,83 +118,57 @@ function BoardScreen({ route }) {
 
   return (
     <>
-    <ScrollView refreshControl={<RefreshControl onRefresh={onCombinedRefresh} refreshing={refreshing || refreshingComment} />}>
-      <View style={styles.block}>
-        {/* 게시물 공간 */}
-        {/* <FlatList
-          data={filteredPosts}
-          renderItem={renderItemPost}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.container}
-          refreshControl={
-            <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
-            
-          }
-        /> */}
-        <DetailPostCard {...board} />
-        
-        {/* 댓글 입력 공간 */}
-        <View style={{ marginBottom: 15 }}>
-          <TextInput
-            style={styles.commentInput}
-            placeholder="댓글 입력"
-            placeholderTextColor={"#BCBCBC"}
-            value={txt}
-            onChangeText={(value) => setTxt(value)}
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            onRefresh={onCombinedRefresh}
+            refreshing={refreshing || refreshingComment}
           />
-          <Button onPress={onSubmit} title="작성" />
-        </View>
-        <Text> 댓글 </Text>
-        {/* 댓글 목록 및 업데이트 */}
-        <View style={{ marginTop: 5 }}>
-          {/* <FlatList
-            data={filteredComments}
-            renderItem={renderItemComment}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.container}
-            // refreshControl={
-            //   <RefreshControl onRefresh={onRefreshComment} refreshing={refreshingComment} />
-            // }
-          /> */}
-          {filteredComments.map((comment) => (
-            <CommentCard
-              key={comment.id}
-              createdAt={comment.createdAt}
-              txt={comment.txt}
-              postId={comment.postId}
-              user={comment.user}
-              id={comment.id}
+        }>
+        <View style={styles.block}>
+          {/* 게시물 공간 */}
+          <DetailPostCard {...board} />
+          {/* 댓글 입력 공간 */}
+          <View style={{ marginBottom: 15 }}>
+            <TextInput
+              style={styles.commentInput}
+              placeholder="댓글 입력"
+              placeholderTextColor={"#BCBCBC"}
+              value={txt}
+              onChangeText={(value) => setTxt(value)}
             />
-          ))}
+            <Button onPress={onSubmit} title="작성" />
+          </View>
+          <Text> 댓글 </Text>
+          {/* 댓글 목록 및 업데이트 */}
+          <View style={{ marginTop: 5 }}>
+            {filteredComments ? (
+              filteredComments.map((comment) => (
+                <CommentCard
+                  key={comment.id}
+                  createdAt={comment.createdAt}
+                  txt={comment.txt}
+                  postId={comment.postId}
+                  user={comment.user}
+                  id={comment.id}
+                />
+              ))
+            ) : (
+              <Text>댓글이 없습니다. 첫 댓글을 작성해보세요!</Text>
+            )}
+          </View>
         </View>
-      </View>
       </ScrollView>
     </>
   );
 }
 
-// 댓글 렌더링
-const renderItemComment = ({ item }) => (
-  <CommentCard
-    createdAt={item.createdAt}
-    txt={item.txt}
-    postId={item.postId}
-    user={item.user}
-    id={item.id}
-  />
-);
-
 const styles = StyleSheet.create({
   block: {
     margin: 10,
   },
-
   paddingBlock: {
     paddingHorizontal: 0,
-  },
-
-  container: {
-    // flex: 1,
   },
 });
 

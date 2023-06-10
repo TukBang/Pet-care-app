@@ -269,56 +269,6 @@ function AnimatedMarkers  () {
   ];
 
 
-
-
-  // useEffect(() => {
-  //   async function requestLocationPermission() {
-  //     try {
-  //       const granted = await PermissionsAndroid.request(
-  //         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-  //         {
-  //           'title': 'Example App',
-  //           'message': 'Example App access to your location '
-  //         }
-  //       )
-  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //         console.log("You can use the location")
-  //         alert("You can use the location");
-  
-  //         // Change the value of the locationPermissionGranted to true after
-  //         // the user grants location access 
-  //         setLocationPermissionGranted(true);
-  //       } else {
-  //         console.log("location permission denied");
-  //         alert("Location permission denied");
-  //       }
-  //     } catch (err) {
-  //       console.warn(err);
-  //     }
-  //   }
-  
-  //   // Don't forget to call the method here
-  //   requestLocationPermission();
-  // })
-
-  // useEffect(()  => {
-  //   Geolocation.getCurrentPosition(
-  //     (position) => {
-  //       const { latitude, longitude } = position.coords;
-  //       console.log(latitude)
-  //       console.log(longitude)
-
-  //       setPrevLatLng({
-  //         latitude: latitude,
-  //         longitude: longitude,
-  //       });
-  //     },
-  //     error => {
-  //       console.log(error);
-  //     }
-  //   );
-  // }, []);
-
   useEffect(() => {
       Geolocation.setRNConfiguration({ skipPermissionRequests: true }); // iOS에서 위치 권한 요청을 스킵
       Geolocation.getCurrentPosition(
