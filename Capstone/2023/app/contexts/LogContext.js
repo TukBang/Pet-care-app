@@ -20,18 +20,20 @@ export function LogContextProvider({ children }) {
         body: `Log ${index}`,
         date: new Date().toISOString(),
         endDate: new Date().toISOString(),
+        pet: `Log ${index}`,
       }))
       .reverse()
   );
 
   // uuid 로 난수 생성 후 id로 설정, 제목, 내용, 날짜로 구성
-  const onCreate = ({ id, title, body, date, endDate }) => {
+  const onCreate = ({ id, title, body, date, endDate, pet }) => {
     const log = {
       id,
       title,
       body,
       date,
       endDate,
+      pet,
     };
     // logs를 log와 기존 로그를 합쳐 설정
     setLogs([log, ...logs]);

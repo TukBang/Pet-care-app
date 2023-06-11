@@ -30,20 +30,20 @@ function WriteScreen({ route }) {
   const [pet, setPet] = useState(log?.pet ?? "");
   const navigation = useNavigation();
   const [date, setDate] = useState(log ? new Date(log.date) : new Date());
-  const [endDate, setEndDate] = useState(log ? new Date(log.date) : new Date());
+  const [endDate, setEndDate] = useState(log ? new Date(log.endDate) : new Date());
 
   const { onCreate, onModify, onRemove } = useContext(LogContext);
   
   const { user } = useUserContext();
   const uid = user["id"];
-  const calendarUid = uuidv4();
   const [calendarList, setCalendarList] = useState([]);
 
+  const createId = uuidv4();
   
   //저장함수
   const onSave = () => {
     createCalendar({
-      calendarUid: calendarUid,
+      calendarUid: createId,
       title: title,
       memo: body,
       s_time: date.toISOString(),
@@ -62,7 +62,7 @@ function WriteScreen({ route }) {
 // test
     if (log) {
       onModify({
-        id: calendarUid,
+        id: log.id,
         date: date.toISOString(),
         endDate: endDate.toISOString(),
         title,
@@ -71,7 +71,7 @@ function WriteScreen({ route }) {
       });
     } else {
       onCreate({
-        id: calendarUid,
+        id: createId,
         title,
         body,
         pet,
@@ -95,8 +95,6 @@ function WriteScreen({ route }) {
         .catch((error) => console.error("캘린더 정보 불러오기 실패", error));
     }
   }, [user, uid]);
-
-  console.log(calendarList);
 
   const calUid = log?.id;
 
@@ -158,7 +156,7 @@ function WriteScreen({ route }) {
           onEndChangeDate={setEndDate}
         />
         {/* 헤더 아래 글쓰는 부분 (에디터) */}
-        <WriteEditor title={title} body={body} onChangeTitle={setTitle} onChangeBody={setBody} onChangePet={setPet} />
+        <WriteEditor title={title} body={body} pet={pet} onChangeTitle={setTitle} onChangeBody={setBody} onChangePet={setPet} />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
