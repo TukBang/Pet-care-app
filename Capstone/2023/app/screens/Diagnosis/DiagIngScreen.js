@@ -4,6 +4,10 @@ import React, {
   } from "react";
   import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
   import RNFS from "react-native-fs";
+import { createDiagnosisResult } from "../../lib/diagnosis";
+import storage from "@react-native-firebase/storage";
+import { v4 } from "uuid";
+import events from "../../lib/events";
   
 
 
@@ -14,26 +18,35 @@ import React, {
     petList,uid,
     selectedImage, setSelectedImage,
     setDiagState,setDiagEnd,setDiagtempView,setDiagModalVisible,
-    diagnosisResultText2,
+    setDiagnosisResultText2,
 }) {
 
     const serverUrl = "http://121.170.118.190:5000/images";
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
   // 진단 선택 스크린
   let DiagnosisText1 = `진단하려는 사진을 확인해주세요.`;
   let DiagnosisText2 = `  [Tip]\n  환부가 잘 보이고, 이미지가 클수록 정확도가 향상됩니다!`;
   let buttonText1 = `다시 선택하기`;
   let buttonText2 = `진단하기`;
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    console.log(aiResult);
+  }, [aiResult]);
+
+
   const handlePostRequest = async () => {
     try {
+      const extension = selectedImage.path.split(".").pop();
+      var reference = storage().ref(`/photo/${uid}/${v4()}.${extension}`);
       const image = await RNFS.readFile(selectedImage.path, "base64");
       const petName = petList.petName;
       const petSpecies = petList.petKind;
       const petAge = petList.petAge;
       const petWeight = petList.petWeight;
       const petGender = petList.petGender;
+      const petID = petList.petID
+      const petImage = petList.petImage
       const response = await fetch(serverUrl, {
         method: "POST",  
         headers: { "Content-Type": "application/json" },
@@ -52,17 +65,16 @@ import React, {
           image: image,
         }),
       });
+      if (Platform.OS === "android") {
+        await reference.putString(image, "base64", { contentType: selectedImage.mime });
+      } else {
+        await reference.putFile(selectedImage.path);
+      }
 
+      var petdiagImage = await reference.getDownloadURL();
       let predictions = await response.json();
-      // aiResult.predictions = [
-      //   predictions["L1"],
-      //   predictions["L2"],
-      //   predictions["L3"],
-      //   predictions["L4"],
-      //   predictions["L5"],
-      //   predictions["L6"],
-      // ];
-      setAiResult((prevState) => ({
+      console.log('set이전 predic',predictions)
+      await setAiResult((prevState) => ({
         ...prevState,
         predictions: [
           predictions["L1"],
@@ -73,10 +85,22 @@ import React, {
           predictions["L6"],
         ]
       }))
+      console.log('set직후' ,aiResult)
+      await createDiagnosisResult({
+        userID: uid, 
+        petName: petName,
+        petSpecies: petSpecies,
+        petGender: petGender,
+        petWeight: petWeight,
+        petAge: petAge,
+        petID: petID,
+        prediction : aiResult,
+        petImage: petImage,
+        image: petdiagImage,
+      })
+      events.emit("refresh");
 
-      diagnosisResultText2 = `${
-        aiResult.labels[aiResult.predictions.indexOf(Math.max(...aiResult.predictions))]
-      }(이)가 의심됩니다.`;
+
 
       setDiagState(true);
       setDiagEnd(true);      

@@ -10,11 +10,11 @@ function DiagResult({
     aiResult,
     diagEnd, setDiagEnd,
     selectedImage, setSelectedImage, 
-    diagnosisResultText2,
+    setDiagnosisResultText2,diagnosisResultText2,
     setDiagtempView
 }) {
     
-
+  // console.log('result', aiResult)
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // 진단 결과 스크린
   let diagnosisResultText1 = `진단 결과`;
@@ -30,6 +30,9 @@ function DiagResult({
         navigation.push("Upload", { res, predictions, isSolution: true });
       };
 
+    setDiagnosisResultText2(`${
+      aiResult.labels[aiResult.predictions.indexOf(Math.max(...aiResult.predictions))]
+    }(이)가 의심됩니다.`);
 
     return (
     <>

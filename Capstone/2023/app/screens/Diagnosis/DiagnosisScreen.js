@@ -12,20 +12,6 @@ import { useUserContext } from "../../contexts/UserContext";
 // get the pet infomation
 import { getPetInfoByUserID } from "../../lib/petInfo";
 
-var diagnosisResultText2 = `(이)가 의심됩니다.`;
-
-// var aiResult = {
-//   labels: [
-//     "구진, 플라크",
-//     "비듬, 각질, 상피성잔고리",
-//     "태선화, 과다색소침착",
-//     "농포, 여드름",
-//     "미란, 궤양",
-//     "결절, 종괴",
-//   ],
-//   predictions: [0, 0, 0, 0, 0, 0],
-// };
-
 function DiagnosisScreen() {
   // get the user information
   const { user } = useUserContext();
@@ -52,6 +38,7 @@ function DiagnosisScreen() {
     ],
     predictions: [0, 0, 0, 0, 0, 0],
   });
+  const [ diagnosisResultText2, setDiagnosisResultText2] = useState('')
   
 
   
@@ -98,13 +85,13 @@ function DiagnosisScreen() {
             !diagtempView ? (
               <DiagIngScreen 
                 petList={selectedPet}
+                uid={uid}
                 selectedImage={selectedImage}
                 setSelectedImage={setSelectedImage}
                 setDiagState={setDiagState}
                 setDiagEnd={setDiagEnd}
                 setDiagtempView={setDiagtempView}
                 setDiagModalVisible={setDiagModalVisible}
-                diagnosisResultText2={diagnosisResultText2}
                 aiResult={aiResult}
                 setAiResult={setAiResult}
               />
@@ -126,6 +113,7 @@ function DiagnosisScreen() {
                   setDiagEnd={setDiagEnd}
                   selectedImage={selectedImage}
                   setSelectedImage={setSelectedImage}
+                  setDiagnosisResultText2={setDiagnosisResultText2}
                   diagnosisResultText2={diagnosisResultText2}
                   setDiagtempView={setDiagtempView}
                   aiResult={aiResult}
