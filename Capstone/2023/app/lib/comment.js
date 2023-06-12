@@ -25,6 +25,7 @@ export async function getComments() {
 export async function getOlderComments(id) {
   const cursorDoc = await CommentCollection.doc(id).get();
   const snapshot = await CommentCollection.orderBy("createdAt", "desc")
+  
     .startAfter(cursorDoc)
     .limit(PAGE_SIZE)
     .get();

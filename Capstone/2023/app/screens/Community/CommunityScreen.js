@@ -28,17 +28,27 @@ function CommunityScreen() {
   //category에 따라 filtered 된 post 가져오기
   useEffect(() => {
     if (posts) {
-      setFilteredPosts(posts.filter((post) => post.category === boardCategory));
-    }
-  }, [boardCategory, posts]);
+      setFilteredPosts(posts);
+  }
+  }, [posts]);
 
   // 전체 게시물 조회
   useEffect(() => {
     if (posts) {
       if (boardCategory === "전체") {
-        setFilteredPosts(posts);
+        if (user.isExpert) {
+          setFilteredPosts(posts);
+        } else {
+          setFilteredPosts(posts.filter((post) => post.category !== '상담'));
+        }
       } else if (boardCategory === "내 게시물") {
         setFilteredPosts(posts.filter((post) => post.user.id == uid));
+      } else if (boardCategory === "상담") {
+        if (user.isExpert) {
+          setFilteredPosts(posts.filter((post) => post.category === boardCategory));
+        } else {
+          setFilteredPosts(posts.filter((post) => post.category === boardCategory && post.user.id === uid));
+        }
       } else {
         setFilteredPosts(posts.filter((post) => post.category === boardCategory));
       }

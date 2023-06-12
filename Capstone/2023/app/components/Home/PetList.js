@@ -14,6 +14,7 @@ import {
 } from "react-native";
 // 아이콘 받기위해 사용
 import Icon from "react-native-vector-icons/MaterialIcons";
+// import Icon from "react-native-vector-icons/MaterialIcons";
 // 펫 정보 firebase에 저장
 import { createPetInfo } from "../../lib/petInfo";
 // 저장된 펫 정보를 불러오기위해 사용
@@ -31,6 +32,8 @@ import ActionSheetModal from "../ActionSheetModal";
 import storage from "@react-native-firebase/storage";
 import { v4 } from "uuid";
 import RNFS from "react-native-fs";
+
+import { Picker } from '@react-native-picker/picker';
 
 function PetList() {
   const { user } = useUserContext();
@@ -51,6 +54,9 @@ function PetList() {
   const [modalVisible, setModalVisible] = useState(false);
   // 카메라 경로저장 변수
   const [cameraInfo, setCameraInfo] = useState(null);
+
+  // 버튼을 눌렀을 때, 함수
+  const [isPressed, setIsPressed] = useState(null);
 
   // 펫 정보 불러오기
   useEffect(() => {
@@ -74,21 +80,26 @@ function PetList() {
 
   // 펫 정보 저장하기
   const handleSavePetInfo = async () => {
+    console.log(cameraInfo)
+    if(cameraInfo) {
+      console.log('if문 진입')
+      const extension = cameraInfo.path.split(".").pop();
+      var reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
 
-    const extension = cameraInfo.path.split(".").pop();
-    var reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
-
-    //image : path to base64 변환
-    const image = await RNFS.readFile(cameraInfo.path, "base64");
-    if (Platform.OS === "android") {
-      await reference.putString(image, "base64", { contentType: cameraInfo.mime });
-    } else {
-      await reference.putFile(cameraInfo.path);
+      //image : path to base64 변환
+      const image = await RNFS.readFile(cameraInfo.path, "base64");
+      if (Platform.OS === "android") {
+        await reference.putString(image, "base64", { contentType: cameraInfo.mime });
+      } else {
+        await reference.putFile(cameraInfo.path);
+      }
+      var petImage = await reference.getDownloadURL();
+      console.log(extension);
+      console.log(reference);
     }
-    const petImage = await reference.getDownloadURL();
-
-    console.log(extension);
-    console.log(reference);
+    else {
+      var petImage = null;
+    }
     console.log(petImage);
 
     createPetInfo({ ...petInfo, userID: uid , petImage: petImage })
@@ -175,6 +186,7 @@ function PetList() {
 
   return (
     <>
+      <Text style={styles.titleText}> 나의 반려동물 </Text>
       <View style={styles.petListScrollView}>
         <ScrollView
           horizontal={true}
@@ -182,32 +194,26 @@ function PetList() {
           contentContainerStyle={styles.scrollViewContent}
         >
           {petList.map((pet) => (
-            <View key={pet.id} style={styles.petInfoContainer}>
-              <View style={styles.petImageContainer}>
-                <TouchableOpacity onPress={() => handlePressPet(pet.id)}>
-                  <Image source={{ uri: pet.petImage }} style={styles.petImage} />
-                </TouchableOpacity>
+            
+            <TouchableOpacity 
+              key={pet.id} 
+              onPress={() => handlePressPet(pet.id)} 
+              style={[styles.petListContainer ,isPressed ? styles.buttonPressed : null]}>
+              <View style={styles.petInfoContainer}>
+                <Image source={pet.petImage ? { uri: pet.petImage } : require("../../assets/dog.png")} style={styles.petImage} />
+                <Text style={styles.petText}>{pet.petName}</Text>
               </View>
-              {/* <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                  style={styles.deleteButton}
-                  onPress={() => handleDeletePet(pet.id)}
-                >
-                  <Text style={styles.buttonText}>Delete</Text>
-                </TouchableOpacity>
-              </View> */}
-            </View>
-          ))}
-          <View style={styles.petInfoContainer}>
-            <TouchableOpacity
-              style={styles.addButton}
-              onPress={() => setShowModal(true)}
-            >
-              <Text style={styles.addButtonText}>+</Text>
+              
             </TouchableOpacity>
-          </View>
+          ))}
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => setShowModal(true)}
+          >
+            <Text style={styles.addButtonText}>+</Text>
+          </TouchableOpacity>
         </ScrollView>
-      </View>
+        </View>
       {/* 펫 등록 화면 모달 */}
       <Modal visible={showModal} transparent={true} animationType="fade">
         <Pressable style={styles.background}>
@@ -251,7 +257,8 @@ function PetList() {
               <Image 
                 style={styles.petProfile}
                 resizeMode='cover' 
-                source={cameraInfo ? { uri: cameraInfo.path } : require("../../assets/dog.png")}  />
+                source={cameraInfo ? { uri: cameraInfo.path } : require("../../assets/dog.png")}  
+              />
             </TouchableOpacity>
             <ActionSheetModal
                 visible={modalVisible}
@@ -307,7 +314,6 @@ function PetList() {
           </View>
         </Pressable>
       </Modal>
-
     </>
   );
 }
@@ -353,51 +359,65 @@ const styles = StyleSheet.create({
   },
 
   addButton: {
-    width: 60,
-    height: 60,
+    flex: 1,
+    width: 90,
+    height: 45,
     borderRadius: 40,
-    backgroundColor: "#BFBFBF",
+    backgroundColor: "#FFFAF3",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
   },
   addButtonText: {
-    color: "#fff",
-    fontSize: 50,
+    color: "black",
+    fontSize: 25,
     textAlign: "center",
-    marginTop: -5,
+    // marginTop: -5,
   },
   // 스크롤 뷰 스타일
   scrollView: {
     backgroundColor: "#FFFFFF",
   },
   scrollViewContent: {
-    padding: 10,
+    // padding: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
   },
-  petInfoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: "#E5E5E5",
+  petListContainer: {
+    width: 150,
+    height: 180,
+    borderRadius: 15,
+    backgroundColor: "#FFFAF3",
     marginRight: 10,
-    padding: 10,
-    position: "relative",
-  },
-  petImageContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    overflow: "hidden",
-    position: "absolute",
-    top: 10,
-    left: 10,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 10,
+    elevation: 10,
   },
   petImage: {
-    width: "100%",
-    height: "100%",
+    width: 140,
+    height: 140,
+    borderRadius: 15,
+    overflow: "hidden",
+    marginBottom: 5,
+    marginTop: 5,
+    marginRight: 6,
+    alignSelf: 'center',
+  },
+  petText: {
+    fontSize: 15,
+    color: 'black',
+    textAlign: 'center',
+    marginLeft: 5,
+  },
+  petInfoContainer: {
+    paddingLeft: 5,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    
   },
   buttonContainer: {
     flexDirection: "row-reverse",
@@ -468,7 +488,18 @@ const styles = StyleSheet.create({
     height: "30%",
     borderRadius: 50,
     alignSelf: "center"
-  }
+  },
+  buttonPressed: {
+
+  },
+  titleText: {
+    color: "black",
+    fontWeight: "bold",
+    // marginLeft: 16,
+    paddingTop: 20,
+    marginBottom: 10,
+    fontSize: 25,
+  },
 });
 //--------------------------------------------------------------------
 

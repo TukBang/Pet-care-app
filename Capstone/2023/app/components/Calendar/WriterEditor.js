@@ -9,15 +9,15 @@ import { getPetInfoByUserID } from "../../lib/petInfo";
 
 // 펫 이름 불러오기
 import { useState, useEffect } from "react";
-import firestore from "@react-native-firebase/firestore";
 
-function WriteEditor({ title, body, onChangeTitle, onChangeBody, onChangePet }) {
+function WriteEditor({ title, body, pet, onChangeTitle, onChangeBody, onChangePet }) {
   // 펫 정보 불러오기위해 사용
   const { user } = useUserContext();
   const uid = user["id"];
 
   const bodyRef = useRef();
   const [petList, setPetList] = useState([]);
+
   const [selectedPet, setSelectedPet] = useState(undefined);
 
   let titlePlaceHolder = "제목";
@@ -37,7 +37,6 @@ function WriteEditor({ title, body, onChangeTitle, onChangeBody, onChangePet }) 
         .catch((error) => console.error("펫 정보 불러오기 실패", error));
     }
   }, [user, uid]);
-  console.log(petList);
 
   return (
     <View style={styles.block}>
@@ -56,18 +55,21 @@ function WriteEditor({ title, body, onChangeTitle, onChangeBody, onChangePet }) 
 
       {/* 펫 선택 */}
       <Picker
-        selectedValue={selectedPet}
-        onValueChange={(pet) => setSelectedPet(pet)}
+        selectedValue={pet}
+        onValueChange={(pet) => {
+          setSelectedPet(pet);
+          onChangePet(pet); // onChangePet 함수를 호출하여 선택된 펫 값을 업데이트
+        }}
         style={styles.picker}
       >
-      <Picker.Item key="0" label={petPlaceHolder} value={undefined} />
-      {petList.map((pet) => (
-        <Picker.Item 
-        key={pet.id} 
-        label={pet.petName} 
-        value={pet.petName} 
-        style={styles.pickerItem}
-        />
+        <Picker.Item key="0" label={petPlaceHolder} value={undefined} />
+        {petList.map((pet) => (
+          <Picker.Item 
+            key={pet.id} 
+            label={pet.petName} 
+            value={pet.petName} 
+            style={styles.pickerItem}
+          />
         ))}
       </Picker>
 

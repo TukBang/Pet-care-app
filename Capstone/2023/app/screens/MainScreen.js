@@ -6,7 +6,7 @@ import HomeScreen from "./Home/HomeScreen";
 import CalendarScreen from "./Calendar/CalendarScreen";
 import WalkingScreen from "./Walking/WalkingScreen";
 import CommunityScreen from "./Community/CommunityScreen";
-import DiagnosisScreen from "./Diagnosis/DiagnosisScreen";
+import DiagTabNavigator from "./Diagnosis/DiagTabNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,7 +17,10 @@ function MainScreen() {
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarActiveTintColor: "#fb8c00",
+        tabBarActiveTintColor: "gray",
+        // tabBarInactiveTintColor: "black",
+        
+        tabBarActiveBackgroundColor: '#FFDFD4',
         tabBarShowLabel: true,
         headerShown: false,
       }}
@@ -49,9 +52,10 @@ function MainScreen() {
           headerShown: true,
         }}
       />
+      
       <Tab.Screen
-        name="DiagnosisScreen"
-        component={DiagnosisScreen}
+        name="DiagTabNavigator"
+        component={DiagTabNavigator}
         options={{
           title: "진단",
           tabBarIcon: ({ color, size }) => (

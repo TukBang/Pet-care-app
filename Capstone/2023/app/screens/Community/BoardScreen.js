@@ -8,12 +8,13 @@ import {
   TextInput,
   Button,
   FlatList,
+  ActivityIndicator,
+  ScrollView
 } from "react-native";
 
 import { useUserContext } from "../../contexts/UserContext";
 import usePosts from "../../hooks/usePosts";
 import { getComments, createComment } from "../../lib/comment";
-
 import useComments from "../../hooks/useComments";
 import { RefreshControl } from "react-native";
 import events from "../../lib/events";
@@ -74,99 +75,100 @@ function BoardScreen({ route }) {
   // post.id 에 따라 댓글을 가져오기 위한 filteredPosts 변수
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { posts, noMorePost, refreshing, onLoadMore, onRefresh, removePost } = usePosts();
-
+  const [ board, setBoard ] = useState({
+    createdAt: "",
+    description: "",
+    title: "",
+    category: "",
+    id: "",
+    user: "",
+    photoURL: null,
+  })
   // useEffect로 filteredPost에 post.id 에 따라 post 저장
   useEffect(() => {
     if (posts) {
       setFilteredPosts(posts.filter((post) => post.id === post_param.id));
+      console.log(filteredPosts)  
     }
   }, [post_param, posts]);
 
+  // filteredPosts 배열이 업데이트되었을 때 board 상태를 업데이트
+  useEffect(() => {
+    if (filteredPosts.length > 0) {
+      const post = filteredPosts[0]; // 첫 번째 요소를 사용하거나 필요에 따라 적절한 방식으로 선택
+      setBoard({
+        createdAt: post.createdAt,
+        description: post.description,
+        title: post.title,
+        category: post.category,
+        id: post.id,
+        user: post.user,
+        photoURL: post.photoURL,
+      });
+    }
+  }, [filteredPosts]);
+
   //------------------------게시글 관련------------------------//
+
+
+  const onCombinedRefresh = useCallback(() => {
+    onRefresh();
+    onRefreshComment();
+  }, []);
 
   return (
     <>
-      <View style={styles.block}>
-        {/* 게시물 공간 */}
-        <FlatList
-          data={filteredPosts}
-          renderItem={renderItemPost}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.container}
-          refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}
-        />
-        {/* 댓글 입력 공간 */}
-        <View style={{ marginBottom: 15 }}>
-          <TextInput
-            style={styles.commentInput}
-            placeholder="댓글 입력"
-            placeholderTextColor={"#BCBCBC"}
-            value={txt}
-            onChangeText={(value) => setTxt(value)}
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            onRefresh={onCombinedRefresh}
+            refreshing={refreshing || refreshingComment}
           />
-          <Button onPress={onSubmit} title="작성" />
+        }>
+        <View style={styles.block}>
+          {/* 게시물 공간 */}
+          <DetailPostCard {...board} />
+          {/* 댓글 입력 공간 */}
+          <View style={{ marginBottom: 15 }}>
+            <TextInput
+              style={styles.commentInput}
+              placeholder="댓글 입력"
+              placeholderTextColor={"#BCBCBC"}
+              value={txt}
+              onChangeText={(value) => setTxt(value)}
+            />
+            <Button onPress={onSubmit} title="작성" />
+          </View>
+          <Text> 댓글 </Text>
+          {/* 댓글 목록 및 업데이트 */}
+          <View style={{ marginTop: 5 }}>
+            {filteredComments ? (
+              filteredComments.map((comment) => (
+                <CommentCard
+                  key={comment.id}
+                  createdAt={comment.createdAt}
+                  txt={comment.txt}
+                  postId={comment.postId}
+                  user={comment.user}
+                  id={comment.id}
+                />
+              ))
+            ) : (
+              <Text>댓글이 없습니다. 첫 댓글을 작성해보세요!</Text>
+            )}
+          </View>
         </View>
-        <Text> 댓글 </Text>
-        {/* 댓글 목록 및 업데이트 */}
-        <View style={{ marginTop: 5 }}>
-          <FlatList
-            data={filteredComments}
-            renderItem={renderItemComment}
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={styles.container}
-            // 댓글의 새로고침 부분
-            //   onEndReached={onLoadMoreComments}
-            //   onEndReachedThreshold={0.75}
-            //   ListFooterComponent={
-            //       !noMoreComment && (
-            //       <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
-            //       )
-            //   }
-            refreshControl={
-              <RefreshControl onRefresh={onRefreshComment} refreshing={refreshingComment} />
-            }
-          />
-        </View>
-      </View>
+      </ScrollView>
     </>
   );
 }
-
-// 댓글 렌더링
-const renderItemComment = ({ item }) => (
-  <CommentCard
-    createdAt={item.createdAt}
-    txt={item.txt}
-    postId={item.postId}
-    user={item.user}
-    id={item.id}
-  />
-);
-
-// Post 렌더링
-const renderItemPost = ({ item }) => (
-  <DetailPostCard
-    createdAt={item.createdAt}
-    description={item.description}
-    title={item.title}
-    category={item.category}
-    id={item.id}
-    user={item.user}
-    photoURL={item.photoURL}
-  />
-);
 
 const styles = StyleSheet.create({
   block: {
     margin: 10,
   },
-
   paddingBlock: {
     paddingHorizontal: 0,
-  },
-
-  container: {
-    // flex: 1,
   },
 });
 
