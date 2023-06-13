@@ -6,6 +6,7 @@ import usePosts from "../../hooks/usePosts";
 import { Picker } from "@react-native-picker/picker";
 import { useUserContext } from "../../contexts/UserContext";
 import { useRoute } from "@react-navigation/native";
+import LinearGradient from "react-native-linear-gradient";
 
 // 커뮤니티 메인화면
 
@@ -46,7 +47,12 @@ function CommunityScreen() {
   }, [boardCategory, posts, uid]);
 
   return (
-    <>
+    <LinearGradient
+      colors={['#EBF6F9', '#C9E8F2']}
+      style={{flex : 1}}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+    >
       <View style={styles.block}>
         {/* 게시글 추가버튼 */}
         <CameraButton />
@@ -61,6 +67,7 @@ function CommunityScreen() {
           <Picker.Item label="상담" value="상담" />
           <Picker.Item label="내 게시물" value="내 게시물" />
         </Picker>
+        <View style={styles.border} />
         {/* 필터링 된 posts 를 렌더링후 flat리스트로 보여줌 */}
         <FlatList
           data={filteredPosts}
@@ -75,7 +82,7 @@ function CommunityScreen() {
           refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}
         />
       </View>
-    </>
+    </LinearGradient>
   );
 }
 const renderItem = ({ item }) => (
@@ -96,10 +103,15 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   container: {
-    paddingBottom: 48,
+    paddingBottom: 48,    
   },
   spinner: {
     height: 64,
+  },
+  border: {
+    height: 2,
+    backgroundColor: "#ced4da",
+
   },
 });
 

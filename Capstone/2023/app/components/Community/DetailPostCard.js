@@ -67,6 +67,7 @@ function DetailPostCards({ user, category, title, photoURL, description, created
         <Text date={date} style={styles.date}>
           {format(date, "MM월 dd일 (EEE) hh시 mm분", { locale: ko })}에 작성됨
         </Text>
+        <View style={styles.border} />
         {/* 게시글 사진 */}
         <Image
           source={{ uri: photoURL }}
@@ -74,8 +75,10 @@ function DetailPostCards({ user, category, title, photoURL, description, created
           resizeMode="contain"
           transform={[{ scale: 1 }]}
         />
+        <View style={styles.border} />
         {/* 게시글 내용 */}
         <Text style={styles.description}>{description}</Text>
+        
       </View>
       {/* 게시글 수정 및 삭제 버튼이 있는 Modal, 아래 함수의 파라미터는 56번째 usePostAction() 부분을 참고하면 된다. */}
       <ActionSheetModal visible={isSelecting} actions={actions} onClose={onClose} />
@@ -134,9 +137,10 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    height: "60%",
-    width: "60%",
+    height: "50%",
+    width: "50%",
     aspectRatio: 1,
+    marginBottom: 10,
 
     // marginTop: 5,
     // marginBottom: 10,
@@ -146,8 +150,13 @@ const styles = StyleSheet.create({
 
   description: {
     fontSize: 16,
-    // lineHeight: 24,
     marginBottom: 8,
+    marginTop: 5,
+  },
+  border: {
+    height: 2,
+    backgroundColor: "#ced4da",
+    marginBottom: 5,
   },
 });
 
