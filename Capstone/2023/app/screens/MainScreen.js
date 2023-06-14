@@ -20,7 +20,7 @@ function MainScreen() {
         tabBarActiveTintColor: "gray",
         // tabBarInactiveTintColor: "black",
         
-        tabBarActiveBackgroundColor: '#FFDFD4',
+        tabBarActiveBackgroundColor: '#C9E8F2',
         tabBarShowLabel: true,
         headerShown: false,
       }}

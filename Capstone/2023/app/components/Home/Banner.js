@@ -29,7 +29,7 @@ function Banner () {
 
 const styles = StyleSheet.create({
     banner: {
-        backgroundColor: '#FFFAF3',
+        backgroundColor: '#F4FAFD',
         borderRadius: 10,
         width: '100%',
         height: '12%',
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     iconImage: {
         position: 'absolute',
         alignSelf: 'flex-end',
-        color: '#FFDFD4',
+        color: '#C9E8F2',
         // justifyContent: 'center',
         // width: 50,
         // height: 50,

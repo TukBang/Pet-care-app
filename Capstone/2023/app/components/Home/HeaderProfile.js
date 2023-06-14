@@ -9,7 +9,7 @@ import LinearGradient from 'react-native-linear-gradient';
 function HeaderProfile({ user, onPress }) {
   return (
     <LinearGradient
-      colors={['#FFF5EE', '#FFDFD4']}
+      colors={['#EBF6F9', '#C9E8F2']}
       //colors={['#FFF0E6', '#FFD7C6']}
       style={{flex : 1}}
       start={{ x: 0, y: 0 }}
@@ -43,6 +43,7 @@ function HeaderProfile({ user, onPress }) {
           </Pressable>
         </View>
       </View>
+      <View style={styles.border} />
     </LinearGradient>
 
   );
@@ -77,11 +78,15 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   textStyle: {
-    marginRight: "64%",
-    left: 40,
+    marginRight: "55%",
     color: "black",
     fontWeight: "bold",
     fontSize: 20,
+  },
+  border: {
+    height: 2,
+    backgroundColor: "#ced4da",
+  
   },
 });
 

@@ -29,8 +29,11 @@ function HomeScreen() {
 
   return (
     <LinearGradient
-      colors={['#FFF5EE', '#FFDFD4']}
-      //colors={['#FFF0E6', '#FFD7C6']}
+      // 연한 핑크, 진한 핑크
+      colors={['#EBF6F9', '#C9E8F2']}
+      //colors={['#E8F4F8 ', '#FFF5EE']}
+      
+      //colors={['#FFF5EE', '#FFDFD4']}
       style={{flex : 1}}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
