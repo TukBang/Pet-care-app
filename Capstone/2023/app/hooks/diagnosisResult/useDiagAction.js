@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ActionSheetIOS, Platform } from "react-native";
-import { removePost } from "../lib/post";
+import { removePost } from "../../lib/post";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import events from "../lib/events";
+import events from "../../lib/events";
 
 //hooks 내부 파일은 사용하기 편하게 하기위한 form 을 생성한 것
 // 게시글을 달 때 사용하는 행동
@@ -11,28 +11,6 @@ export default function usePostActions({ id, title, photoURL, description }) {
   const [isSelecting, setIsSelecting] = useState(false);
   const navigation = useNavigation();
   const route = useRoute();
-
-  //게시글 수정
-  const edit = () => {
-    navigation.navigate("Modify", {
-      id,
-      title,
-      photoURL,
-      description,
-    });
-  };
-
-  //게시글 삭제
-  const remove = async () => {
-    await removePost(id);
-
-    // 현재 단일 포스트 조회 화면이라면 뒤로가기
-    if (route.name === "Board") {
-      navigation.pop();
-    }
-
-    events.emit("removePost", id);
-  };
 
   //게시글 관리 모달
   const onPressMore = () => {

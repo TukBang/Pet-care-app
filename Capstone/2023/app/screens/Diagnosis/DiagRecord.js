@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, Button, Text, StyleSheet, FlatList, ActivityIndicator, RefreshControl} from 'react-native';
 import DiagResultCard from '../../components/Diagnosis/DiagResultCard';
-import useDiags from '../../hooks/useDiags';
+import useDiags from '../../hooks/DiagnosisResult/useDiags';
 import auth from "@react-native-firebase/auth";
 import { useUserContext } from "../../contexts/UserContext";
 

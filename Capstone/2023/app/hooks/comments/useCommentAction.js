@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ActionSheetIOS, Platform } from "react-native";
-import { removeComment } from "../lib/comment";
+import { removeComment } from "../../lib/comment";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import events from "../lib/events";
+import events from "../../lib/events";
 
 //hooks 내부 파일은 사용하기 편하게 하기위한 form 을 생성한 것
 // 댓글을 달 때 사용하는 행동

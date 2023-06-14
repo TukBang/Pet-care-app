@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
-import { View, StyleSheet, Text, Image, Pressable } from "react-native";
+import { View, StyleSheet, Text, Image, Pressable, Dimensions } from "react-native";
 import { useUserContext } from "../../contexts/UserContext";
-import usePostActions from "../../hooks/usePostAciton";
+import usePostActions from "../../hooks/posts/usePostAciton";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import ko from "date-fns/locale/ko";
 import { format, formatDistanceToNow } from "date-fns";
@@ -9,6 +9,7 @@ import ActionSheetModal from "../ActionSheetModal";
 
 // 게시글을 렌더링하기 위해 사용
 // BoardScreen에서 사용
+
 
 function DetailPostCards({ user, category, title, photoURL, description, createdAt, id }) {
   // route에서 post에 대한 파라미터를 불러온다.
@@ -137,9 +138,9 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    height: 300,
-    width: 300,
-    //aspectRatio: 1,
+    // height: 300,
+    width: "100%",
+    aspectRatio: 1,
     marginBottom: 10,
     alignSelf: "center",
   },

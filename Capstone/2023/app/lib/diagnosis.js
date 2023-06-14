@@ -27,7 +27,7 @@ export function createDiagnosisResult({ userID, petName, petSpecies, petGender, 
 export const PAGE_SIZE = 15;
 
 export async function getDiags() {
-    const currentUser = auth().currentUser;
+  const currentUser = auth().currentUser;
   const snapshot = await diagnosisResultCollection
     .where("userID", "==", currentUser.uid)
     .orderBy("createdAt", "desc")
@@ -41,7 +41,7 @@ export async function getDiags() {
 }
 
 export async function getOlderDiags(id) {
-    const currentUser = auth().currentUser;
+  const currentUser = auth().currentUser;
   const cursorDoc = await diagnosisResultCollection.doc(id).get();
   const snapshot = await diagnosisResultCollection
   .where("userID", "==", currentUser.uid)
@@ -58,7 +58,7 @@ export async function getOlderDiags(id) {
   return diags;
 }
 export async function getNewerDiags(id) {
-    const currentUser = auth().currentUser;
+  const currentUser = auth().currentUser;
   const cursorDoc = await diagnosisResultCollection.doc(id).get();
   const snapshot = await diagnosisResultCollection
   .where("userID", "==", currentUser.uid)

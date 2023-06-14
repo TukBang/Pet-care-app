@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
-import { getNewerDiags, getOlderDiags, getDiags, PAGE_SIZE } from "../lib/diagnosis";
-import { useUserContext } from "../contexts/UserContext";
+import { getNewerDiags, getOlderDiags, getDiags, PAGE_SIZE } from "../../lib/diagnosis";
+import { useUserContext } from "../../contexts/UserContext";
 import useDiagEventEffect from "./useDiagEventEffect";
 
 // 비슷한 함수의 재사용을 막기위해 정리

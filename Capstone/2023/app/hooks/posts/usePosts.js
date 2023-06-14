@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
-import { getNewerPosts, getOlderPosts, getPosts, PAGE_SIZE } from "../lib/post";
-import { useUserContext } from "../contexts/UserContext";
+import { getNewerPosts, getOlderPosts, getPosts, PAGE_SIZE } from "../../lib/post";
+import { useUserContext } from "../../contexts/UserContext";
 import usePostsEventEffect from "./usePostEventEffect";
 
 // 비슷한 함수의 재사용을 막기위해 정리
 
-export default function usePosts(userId) {
+export default function usePosts(category, isExpert) {
   const [posts, setPosts] = useState(null);
   const [noMorePost, setNoMorePost] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -17,7 +17,7 @@ export default function usePosts(userId) {
       return;
     }
     const lastPost = posts[posts.length - 1];
-    const olderPosts = await getOlderPosts(lastPost.id, userId);
+    const olderPosts = await getOlderPosts(lastPost.id, category, isExpert);
     if (olderPosts.length < PAGE_SIZE) {
       setNoMorePost(true);
     }
@@ -31,13 +31,13 @@ export default function usePosts(userId) {
     }
     const firstPost = posts[0];
     setRefreshing(true);
-    const newerPosts = await getNewerPosts(firstPost.id, userId);
+    const newerPosts = await getNewerPosts(firstPost.id, category, isExpert);
     setRefreshing(false);
     if (newerPosts.length === 0) {
       return;
     }
     setPosts(newerPosts.concat(posts));
-  }, [posts, userId, refreshing]);
+  }, [posts, refreshing]);
 
   //게시글 삭제
   const removePost = useCallback(
@@ -48,13 +48,13 @@ export default function usePosts(userId) {
   );
 
   useEffect(() => {
-    getPosts({ userId }).then((_posts) => {
+    getPosts(category).then((_posts) => {
       setPosts(_posts);
       if (_posts.length < PAGE_SIZE) {
         setNoMorePost(true);
       }
     });
-  }, [userId]);
+  }, [category]);
 
   const updatePost = useCallback(
     ({ postId, title, description }) => {
@@ -76,7 +76,7 @@ export default function usePosts(userId) {
   usePostsEventEffect({
     refresh: onRefresh,
     removePost,
-    enabled: !userId || userId === user.id,
+    enabled: true,
     updatePost,
   });
 

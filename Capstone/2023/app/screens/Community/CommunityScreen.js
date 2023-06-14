@@ -2,7 +2,7 @@ import { ActivityIndicator, View, FlatList, StyleSheet, RefreshControl } from "r
 import CameraButton from "../../components/Community/CameraButton";
 import React, { useEffect, useRef, useState } from "react";
 import PostCard from "../../components/Community/PostCard";
-import usePosts from "../../hooks/usePosts";
+import usePosts from "../../hooks/posts/usePosts";
 import { Picker } from "@react-native-picker/picker";
 import { useUserContext } from "../../contexts/UserContext";
 import { useRoute } from "@react-navigation/native";
@@ -18,43 +18,22 @@ function CommunityScreen() {
       setBoardCategory(route.params.boardCategory);
     }
   }, [route.params?.boardCategory]);
-  const [filteredPosts, setFilteredPosts] = useState([]);
-  const { posts, noMorePost, refreshing, onLoadMore, onRefresh, removePost } = usePosts();
-
+  
   // 사용자 uid 가져오기
   const { user } = useUserContext();
   const uid = user["id"];
   const pickerRef = useRef();
+  
+
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const { posts, noMorePost, refreshing, onLoadMore, onRefresh, removePost } = usePosts(boardCategory, user["isExpert"]);
 
   //category에 따라 filtered 된 post 가져오기
   useEffect(() => {
     if (posts) {
       setFilteredPosts(posts);
   }
-  }, [posts]);
-
-  // 전체 게시물 조회
-  useEffect(() => {
-    if (posts) {
-      if (boardCategory === "전체") {
-        if (user.isExpert) {
-          setFilteredPosts(posts);
-        } else {
-          setFilteredPosts(posts.filter((post) => post.category !== '상담'));
-        }
-      } else if (boardCategory === "내 게시물") {
-        setFilteredPosts(posts.filter((post) => post.user.id == uid));
-      } else if (boardCategory === "상담") {
-        if (user.isExpert) {
-          setFilteredPosts(posts.filter((post) => post.category === boardCategory));
-        } else {
-          setFilteredPosts(posts.filter((post) => post.category === boardCategory && post.user.id === uid));
-        }
-      } else {
-        setFilteredPosts(posts.filter((post) => post.category === boardCategory));
-      }
-    }
-  }, [boardCategory, posts, uid]);
+  }, [posts,boardCategory]);
 
   return (
     <LinearGradient

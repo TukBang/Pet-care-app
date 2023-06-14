@@ -15,9 +15,9 @@ import {
 import { Dimensions } from 'react-native';
 
 import { useUserContext } from "../../contexts/UserContext";
-import usePosts from "../../hooks/usePosts";
+import usePosts from "../../hooks/posts/usePosts";
 import { getComments, createComment } from "../../lib/comment";
-import useComments from "../../hooks/useComments";
+import useComments from "../../hooks/comments/useComments";
 import { RefreshControl } from "react-native";
 import events from "../../lib/events";
 import CommentCard from "../../components/Community/CommentCard";

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { View, StyleSheet, Text, Image, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import useCommentActions from "../../hooks/useCommentAction";
+import useCommentActions from "../../hooks/comments/useCommentAction";
 import ActionSheetModal from "../ActionSheetModal";
 import { useUserContext } from "../../contexts/UserContext";
 import Icon from "react-native-vector-icons/MaterialIcons";

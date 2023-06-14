@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
-import { getNewerComments, getOlderComments, getComments, PAGE_SIZE } from "../lib/comment";
-import { useUserContext } from "../contexts/UserContext";
+import { getNewerComments, getOlderComments, getComments, PAGE_SIZE } from "../../lib/comment";
+import { useUserContext } from "../../contexts/UserContext";
 import useCommentEventEffect from "./useCommentEventEffect";
 
 // 비슷한 함수의 재사용을 막기위해 정리
