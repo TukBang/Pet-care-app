@@ -58,7 +58,7 @@ function CommunityScreen() {
 
   return (
     <LinearGradient
-      colors={['#EBF6F9', '#C9E8F2']}
+      colors={['#F0F8FF', '#D1EEFD']}
       style={{flex : 1}}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
