@@ -20,8 +20,6 @@ function DiagRecord() {
 
 
 
-
-
     return (
 
 

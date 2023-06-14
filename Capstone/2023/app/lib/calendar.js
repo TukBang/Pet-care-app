@@ -23,6 +23,7 @@ export const getAllCalendarsByUser = async (userID) => {
   try {
     const snapshot = await firestore()
       .collection("calendar")
+      .orderBy("createdAt", "desc")
       .where("userID", "==", userID)
       .get();
 
