@@ -320,7 +320,7 @@ function PetList() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFFFFF",
     alignItems: "flex-start",
     justifyContent: "center",
   },
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: 45,
     borderRadius: 40,
-    backgroundColor: "#FFFAF3",
+    backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 180,
     borderRadius: 15,
-    backgroundColor: "#F4FAFD",
+    backgroundColor: "#FFFFFF",
     marginRight: 10,
     alignItems: 'center',
     justifyContent: 'flex-start',

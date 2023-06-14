@@ -30,7 +30,7 @@ function HomeScreen() {
   return (
     <LinearGradient
       // 연한 핑크, 진한 핑크
-      colors={['#EBF6F9', '#C9E8F2']}
+      colors={['#F0F8FF', '#D1EEFD']}
       //colors={['#E8F4F8 ', '#FFF5EE']}
       
       //colors={['#FFF5EE', '#FFDFD4']}

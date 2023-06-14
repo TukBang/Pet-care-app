@@ -23,7 +23,7 @@ function Banner () {
 
 const styles = StyleSheet.create({
     banner: {
-        backgroundColor: '#F4FAFD',
+        backgroundColor: '#FFFFFF',
         borderRadius: 10,
         width: '100%',
         height: '10%',
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 5,
         paddingVertical: 7,
         borderRadius: 15,
-        elevation: 1,
+        elevation: 4,
     },  
     tutorialText: {
         fontWeight: "bold",
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     iconImage: {
         position: 'absolute',
         alignSelf: 'flex-end',
-        color: '#C9E8F2',
+        color: '#D1EEFD',
         // justifyContent: 'center',
         // width: 50,
         // height: 50,

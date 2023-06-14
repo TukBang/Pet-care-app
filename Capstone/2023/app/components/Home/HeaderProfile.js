@@ -9,7 +9,7 @@ import LinearGradient from 'react-native-linear-gradient';
 function HeaderProfile({ user, onPress }) {
   return (
     <LinearGradient
-      colors={['#EBF6F9', '#C9E8F2']}
+      colors={['#F0F8FF', '#D1EEFD']}
       //colors={['#FFF0E6', '#FFD7C6']}
       style={{flex : 1}}
       start={{ x: 0, y: 0 }}
