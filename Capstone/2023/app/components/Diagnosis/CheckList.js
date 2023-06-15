@@ -3,6 +3,9 @@ import { FlatList, View, Text, TouchableOpacity, StyleSheet } from "react-native
 import CheckBox from "@react-native-community/checkbox";
 import { useNavigation } from "@react-navigation/native";
 
+// 그라데이션
+import LinearGradient from 'react-native-linear-gradient';
+
 //진단 메인화면
 
 function CheckList({ setModalVisible }) {
@@ -50,7 +53,7 @@ function CheckList({ setModalVisible }) {
   };
 
   return (
-    <View>
+    <View style={styles.headerView}>
       {/* 버튼 상단 진단 설명 및 유의사항 */}
       <FlatList
         data={data}

@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     tutorialButton: {
         //position: 'absolute',
         top: 35,
+        marginTop: 10,
         //left: 10,
         backgroundColor: 'white',
         alignItems: 'center',

@@ -37,7 +37,8 @@ function CommunityScreen() {
 
   return (
     <LinearGradient
-      colors={['#F0F8FF', '#D1EEFD']}
+      colors={['#f6faff', '#f6faff']}
+      // colors={['#F0F8FF', '#D1EEFD']}
       style={{flex : 1}}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
@@ -90,17 +91,19 @@ const styles = StyleSheet.create({
   block: {
     flex: 1,
     zIndex: 0,
+    
   },
   container: {
-    paddingBottom: 48,    
+    paddingBottom: 48,
   },
   spinner: {
     height: 64,
   },
   border: {
     height: 2,
-    backgroundColor: "#ced4da",
-
+    // backgroundColor: "#ced4da",
+    // backgroundColor: "#ebf6ff",
+    backgroundColor: "#007AFF",
   },
 });
 

@@ -27,38 +27,89 @@ function DiagResultCard({
   return (
     <>
       <View style={styles.paddingBlock}>
-        <Text>펫 이름 : {petName}</Text>
-        <View style={styles.head}>
-            <Image
-                source={{ uri: petImage}}
-                style={styles.image}
-                resizeMethod="resize"
-                resizeMode="cover"
-                />
-            <Image
-                source={{ uri: image}}
-                style={styles.image}
-                resizeMethod="resize"
-                resizeMode="cover"
-                />
+        <View style={styles.header}>
+          <Image
+                  source={{ uri: petImage}}
+                  style={styles.image1}
+                  resizeMethod="resize"
+                  resizeMode="cover"
+                  />
+          <Text style={styles.name}>{petName}</Text>
+        </View>
+        <View style={styles.profile}>
+          <View style={styles.petProfile}>
             <Text>펫 종류 : {petSpecies}</Text>
             <Text>펫 성별 : {petGender}</Text>
             <Text>펫 무게 : {petWeight}</Text>
             <Text>펫 나이 : {petAge}</Text>
             <Text date={date} style={styles.date}>
-                {date.toLocaleString()}
+              {date.toLocaleString()}
             </Text>
             <View style={{flexDirection: 'column'}}>
                 <Text>{prediction.predictions}</Text>
             </View>
-            <ProbChart prediction={prediction["predictions"]} />
+          </View>
+          <View>
+            <Text style={styles.text}>진단 사진</Text>
+            <Image 
+              source={{ uri: image}}
+              style={styles.image}
+              resizeMethod="resize"
+              resizeMode="cover"
+              />
+          </View>
         </View>
+        <ProbChart prediction={prediction["predictions"]} />
       </View>
       <View style={styles.border} />
     </>
   );
 }
 const styles = StyleSheet.create({
+  // 펫 프로필 이미지와 펫 이름 뷰 스타일
+  header: {
+    flexDirection: "row",
+  },
+
+  // 펫 이름 Text 스타일
+  name: {
+    fontWeight: "bold",
+    fontSize: 25,
+
+    marginTop: 30,
+    marginLeft: 15,
+  },
+
+  // 선택된 펫 프로필 이미지
+  image1: {
+    backgroundColor: "#bdbdbd",
+    width: "15%",
+    aspectRatio: 1,
+    // marginBottom: 6,
+    marginTop: 15,
+    borderRadius: 50,
+  },
+
+  // 프로필 , input 사진 이미지 뷰
+  profile:{
+    flexDirection: "row",
+    flex: 1,
+  },
+
+  // 펫 프로필 뷰
+  petProfile:{
+    width: '50%',
+    marginTop: 10,
+    
+  },
+
+  text:{
+    marginTop: 10,
+    fontWeight: "bold",
+    fontSize: 20,
+    marginLeft: 40,
+  },
+
   border: {
     height: 1,
     backgroundColor: "gray",
@@ -105,10 +156,11 @@ const styles = StyleSheet.create({
   },
   image: {
     backgroundColor: "#bdbdbd",
-    width: "20%",
+    width: "65%",
     aspectRatio: 1,
-    // marginBottom: 6,
-    // marginTop: 6,
+    
+    //marginLeft: 20,
+    marginTop: 10,
     borderRadius: 10,
   },
   description: {
@@ -120,7 +172,6 @@ const styles = StyleSheet.create({
     color: "#757575",
     fontSize: 12,
     lineHeight: 18,
-    marginLeft: 14,
   },
 });
 

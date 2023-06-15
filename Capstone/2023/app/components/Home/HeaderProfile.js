@@ -8,44 +8,28 @@ import LinearGradient from 'react-native-linear-gradient';
 // Header Profile
 function HeaderProfile({ user, onPress }) {
   return (
-    <LinearGradient
-      colors={['#F0F8FF', '#D1EEFD']}
-      //colors={['#FFF0E6', '#FFD7C6']}
-      style={{flex : 1}}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 0 }}
-      >
-      <View style={styles.container}>
-        {/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        일반회원, 전문가
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-        <Text style={styles.textStyle}>{user.isExpert ? '전문가' : '일반회원'}</Text>
-
-        
-        {/* ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        엡 가이드 넣는 부분
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
-        <Icon style={styles.iconImage} name='help-outline' size={53} />
-
-        <View style={styles.block}>
-          <Pressable onPress={onPress}>
-            <Image
-              source={
-                user.photoURL
-                  ? {
-                      uri: user.photoURL,
-                    }
-                  : require("../../assets/user.png")
-              }
-              resizeMode="cover"
-              style={styles.avatar}
-            />
-          </Pressable>
-        </View>
+    <>
+    <View style={styles.container}>
+      <Text style={styles.textStyle}>{user.isExpert ? '전문가' : '일반회원'}</Text>
+      <Icon style={styles.iconImage} name='help-outline' size={53} />
+      <View style={styles.block}>
+        <Pressable onPress={onPress} style={styles.press}>
+          <Image
+            source={
+              user.photoURL
+                ? {
+                    uri: user.photoURL,
+                  }
+                : require("../../assets/user.png")
+            }
+            resizeMode="cover"
+            style={styles.avatar}
+          />
+        </Pressable>
       </View>
-      <View style={styles.border} />
-    </LinearGradient>
-
+    </View>
+    <View style={styles.border} />
+    </>
   );
 }
 
@@ -53,40 +37,58 @@ const styles = StyleSheet.create({
   block: {
     width: 44,
     height: 44,
-    right: 20,
+    top: -4,
+    right: 5,
     marginRight: 20,
     borderWidth: 4,
     borderColor: 'gray',
-    borderRadius: 25,
   },
+  
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    // overflow: "hidden",
-    // paddingHorizontal: 1,
+    position: 'absolute',
+    width: 500,
+    height: 60,
+    top: 0,
+    left: -100,
+    backgroundColor: "#F6FAFF",
   },
+
+  press: {
+    top: 8,
+    right: 69,
+  },
+
   avatar: {
-    width: 35,
-    height: 35,
-    borderRadius: 20,
-    overflow: 'hidden',
+    width: 44,
+    height: 44,
+    left: 500,
+    borderRadius: 22,
   },
+
   iconImage: {
-    marginRight: 10,
-    right: 20,
+    position: "absolute",
+    marginRight: 40,
+    top: 3,
+    right: 33,
     color: 'gray',
   },
+
   textStyle: {
-    marginRight: "55%",
+    position: 'absolute',
+    top: 15,
+    right: 344,
     color: "black",
     fontWeight: "bold",
     fontSize: 20,
+    backgroundColor: "#F6FAFF"
   },
+
   border: {
     height: 2,
-    backgroundColor: "#ced4da",
-  
+    top: 32,
+    left: 100,
+    width: 1000,
+    backgroundColor: "#C0CDDF",
   },
 });
 

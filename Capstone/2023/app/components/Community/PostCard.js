@@ -85,8 +85,9 @@ function PostCard({ user, category, title, photoURL, description, createdAt, id 
 const styles = StyleSheet.create({
   border: {
     height: 2,
-    backgroundColor: "#ced4da",
-    marginBottom: 10,
+    // backgroundColor: "#ced4da",
+    backgroundColor: "#C0CDDF",
+    marginBottom: 5,
     marginLeft: 10,
     marginRight: 20,
   },
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
   },
   profile: {
     flex: 1,
-    marginTop: 5,
+    marginTop: 10,
     flexDirection: "row",
     // alignItems: 'center',
   },
