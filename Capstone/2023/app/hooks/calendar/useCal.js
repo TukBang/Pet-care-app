@@ -1,13 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
-import { getNewerCal, getOlderCal, getCal, PAGE_SIZE } from "../../lib/calendar";
+import { getAllCalendarsByUser, getNextClosestCalendarByUser, getOneNewerCal } from "../../lib/calendar";
 import { useUserContext } from "../../contexts/UserContext";
 import useCalEventEffect from "./useCalEventEffect";
 
 // 비슷한 함수의 재사용을 막기위해 정리
 
-export default function usecal(userId) {
+export default function useCal(userId) {
   const [cal, setCal] = useState(null);
-  const [noMoreCal, setNoMoreCal] = useState(false);
+  const [onecal, setOneCal] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
   const { user } = useUserContext();
 
@@ -30,22 +30,30 @@ export default function usecal(userId) {
     }
     const firstCal = cal[0];
     setRefreshing(true);
-    const newerCal = await getNewerCal(firstCal.id, userId);
+    const oneNewerCal = await getOneNewerCal(firstCal.id);
     setRefreshing(false);
     if (newerCal.length === 0) {
       return;
     }
+    setOneCal(oneNewerCal)
     setCal(newerCal.concat(cal));
   }, [cal, userId, refreshing]);
 
   useEffect(() => {
-    getCal({ userId }).then((_cal) => {
+    getAllCalendarsByUser().then((_cal) => {
+      console.log('ca',_cal)
       setCal(_cal);
       // if (_cal.length < PAGE_SIZE) {
       //   setNoMoreCal(true);
       // }
     });
-  }, [userId]);
+  }, []);
+
+  useEffect(() => {
+    getNextClosestCalendarByUser().then((_cal) => {
+      setOneCal(_cal);
+  })
+  }, []);
 
   useCalEventEffect({
     refresh: onRefresh,
@@ -54,6 +62,7 @@ export default function usecal(userId) {
 
   return {
     cal,
+    onecal,
     // noMoreCal,
     refreshing,
     // onLoadMore,

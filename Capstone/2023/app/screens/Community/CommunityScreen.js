@@ -39,6 +39,7 @@ function CommunityScreen() {
     <LinearGradient
       colors={['#f6faff', '#f6faff']}
       // colors={['#F0F8FF', '#D1EEFD']}
+
       style={{flex : 1}}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
@@ -101,9 +102,8 @@ const styles = StyleSheet.create({
   },
   border: {
     height: 2,
-    // backgroundColor: "#ced4da",
-    // backgroundColor: "#ebf6ff",
-    backgroundColor: "#007AFF",
+    backgroundColor: "#ced4da",
+
   },
 });
 

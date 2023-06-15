@@ -2,9 +2,6 @@ import React from "react";
 import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-// 그라데이션
-import LinearGradient from 'react-native-linear-gradient';
-
 // Header Profile
 function HeaderProfile({ user, onPress }) {
   return (
