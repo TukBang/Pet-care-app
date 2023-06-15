@@ -85,7 +85,7 @@ function PostCard({ user, category, title, photoURL, description, createdAt, id 
 const styles = StyleSheet.create({
   border: {
     height: 2,
-    backgroundColor: "#ced4da",
+    backgroundColor: "#C0CDDF",
     marginBottom: 10,
     marginLeft: 10,
     marginRight: 20,
