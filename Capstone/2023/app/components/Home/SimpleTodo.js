@@ -1,17 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image } from "react-native";
 // import { useUserContext } from "../../contexts/UserContext";
 import { useNavigation } from "@react-navigation/native";
+import useCal from "../../hooks/calendar/useCal";
+import { useEffect } from "react";
 
 // 홈 화면을 구성하는 요소 - 기능 요약의 형태
 
 function SimpleTodo() {
 
+  const { onecal } = useCal();
   const navigation = useNavigation();
-  const [ todoRecent, setTodoRecent ] = useState()
+  const [todoRecent, setTodoRecent ] = useState(null)
+  console.log('onecal',onecal)
+  // console.log('onecal_stime',onecal.s_time)
+  // console.log('todoRecent',todoRecent)
   const [ recentDiagnosis, setRecentDiagnosis ] = useState()
   const [ isWalked, setIsWalked ] = useState(false);
   const [ whenWalked, setWhenWalked ] = useState('')
+
+  useEffect(() =>{
+    if (onecal) {
+      const date = new Date(onecal.s_time.seconds * 1000).toLocaleString()
+      // date.get
+      setTodoRecent(date)
+    }
+    else {
+      setTodoRecent(null)
+    }
+  },[onecal])
 
   const onPressCalendar = () => {
     navigation.navigate("CalendarScreen")
@@ -20,13 +37,11 @@ function SimpleTodo() {
     navigation.navigate("WalkingScreen")
   }
   const onPressDiagnosis = () => {
-    // navigation.navigate("DiagnosisScreen")
     navigation.navigate("DiagTabNavigator")
   }
   const onPressConsult = () => {
     navigation.navigate("CommunityScreen", {boardCategory : "상담"})
   }
-
 
   return (
     <View style={styles.container} >

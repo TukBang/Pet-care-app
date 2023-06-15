@@ -76,7 +76,7 @@ function BoardScreen({ route }) {
 
   // post.id 에 따라 댓글을 가져오기 위한 filteredPosts 변수
   const [filteredPosts, setFilteredPosts] = useState([]);
-  const { posts, noMorePost, refreshing, onLoadMore, onRefresh, removePost } = usePosts();
+  const { posts, noMorePost, refreshing, onLoadMore, onRefresh, removePost } = usePosts('전체',false);
   const [ board, setBoard ] = useState({
     createdAt: "",
     description: "",
@@ -85,6 +85,7 @@ function BoardScreen({ route }) {
     id: "",
     user: "",
     photoURL: null,
+    // isExpert: null,
   })
   // const [description, setDescription] = useState("");
   // const DetailPostCard = ({ description }) => {

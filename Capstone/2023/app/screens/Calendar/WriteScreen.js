@@ -46,8 +46,8 @@ function WriteScreen({ route }) {
       calendarUid: createId,
       title: title,
       memo: body,
-      s_time: date.toISOString(),
-      e_time: endDate.toISOString(),
+      s_time: date,
+      e_time: endDate,
       userID: uid,
       petName: pet, // 펫 이름을 전달
     })
@@ -63,8 +63,8 @@ function WriteScreen({ route }) {
     if (log) {
       onModify({
         id: log.id,
-        date: date.toISOString(),
-        endDate: endDate.toISOString(),
+        date: date,
+        endDate: endDate,
         title,
         body,
         pet,
@@ -75,8 +75,8 @@ function WriteScreen({ route }) {
         title,
         body,
         pet,
-        date: date.toISOString(),
-        endDate: endDate.toISOString(),
+        date: date,
+        endDate: endDate,
         // date: selectedDate.toISOString(),
       });
     }
