@@ -28,7 +28,7 @@ export default function usewalk(userId) {
     if (!walk || walk.length === 0 || refreshing) {
       return;
     }
-    const firstwalk = walk[0];
+    const firstwalk = walk;
     setRefreshing(true);
     const oneNewerwalk = await getNextClosestWalkingByUser(firstwalk.id);
     setRefreshing(false);

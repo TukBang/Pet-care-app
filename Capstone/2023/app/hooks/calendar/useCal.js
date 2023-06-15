@@ -28,7 +28,7 @@ export default function useCal(userId) {
     if (!cal || cal.length === 0 || refreshing) {
       return;
     }
-    const firstCal = cal[0];
+    const firstCal = onecal[0];
     setRefreshing(true);
     const oneNewerCal = await getOneNewerCal(firstCal.id);
     setRefreshing(false);
