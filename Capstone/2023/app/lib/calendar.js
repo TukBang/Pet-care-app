@@ -49,7 +49,7 @@ export const getNextClosestCalendarByUser = async () => {
 
     const snapshot = await firestore()
       .collection("calendar")
-      .orderBy("s_time", "asc")
+      .orderBy("s_time", "desc")
       .where("userID", "==", currentUser.uid)
       .where("s_time", ">=", firestore.Timestamp.now()) // 현재 시간 이후의 캘린더만 가져옴
       .limit(1)

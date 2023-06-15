@@ -41,7 +41,7 @@ export default function useCal(userId) {
 
   useEffect(() => {
     getAllCalendarsByUser().then((_cal) => {
-      console.log('ca',_cal)
+    
       setCal(_cal);
       // if (_cal.length < PAGE_SIZE) {
       //   setNoMoreCal(true);
