@@ -17,45 +17,24 @@ function WriteHeader({
     navigation.pop();
   };
 
-  const [mode, setMode] = useState("date");
-  const [endMode, setEndMode] = useState("date");
-  const [visible, setVisible] = useState(false);
-  const [endVisible, setEndVisible] = useState(false);
+  const [isDatePickerVisible, setDatePickerVisibility] = useState({picker1: false, picker2: false, picker3: false});
 
-  const onPressDate = () => {
-    setMode("date");
-    setVisible(true);
-    console.log('onPressDate')
+  const showDatePicker = (picker) => {
+    setDatePickerVisibility({...isDatePickerVisible, [picker]: true });
   };
 
-  const onPressStartTime = () => {
-    setMode("time");
-    setVisible(true);
-    console.log('onPressstarttime')
+  const hideDatePicker = (picker) => {
+    setDatePickerVisibility({...isDatePickerVisible, [picker]: false });
   };
 
-  const onPressEndTime = () => {
-    setEndMode("time");
-    setEndVisible(true);
-    console.log('onPresseendtime')
-  };
-
-  const onConfirm = (selectedDate) => {
-    setVisible(false);
-    onChangeDate(selectedDate);
-  };
-  
-  const onEndConfirm = (selectedDate) => {
-    setEndMode(false);
-    onEndChangeDate(selectedDate);
-  };
-
-  const onCancel = () => {
-    setVisible(false);
-  };
-
-  const onEndCancel = () => {
-    setEndVisible(false);
+  const handleConfirm = (date, picker) => {
+    console.log("A date has been picked: ", date);
+    if (picker === 'picker3') {
+      onEndChangeDate(date);
+    } else {
+      onChangeDate(date);
+    }
+    hideDatePicker(picker);
   };
 
   return (
@@ -67,24 +46,44 @@ function WriteHeader({
 
       <View style={styles.buttonContainer}>
         {/* 날짜 */}
-        <TouchableOpacity onPress={onPressDate} style={styles.button1}>
+        <TouchableOpacity onPress={() => showDatePicker('picker1')} style={styles.button1}>
           <Text style={styles.Text}>
             {format(new Date(date), "yyyy년 MM월 dd일", { locale: ko })}
           </Text>
         </TouchableOpacity>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible.picker1}
+          mode="date"
+          date={date}
+          onConfirm={(date) => handleConfirm(date, 'picker1')}
+          onCancel={() => hideDatePicker('picker1')}
+        />
 
         {/* 날짜, 시간 분리 여백 */}
         <View style={{ width: 8 }} />
 
         {/* 시작 시간 */}
-        <TouchableOpacity onPress={onPressStartTime} style={styles.button2}>
+        <TouchableOpacity onPress={() => showDatePicker('picker2')} style={styles.button2}>
           <Text style={styles.Text}>{format(new Date(date), "hh시 mm분", { locale: ko })}</Text>
         </TouchableOpacity>
-
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible.picker2}
+          mode="time"
+          date={date}
+          onConfirm={(date) => handleConfirm(date, 'picker2')}
+          onCancel={() => hideDatePicker('picker2')}
+        />
         {/* 종료 시간 */}
-        <TouchableOpacity onPress={onPressEndTime} style={styles.button2}>
+        <TouchableOpacity onPress={() => showDatePicker('picker3')} style={styles.button2}>
           <Text style={styles.Text}>{format(new Date(endDate), "hh시 mm분", { locale: ko })}</Text>
         </TouchableOpacity>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible.picker3}
+          mode="time"
+          date={endDate}
+          onConfirm={(date) => handleConfirm(date, 'picker3')}
+          onCancel={() => hideDatePicker('picker3')}
+        />
       </View>
 
       <View style={styles.buttons}>
@@ -98,21 +97,6 @@ function WriteHeader({
         )}
         <TransparentCircleButton name="check" color="#FFA000" onPress={onSave} />
       </View>
-
-      <DateTimePickerModal
-        isVisible={visible}
-        mode={mode}
-        date={date}
-        onConfirm={onConfirm}
-        onCancel={onCancel}
-      />
-      <DateTimePickerModal
-        isVisible={endVisible}
-        mode={endMode}
-        date={endDate}
-        onConfirm={onEndConfirm}
-        onCancel={onEndCancel}
-      />
     </View>
     
   );
