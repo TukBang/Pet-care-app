@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -7,6 +7,8 @@ import auth from "@react-native-firebase/auth";
 
 import { signOut } from "../../lib/auth";
 import PetProfile from "../../components/Home/PetProfile";
+import AuthExpertModal from "./AuthExpertModal";
+import QnAModal from "./QnAModal";
 
 function ProfileSetting() {
   const { user, setUser } = useUserContext();
@@ -14,8 +16,6 @@ function ProfileSetting() {
   const navigation = useNavigation();
 
   const currentUser = auth().currentUser;
-  console.log(currentUser)
-  console.log(user)
   const creationTime = currentUser.metadata.creationTime;
   const dateObj = new Date(creationTime);
   console.log(dateObj)
@@ -27,6 +27,9 @@ function ProfileSetting() {
   
   const timeDiff = today.getTime() - dateObj.getTime();
   const dayDiff = Math.floor(timeDiff / (1000 * 3600 * 24));
+
+  const [ authExpert, setAuthExpert ] = useState(false);
+  const [ qna, setQnA ] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -40,7 +43,18 @@ function ProfileSetting() {
     });
   }, [navigation]);
 
-
+  const OpenAuthExpertModal = () => {
+    setAuthExpert(true);
+  }
+  const CloseAuthExpertModal = () => {
+    setAuthExpert(false);
+  }
+  const OpenQnAModal = () => {
+    setQnA(true);
+  }
+  const CloseQnAModal = () => {
+    setQnA(false);
+  }
 
   const onCloseLogIn = useCallback(() => {
     navigation.dispatch(
@@ -98,18 +112,21 @@ function ProfileSetting() {
       </View>
       <View>
         <Text>상담</Text>
-        <TouchableOpacity style={styles.content} onPress={goMyBoard}>
+        <TouchableOpacity style={styles.content} onPress={OpenQnAModal}>
           <Icon style={styles.icon} name="contact-support" size={35} />
           <View>
             <Text>문의 하기</Text>
           </View>
         </TouchableOpacity>
         <View style={styles.border} />
-        <TouchableOpacity style={styles.content} onPress={goMyBoard}>
+        <TouchableOpacity style={styles.content} onPress={OpenAuthExpertModal}>
           <Icon style={styles.icon} name="work" size={35} />
           <Text>전문가 계정 인증하기</Text>
         </TouchableOpacity>
+        <AuthExpertModal visible={authExpert} unvisible={CloseAuthExpertModal} />
+        <QnAModal visible={qna} unvisible={CloseQnAModal} />
       </View>
+      
       <View style={styles.border} />
     </View>
   );
