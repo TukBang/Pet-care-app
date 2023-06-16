@@ -89,8 +89,7 @@ function DetailPostCards({ user, category, title, photoURL, description, created
 const styles = StyleSheet.create({
   block: {
     margin: 10,
-    //flex: 1,
-    // paddingBottom: 16,
+    
   },
   paddingBlock: {
     paddingHorizontal: 0,

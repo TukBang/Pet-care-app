@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import DiagModal from "../../components/Diagnosis/DiagModal";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import ProbChart from "../../components/Diagnosis/HorizontalBarChart";
@@ -33,87 +33,89 @@ function DiagResult({
     setDiagnosisResultText2(`${
       aiResult.labels[aiResult.predictions.indexOf(Math.max(...aiResult.predictions))]
     }(이)가 의심됩니다.`);
-
+    
     return (
-    <>
-      {diagEnd ? (
-        // 진단 결과 스크린
-        <View style={diagnosisResultStyles.resultScreenView}>
-          {/* 진단 결과 이미지 및 문구 */}
-          <View style={diagnosisResultStyles.resultView}>
-            <View style={{ width: "50%" }}>
-              <Text style={diagnosisResultStyles.resultTextTitle}>
-                {diagnosisResultText1}
-              </Text>
-              <Text style={diagnosisResultStyles.resultTextContent}>
-                {diagnosisResultText2}
-              </Text>
+      <View style={{ backgroundColor: 'f6faff' }}>
+        {diagEnd ? (
+          // 진단 결과 스크린
+          <View style={diagnosisResultStyles.resultScreenView}>
+            {/* 진단 결과 이미지 및 문구 */}
+            <View style={diagnosisResultStyles.resultView}>
+              <View style={{ width: "50%" }}>
+                <Text style={diagnosisResultStyles.resultTextTitle}>
+                  {diagnosisResultText1}
+                </Text>
+                <Text style={diagnosisResultStyles.resultTextContent}>
+                  {diagnosisResultText2}
+                </Text>
+              </View>
+    
+              <View style={diagnosisResultStyles.imageView}>
+                <Image
+                  source={{ uri: selectedImage.path }}
+                  style={diagnosisResultStyles.image}
+                  resizeMode="contain"
+                  transform={[{ scale: 1 }]}
+                />
+              </View>
             </View>
-
-            <View style={diagnosisResultStyles.imageView}>
-              <Image
-                source={{ uri: selectedImage.path }}
-                style={diagnosisResultStyles.image}
-                resizeMode="contain"
-                transform={[{ scale: 1 }]}
-              />
+            {/* 차트 표시 */}
+            <View style={diagnosisResultStyles.chartView}>
+              <ProbChart prediction={aiResult["predictions"]} />
+            </View>
+    
+            <View style={diagnosisResultStyles.button_container}>
+              <TouchableOpacity
+                style={diagnosisResultStyles.button}
+                onPress={() => {
+                  setSelectedImage(null);
+                  setDiagtempView(false);
+                  setDiagEnd(false);
+                }}
+              >
+                <Text style={diagnosisResultStyles.buttonText}>{resultButtonText1}</Text>
+              </TouchableOpacity>
+              {/* gowrite 함수에 selectedImage 인자 전달 - 상담 게시글 작성 이동*/}
+              <TouchableOpacity
+                style={diagnosisResultStyles.button}
+                onPress={() => {
+                  console.log(selectedImage);
+                  goWrite(selectedImage, aiResult["predictions"]);
+                }}
+              >
+                <Text style={diagnosisResultStyles.buttonText}>{resultButtonText2}</Text>
+              </TouchableOpacity>
             </View>
           </View>
-          {/* 차트 표시 */}
-          <View style={diagnosisResultStyles.chartView}>
-            <ProbChart prediction={aiResult["predictions"]} />
-          </View>
-
-          <View style={diagnosisResultStyles.button_container}>
-            <TouchableOpacity
-              style={diagnosisResultStyles.button}
-              onPress={() => {
-                setSelectedImage(null);
-                setDiagtempView(false);
-                setDiagEnd(false);
-              }}
-            >
-              <Text style={diagnosisResultStyles.buttonText}>{resultButtonText1}</Text>
-            </TouchableOpacity>
-            {/* gowrite 함수에 selectedImage 인자 전달 - 상담 게시글 작성 이동*/}
-            <TouchableOpacity
-              style={diagnosisResultStyles.button}
-              onPress={() => {
-                console.log(selectedImage);
-                goWrite(selectedImage, aiResult["predictions"]);
-              }}
-            >
-              <Text style={diagnosisResultStyles.buttonText}>{resultButtonText2}</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      ) : (
-        // 예외 없음
-        <Text></Text>
-      )}
-    </>
-    )
-
-
+        ) : (
+          // 예외 없음
+          <Text></Text>
+        )}
+      </View>
+    );
 }
 
 // 진단 결과 스타일
 const diagnosisResultStyles = StyleSheet.create({
+
   resultScreenView: {
     flexDirection: "column",
     height: 150,
     padding: 20,
+    //backgroundColor: "#f6faff",
   },
 
   resultView: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginBottom: 5,
+    
   },
 
   resultTextTitle: {
     fontSize: 20,
     fontWeight: "bold",
+    
   },
 
   resultTextContent: {
@@ -124,12 +126,13 @@ const diagnosisResultStyles = StyleSheet.create({
     overflow: "hidden",
     width: "50%",
     height: "100%",
+    
   },
 
   image: {
     overflow: "hidden",
-    width: 250,
-    height: 250,
+    width: 200,
+    height: 200,
   },
 
   chartView: {
@@ -137,7 +140,7 @@ const diagnosisResultStyles = StyleSheet.create({
     flexDirection: "row",
     height: 100,
     padding: 0,
-
+    
     marginBottom: 118,
   },
 
@@ -147,7 +150,7 @@ const diagnosisResultStyles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     overflow: "hidden",
-
+    
     // 여백
     marginTop: 20,
   },
@@ -162,18 +165,20 @@ const diagnosisResultStyles = StyleSheet.create({
 
     // 여백
     marginTop: 10,
+    marginBottom: 5,
 
     // 모양
     borderRadius: 5,
 
     // 배경색
-    backgroundColor: "#2296F3",
+    backgroundColor: "#FFFFFF",
+    elevation: 3,
   },
 
   // 버튼 텍스트
   buttonText: {
     fontSize: 15,
-    color: "#FFFFFF",
+    color: "#000000",
   },
 });
 

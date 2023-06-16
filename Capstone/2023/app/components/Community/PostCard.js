@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
   },
   paddingBlock: {
     paddingHorizontal: 16,
+
   },
   head: {
     flexDirection: "row",
