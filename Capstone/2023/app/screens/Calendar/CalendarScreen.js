@@ -9,6 +9,7 @@ import LogContext from "../../contexts/LogContext";
 import FloatingWriteButton from "../../components/Calendar/FloatingWriteButton";
 
 // 달력 메인화면
+import LinearGradient from 'react-native-linear-gradient';
 
 function CalendarScreen() {
   // 기존에 저장되어 있던 일정 기록들
@@ -38,22 +39,29 @@ function CalendarScreen() {
   };
 
   return (
-    <View style={styles.block}>
-      {/* 달력 뷰 */}
-      <CalendarView
-        markedDates={markedDates}
-        selectedDate={selectedDate}
-        onSelectDate={setSelectedDate}
-      />
-      {/* 일정 목록 */}
-      <FeedList logs={filteredLogs} onScroll={onScrolledToBottom} />
-      {/* 일정 추가 버튼 */}
-      <FloatingWriteButton
-        hidden={hidden}
-        selectedDate={selectedDate}
-        onSelectDate={setSelectedDate}
-      />
-    </View>
+    <LinearGradient
+      colors={['#F6FAFF', '#F6FAFF']}
+      style={{flex : 1}}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+    >
+      <View style={styles.block}>
+        {/* 달력 뷰 */}
+        <CalendarView
+          markedDates={markedDates}
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+        />
+        {/* 일정 목록 */}
+        <FeedList logs={filteredLogs} onScroll={onScrolledToBottom} />
+        {/* 일정 추가 버튼 */}
+        <FloatingWriteButton
+          hidden={hidden}
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+        />
+      </View>
+    </LinearGradient>
   );
 }
 

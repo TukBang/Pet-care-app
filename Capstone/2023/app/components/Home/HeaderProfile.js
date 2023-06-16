@@ -7,7 +7,7 @@ function HeaderProfile({ user, onPress }) {
   return (
     <>
     <View style={styles.container}>
-      <Text style={styles.textStyle}>{user.isExpert ? '전문가' : '일반회원'}</Text>
+      <Text style={styles.textStyle}>{user.isExpert ? 'Expert+' : '일반회원'}</Text>
       <Icon style={styles.iconImage} name='help-outline' size={53} />
       <View style={styles.block}>
         <Pressable onPress={onPress} style={styles.press}>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     marginRight: 40,
     top: 3,
     right: 33,
-    color: 'gray',
+    color: '#2296F3',
   },
 
   textStyle: {

@@ -33,7 +33,7 @@ function CheckList({ setModalVisible }) {
     setData(data.map((item) => (item.id === id ? { ...item, checked: !item.checked } : item)));
 
     if (buttonColor === "#DFDFDF") {
-      setButtonColor("#2296F3");
+      setButtonColor("#3A8DF8");
       setButtonTextColor("#FFFFFF");
       setButtonText1("진단 시작하기");
     } else {
@@ -85,7 +85,7 @@ function CheckList({ setModalVisible }) {
         </TouchableOpacity>
 
         <TouchableOpacity 
-          style={[styles.button, { backgroundColor: "#2296F3" }]}
+          style={[styles.button, { backgroundColor: "#3A8DF8" }]}
           onPress={goChatBot}>
           <Text style={[styles.buttonText, { color: "#FFFFFF" }]}>{buttonText2}</Text>
         </TouchableOpacity>

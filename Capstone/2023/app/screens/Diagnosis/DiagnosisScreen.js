@@ -188,7 +188,7 @@ const diagnosisSelectStyles = StyleSheet.create({
     borderRadius: 5,
 
     // 배경색
-    backgroundColor: "#2296F3",
+    backgroundColor: "#3A8DF8",
   },
 
   // 버튼 텍스트

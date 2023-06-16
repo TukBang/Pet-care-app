@@ -46,8 +46,8 @@ function CalendarView({ markedDates, selectedDate, onSelectDate }) {
     [selectedDate]: {
       selected: true,
       marked: markedDates[selectedDate]?.marked,
-      selectedColor: "#FFA000",
-      dotColor: "#189AF2",
+      selectedColor: "#3A8DF8",
+      dotColor: "#3A8DF8",
     },
   };
 
@@ -62,8 +62,8 @@ function CalendarView({ markedDates, selectedDate, onSelectDate }) {
             onSelectDate(day.dateString);
           }}
           theme={{
-            todayTextColor: "#189AF2",
-            arrowColor: "#FFA000",
+            todayTextColor: "#3A8DF8",
+            arrowColor: "#3A8DF8",
             textDayFontFamily: "NotoSansKR-Regular",
             textMonthFontFamily: "NotoSansKR-Regular",
             textDayHeaderFontFamily: "NotoSansKR-Regular",
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
 
     // 밑줄
     borderBottomWidth: 3,
-    borderBottomColor: "#E0E0E0",
+    borderBottomColor: "#C0CDDF",
   },
 });
 

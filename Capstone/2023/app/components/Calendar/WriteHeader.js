@@ -41,7 +41,7 @@ function WriteHeader({
     <View style={styles.header}>
       {/* 뒤로가기 버튼 */}
       <View style={styles.iconButtonWrapper}>
-        <TransparentCircleButton onPress={onGoBack} name="arrow-back" color="#FFA000" />
+        <TransparentCircleButton onPress={onGoBack} name="arrow-back" color="#3A8DF8" />
       </View>
 
       <View style={styles.buttonContainer}>
@@ -95,7 +95,7 @@ function WriteHeader({
             onPress={onAskRemove}
           />
         )}
-        <TransparentCircleButton name="check" color="#FFA000" onPress={onSave} />
+        <TransparentCircleButton name="check" color="#3A8DF8" onPress={onSave} />
       </View>
     </View>
     
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
 
     // 밑줄
     borderBottomWidth: 2,
-    borderBottomColor: "#E0E0E0",
+    borderBottomColor: "#C0CDDF",
   },
 
   // 뒤로가기 버튼
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     height: 20,
     width: 120,
     borderRadius: 5,
-    backgroundColor: "#FFA000",
+    backgroundColor: "#FFFFFF",
   },
 
   // 시간 버튼
@@ -156,11 +156,11 @@ const styles = StyleSheet.create({
     height: 20,
     width: 72,
     borderRadius: 5,
-    backgroundColor: "#FFA000",
+    backgroundColor: "#FFFFFF",
   },
 
   Text: {
-    color: "#FFFFFF",
+    color: "#000000",
   },
 });
 
