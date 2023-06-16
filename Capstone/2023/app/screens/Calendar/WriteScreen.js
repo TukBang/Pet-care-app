@@ -80,6 +80,7 @@ function WriteScreen({ route }) {
         // date: selectedDate.toISOString(),
       });
     }
+    events.emit("Calrefresh");
     navigation.pop();
   };
 

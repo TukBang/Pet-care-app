@@ -1,34 +1,70 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image } from "react-native";
 // import { useUserContext } from "../../contexts/UserContext";
 import { useNavigation } from "@react-navigation/native";
 import useCal from "../../hooks/calendar/useCal";
 import { useEffect } from "react";
+import { getNextClosestWalkingByUser } from "../../lib/walkInfo";
+import useWalk from "../../hooks/walking/useWalk";
 
 // 홈 화면을 구성하는 요소 - 기능 요약의 형태
 
 function SimpleTodo() {
 
   const { onecal } = useCal();
+  const { walk } = useWalk()
   const navigation = useNavigation();
+
   const [todoRecent, setTodoRecent ] = useState(null)
-  console.log('onecal',onecal)
-  // console.log('onecal_stime',onecal.s_time)
-  // console.log('todoRecent',todoRecent)
+  const [ afterDay, setAfterDay] = useState()
+  const [ todo, setTodo ] = useState()
+
   const [ recentDiagnosis, setRecentDiagnosis ] = useState()
   const [ isWalked, setIsWalked ] = useState(false);
-  const [ whenWalked, setWhenWalked ] = useState('')
+  const [ walkedRecent, setWalkedRecent ] = useState()
+  const [ beforeDay, setBeforeDay] = useState()
+
 
   useEffect(() =>{
     if (onecal) {
-      const date = new Date(onecal.s_time.seconds * 1000).toLocaleString()
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      };
+      const recentDate = new Date(onecal.s_time.seconds * 1000)
+      const today= new Date()
+      const diffInMilliseconds = Math.abs(recentDate - today);
+      const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+      setAfterDay(diffInDays)
       // date.get
-      setTodoRecent(date)
+      setTodoRecent(recentDate.toLocaleString('ko-KR', options))
+      setTodo(onecal.memo)
     }
     else {
       setTodoRecent(null)
+      setAfterDay(null)
     }
   },[onecal])
+
+  useEffect(() => {
+    if (walk) {
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      };
+      const recentDate = new Date(walk.createdAt.seconds * 1000)
+      const today= new Date()
+      const diffInMilliseconds = Math.abs(recentDate - today);
+      const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+      setWalkedRecent(recentDate.toLocaleString('ko-KR', options))
+      setBeforeDay(diffInDays)
+    } else {
+      setWalkedRecent(null)
+      setBeforeDay(null)
+    }
+},[walk])
 
   const onPressCalendar = () => {
     navigation.navigate("CalendarScreen")
@@ -53,10 +89,17 @@ function SimpleTodo() {
       <View style={Boxstyles.boxContainer}>
         <TouchableOpacity onPress={() => onPressCalendar()} style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
             <Text style={Boxstyles.boxTitle}>최근 일정</Text>
-            <Text style={Boxstyles.boxSentence}>{todoRecent ? todoRecent : '일정이 없어요!'}</Text>
+              {!todoRecent ? (
+              <Text style={Boxstyles.boxSentence}>일정이 없어요!</Text>
+              ) : (
+              <>
+                <Text style={Boxstyles.boxSentence}>{afterDay ? afterDay+'일 뒤에' : '오늘' } 일정이 있어요!</Text>
+                <Text style={Boxstyles.boxSentence}>{todo}</Text>
+              </>
+              )}
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onPressWalking()} style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
-          {isWalked ? (
+          {beforeDay === 0 ? (
             <>
               <Text style={[Boxstyles.boxTitle,{fontSize: 20}]}>오늘도 즐거웠어요!</Text>
               <Text style={Boxstyles.boxSentence}>내일도 같이가요!</Text>
@@ -64,13 +107,10 @@ function SimpleTodo() {
           ): (
             <>
               <Text style={Boxstyles.boxTitle}>산책 해주세요!</Text>
-              {
-                // <Text style={Boxstyles.boxSentence}>기다리고 있어요!</Text>}
-              }
             </>
           )}
           <Text style={Boxstyles.boxSentence}>마지막 산책 : </Text>
-          <Text style={Boxstyles.boxSentence}>{whenWalked ? whenWalked : '아직 산책을 하지 않았어요!'}</Text>
+          <Text style={Boxstyles.boxSentence}>{walkedRecent && beforeDay===0 ? '오늘' : beforeDay+'일 전'}</Text>
           <Image style={Boxstyles.image} source={require("../../assets/dog_walking.png")} />
         </TouchableOpacity>
       </View>
@@ -82,20 +122,11 @@ function SimpleTodo() {
       <View style={Boxstyles.boxContainer}>
         <TouchableOpacity onPress={() => onPressDiagnosis()} style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
             <Text style={Boxstyles.boxTitle}>진단 기록</Text>
-            <Text style={Boxstyles.boxSentence}>{recentDiagnosis ? recentDiagnosis : '진단 기록이 없어요!'}</Text>
+            <Text style={Boxstyles.boxSentence}>{recentDiagnosis ? recentDiagnosis : '진단 기록 보러가기'}</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onPressConsult()} style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
-          {isWalked ? (
-            <>
-              <Text style={[Boxstyles.boxTitle,{fontSize: 20}]}>오늘도 즐거웠어요!</Text>
-              <Text style={Boxstyles.boxSentence}>내일도 같이가요!</Text>
-            </>
-          ): (
-            <>
               <Text style={Boxstyles.boxTitle}>상담 하기</Text>
               <Text style={Boxstyles.boxSentence}>전문가에게 상담해보세요!</Text>
-            </>
-          )}
 
         </TouchableOpacity>
       </View>

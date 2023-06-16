@@ -17,6 +17,7 @@ import { useUserContext } from "../../contexts/UserContext";
 import { createWalkInfo } from "../../lib/walkInfo";
 import MapInfo from "./MapInfo";
 import MapUploadModal from "./MapUploadModal";
+import events from "../../lib/events";
 
 var initLatitude = 35.44376;            // 이 부분은 아래 주석이 활성화되면 null으로 변경
 var initLongitude = 139.63766833333332; // 이 부분은 아래 주석이 활성화되면 null으로 변경
@@ -256,6 +257,7 @@ function AnimatedMarkers() {
   
       setResultImage(result);
       setIsModalVisible(true);
+      events.emit('Walkrefresh')
     }
   }; 
 
