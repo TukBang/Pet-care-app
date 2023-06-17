@@ -22,62 +22,59 @@ function PostCard({ user, category, title, photoURL, description, createdAt, id 
   return (
     <>
       <View style={styles.paddingBlock}>
-      <View style={styles.tail}>
-          <Pressable style={styles.profile} onPress={onOpenProfile}>
-            <Image
-              source={
-                user.photoURL
-                  ? {
-                      uri: user.photoURL,
-                    }
-                  : require("../../assets/user.png")
-              }
-              resizeMode="cover"
-              style={styles.avatar}
-            />
-            <Text style={styles.displayName}>{user.displayName}</Text>
-          </Pressable>
-          <Text date={date} style={styles.date}>
-            {date.toLocaleString()}
-          </Text>
-        </View>
-        <Pressable onPress={onOpenBoard}>
-          <View style={styles.head}>
-            {/* 카테고리 여부에 따라 다르게 표기 */}
-            <View style={styles.textContainer}>
-            <View style={styles.cateContainer}>
-              <View style={styles.categoryContainer}>
-                {category ? (
-                  <Text numberOfLines={2} ellipsizeMode="tail" style={styles.categoryTitle}>
-                    {category}
+        <View style={styles.tail}>
+            <Pressable style={styles.profile} onPress={onOpenProfile}>
+              <Image
+                source={
+                  user.photoURL
+                    ? {
+                        uri: user.photoURL,
+                      }
+                    : require("../../assets/user.png")
+                }
+                resizeMode="cover"
+                style={styles.avatar}
+              />
+              <Text style={styles.displayName}>{user.displayName}</Text>
+            </Pressable>
+            <Text date={date} style={styles.date}>
+              {date.toLocaleString()}
+            </Text>
+          </View>
+          <Pressable onPress={onOpenBoard}>
+            <View style={styles.head}>
+              {/* 카테고리 여부에 따라 다르게 표기 */}
+              <View style={styles.textContainer}>
+              <View style={styles.cateContainer}>
+                <View style={styles.categoryContainer}>
+                  {category ? (
+                    <Text numberOfLines={2} ellipsizeMode="tail" style={styles.categoryTitle}>
+                      {category}
+                    </Text>
+                  ) : (
+                    <Text style={styles.categoryTitle}>[없음]</Text>
+                  )}
+                </View>
+                <View style={styles.titleContainer}>
+                  <Text numberOfLines={2} ellipsizeMode="tail" style={styles.boardTitle}>
+                    {title}
                   </Text>
-                ) : (
-                  <Text style={styles.categoryTitle}>[없음]</Text>
-                )}
-              </View>
-              <View style={styles.titleContainer}>
-                <Text numberOfLines={2} ellipsizeMode="tail" style={styles.boardTitle}>
-                  {title}
+                </View>
+                </View>
+                {/* 게시글 내용 */}
+                <Text numberOfLines={3} ellipsizeMode="tail" style={styles.description}>
+                  {description}
                 </Text>
               </View>
-              </View>
-              {/* 게시글 내용 */}
-              <Text numberOfLines={3} ellipsizeMode="tail" style={styles.description}>
-                {description}
-              </Text>
+              <Image
+                source={{ uri: photoURL }}
+                style={styles.image}
+                resizeMethod="resize"
+                resizeMode="cover"
+              />
             </View>
-            <Image
-              source={{ uri: photoURL }}
-              style={styles.image}
-              resizeMethod="resize"
-              resizeMode="cover"
-            />
-
-          </View>
-        </Pressable>
-        {/* 프사 + 닉네임 + date */}
-        
-      </View>
+          </Pressable>
+        </View>
       <View style={styles.border} />
     </>
   );

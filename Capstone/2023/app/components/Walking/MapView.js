@@ -4,6 +4,9 @@ import {
   View,
   Text,
   TouchableOpacity,
+  Modal,
+  Pressable,
+  ActivityIndicator
 } from "react-native";
 import MapView, { Marker, AnimatedRegion, Polyline, PROVIDER_GOOGLE, MapStyle } from "react-native-maps";
 
@@ -18,6 +21,7 @@ import { createWalkInfo } from "../../lib/walkInfo";
 import MapInfo from "./MapInfo";
 import MapUploadModal from "./MapUploadModal";
 import events from "../../lib/events";
+import { useNavigation } from "@react-navigation/native";
 
 var initLatitude = 35.44376;            // 이 부분은 아래 주석이 활성화되면 null으로 변경
 var initLongitude = 139.63766833333332; // 이 부분은 아래 주석이 활성화되면 null으로 변경
@@ -46,8 +50,13 @@ let count = 0;
 //   console.log("#0-----------------------------------------------------------------------------");
 // });
 
-function AnimatedMarkers() {
+function AnimatedMarkers({setWalkingStart}) {
   // 변수 부문 ----------------------------------------------------------------------------------------------------------------------------------
+
+  // 맵 로딩 관련 useState 변수
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(false);
+
   // 위치 관련 useState 변수
   const [latitude, setLatitude] = useState(initLatitude);        // 위도 값
   const [longitude, setLongitude] = useState(initLongitude);     // 경도 값
@@ -57,6 +66,7 @@ function AnimatedMarkers() {
   const [kcal, setKcal] = useState(0);                           // 칼로리
   const [startTime, setStartTime] = useState(null);              // 시작 시간
   const [elapsedTime, setElapsedTime] = useState(0);             // 경과 시간
+  const [isLoading, setIsLoading] = useState(false);             // 로딩 중 
 
   // 시작 상태 및 결과 모달 관련 useState 변수
   const [isTracking, setIsTracking] = useState(false);           // 위치 기록 추적 상태 변수
@@ -66,6 +76,9 @@ function AnimatedMarkers() {
   // 사용자 ID 가져오기
   const {user} = useUserContext();
   const uid = user["id"];
+
+  // 이동 관련 변수
+  const navigation = useNavigation();
 
   // 좌표 구조체 변수 선언
   const coordinate = useRef(new AnimatedRegion({
@@ -257,12 +270,13 @@ function AnimatedMarkers() {
   
       setResultImage(result);
       setIsModalVisible(true);
-      events.emit('Walkrefresh')
+      
     }
   }; 
 
   // 산책 정보 저장하기
   const handleSaveWalkInfo = async () => {
+    setIsLoading(true);
     const extension = resultImage.split(".").pop();
     var reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
 
@@ -282,12 +296,14 @@ function AnimatedMarkers() {
       userID: uid, 
       walkingImage: walkImage
     });
+    setIsLoading(false)
   };
   
   // 모달을 숨기는 함수
   const hideModal = async () => {
     setIsModalVisible(true);
     await handleSaveWalkInfo();
+    events.emit('Walkrefresh')
     setIsModalVisible(false);
     
     // 나머지 코드들 실행
@@ -298,9 +314,20 @@ function AnimatedMarkers() {
     count = 0;               // 카운트 초기화
     setKcal(0);              // 칼로리 초기화
     setIsModalVisible(false);
+    setWalkingStart(false);
   };  
 
-  // useEffect 부문 ----------------------------------------------------------------------------------------------------------------------------------
+  // useEffect 부문 ---------------------------------------------------------------------------------------------------------------------------------
+
+  useEffect(() => {
+    // 로딩 딜레이 시뮬레이션을 위한 setTimeout
+    const delay = setTimeout(() => {
+      setMapLoaded(true);
+    }, 2000);
+
+    return () => clearTimeout(delay);
+  }, []);
+
   useEffect(() => {
     // iOS에서 위치 권한 요청을 스킵
     Geolocation.setRNConfiguration({skipPermissionRequests: true});
@@ -378,7 +405,15 @@ function AnimatedMarkers() {
         <TouchableOpacity onPress={stopTracking}>
           <Text>중단</Text>
         </TouchableOpacity>
-        
+        {!mapLoaded &&
+            <Modal transparent={true} animationType="fade">
+              <Pressable style={styles.background}>
+                <View style={styles.loading}>
+                  <ActivityIndicator size="large" />
+                </View>
+              </Pressable>
+            </Modal>
+        }
         <MapView
           style={styles.map}
           provider={PROVIDER_GOOGLE}
@@ -396,15 +431,21 @@ function AnimatedMarkers() {
             image
           />
         </MapView>
-
         {/* 산책 정보 기록 Contatiner */}
-        <MapInfo elapsedTime={elapsedTime} distanceTravelled={distanceTravelled} kcal={kcal}/>
-
+        <MapInfo 
+          elapsedTime={elapsedTime} 
+          distanceTravelled={distanceTravelled}
+          kcal={kcal}
+        />
         <Text>{latitude}</Text>
         <Text>{longitude}</Text>
-
       </View>
-      <MapUploadModal isModalVisible={isModalVisible} hideModal={hideModal} resultImage={resultImage} />
+      <MapUploadModal 
+        isModalVisible={isModalVisible} 
+        hideModal={hideModal} 
+        resultImage={resultImage} 
+        isLoading={isLoading}
+      />
     </>
   );
 };

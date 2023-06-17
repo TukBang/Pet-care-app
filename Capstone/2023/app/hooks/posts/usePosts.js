@@ -48,12 +48,15 @@ export default function usePosts(category, isExpert) {
   );
 
   useEffect(() => {
-    getPosts(category).then((_posts) => {
+    setPosts(null);
+    setNoMorePost(false);
+    getPosts(category, isExpert).then((_posts) => {
       setPosts(_posts);
       if (_posts.length < PAGE_SIZE) {
         setNoMorePost(true);
       }
     });
+    
   }, [category]);
 
   const updatePost = useCallback(

@@ -1,17 +1,25 @@
-import { Modal,Pressable, View, Text, Image, Button, StyleSheet } from "react-native"
+import { Modal,Pressable, View, Text, Image, Button, StyleSheet, ActivityIndicator } from "react-native"
 
-function MapUploadModal({isModalVisible, hideModal, resultImage}) {
+function MapUploadModal({isModalVisible, hideModal, resultImage, isLoading}) {
 
     return (
     <Modal visible={isModalVisible} onRequestClose={hideModal} transparent={true} animationType="fade">
         <Pressable style={styles.background} onPress={hideModal}>
-        <View style={styles.whiteBox}>
+          <View style={styles.whiteBox}>
             <Text>산책 내용 저장</Text>
             <Image source={{uri: resultImage}} style={styles.image} resizeMode="contain"/>
             <Button title="닫기" onPress={hideModal} />
             {/* Activity Indicator 표시 */}
-            {/* {isSavingWalkInfo && <ActivityIndicator />} */}
-        </View>
+            {isLoading && (
+            <Modal transparent={true} animationType="fade">
+              <Pressable style={styles.background}>
+                <View style={styles.loading}>
+                  <ActivityIndicator size="large" />
+                </View>
+              </Pressable>
+            </Modal>
+          )}
+          </View>
         </Pressable>
     </Modal>
     )

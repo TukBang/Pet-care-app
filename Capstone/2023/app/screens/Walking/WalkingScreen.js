@@ -28,7 +28,7 @@ const WalkingScreen = () => {
         <View
           style={styles.container}
         >
-          <AnimatedMarkers />
+          <AnimatedMarkers setWalkingStart={setWalkingStart}/>
         </View>
       )
     }

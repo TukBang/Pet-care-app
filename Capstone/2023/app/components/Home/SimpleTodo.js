@@ -29,12 +29,13 @@ function SimpleTodo() {
   const diagnosisText = recentDiagnosis ? recentDiagnosis : '진단 기록 바로 가기';
 
   useEffect(() =>{
-    if (onecal) {
+    if (onecal && onecal.createdAt !== null) {
       const options = {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
       };
+      console.log(onecal)
       const recentDate = new Date(onecal.s_time.seconds * 1000)
       const today= new Date()
       const diffInMilliseconds = Math.abs(recentDate - today);
@@ -43,20 +44,20 @@ function SimpleTodo() {
       // date.get
       setTodoRecent(recentDate.toLocaleString('ko-KR', options))
       setTodo(onecal.memo)
-    }
-    else {
+    } else {
       setTodoRecent(null)
       setAfterDay(null)
     }
   },[onecal])
 
   useEffect(() => {
-    if (walk) {
+    if (walk && walk.createdAt !== null) {
       const options = {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
       };
+      console.log(walk)
       const recentDate = new Date(walk.createdAt.seconds * 1000)
       const today= new Date()
       const diffInMilliseconds = Math.abs(recentDate - today);

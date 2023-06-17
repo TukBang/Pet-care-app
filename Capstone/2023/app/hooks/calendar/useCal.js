@@ -25,7 +25,7 @@ export default function useCal(userId) {
 
   //새로고침
   const onRefresh = useCallback(async () => {
-    if (!cal || cal.length === 0 || refreshing) {
+    if (!onecal || onecal.length === 0 || refreshing) {
       return;
     }
     const firstCal = onecal;
