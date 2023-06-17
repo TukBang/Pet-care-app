@@ -175,6 +175,7 @@ function UploadScreen() {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
+    backgroundColor: "#f6faff",
   },
 
   titleTextInput: {

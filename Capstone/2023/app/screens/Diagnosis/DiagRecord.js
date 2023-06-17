@@ -5,6 +5,9 @@ import useDiags from '../../hooks/diagnosisResult/useDiags';
 import auth from "@react-native-firebase/auth";
 import { useUserContext } from "../../contexts/UserContext";
 
+// 그라데이션
+import LinearGradient from 'react-native-linear-gradient';
+
 function DiagRecord() {
 
     const [results, setResults] = useState([]);
@@ -24,6 +27,13 @@ function DiagRecord() {
 
 
         <>
+          <LinearGradient
+            colors={['#f6faff', '#f6faff']}
+            // colors={['#F0F8FF', '#D1EEFD']}
+
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          >
             {/* <Text>{auth().currentUser.uid}</Text> */}
             {/* <Text>{user.id}</Text> */}
             <FlatList
@@ -38,6 +48,7 @@ function DiagRecord() {
             }
             refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}
             />
+            </LinearGradient>
         </>
     )
 

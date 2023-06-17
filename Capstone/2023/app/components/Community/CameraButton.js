@@ -16,7 +16,6 @@ const imagePickerOption = {
 };
 
 // CommunityScreen 에서 게시물 추가하기 위한 모달을 띄우는데 사용
-
 function CameraButton() {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();

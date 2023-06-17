@@ -53,7 +53,13 @@ function CheckList({ setModalVisible }) {
   };
 
   return (
-    <View style={styles.headerView}>
+    <LinearGradient
+      colors={['#f6faff', '#f6faff']}
+      // colors={['#F0F8FF', '#D1EEFD']}
+
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+    >
       {/* 버튼 상단 진단 설명 및 유의사항 */}
       <FlatList
         data={data}
@@ -90,11 +96,14 @@ function CheckList({ setModalVisible }) {
           <Text style={[styles.buttonText, { color: "#FFFFFF" }]}>{buttonText2}</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  headerView: {
+  },
+
   // 유의사항
   header: {
     // 여백
@@ -151,6 +160,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 30,
     marginRight: 30,
+    marginBottom: 500,
   },
 
   // 버튼

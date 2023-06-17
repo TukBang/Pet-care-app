@@ -51,7 +51,7 @@ function PetProfile({ route }) {
         resizeMode="cover"
         style={styles.petImage} />
         <View style={styles.petInfoContainer}>
-          <Text style={styles.petName}>{petInfo.petName} 아 반가워</Text>
+          <Text style={styles.petName}>{petInfo.petName}야 반가워</Text>
           <Text>무게 : {petInfo.petWeight}</Text>
           <Text>나이 : {petInfo.petAge}</Text>
           <Text>성별 : {petInfo.petGender}</Text>
@@ -75,9 +75,12 @@ function PetProfile({ route }) {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#f6faff",
   },
   petImageContainer: {
+    margin: 20,
     flexDirection: "row",
     marginBottom: 20,
   },

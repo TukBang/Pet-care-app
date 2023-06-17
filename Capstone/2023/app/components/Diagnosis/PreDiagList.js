@@ -73,9 +73,7 @@ function PreDiagList(props) {
     setPetModalVisible(false);
     setModalVisible(true)
   };
-
-
-
+  
   return (
     <View>
       <CheckList setModalVisible={setPetModalVisible} />
@@ -119,6 +117,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
   whiteBox: {
     width: 300,
     paddingVertical: 10,
@@ -127,11 +126,13 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     elevation: 2,
   },
+
   petSelect: {
     width: '100%',
     paddingHorizontal: 10,
     flexDirection: 'row'
   },
+
   petImage: {
     width: 30,
     height: 30,

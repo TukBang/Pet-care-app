@@ -167,7 +167,7 @@ function WriteScreen({ route }) {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#F6FAFF",
   },
 
   avoidingView: {

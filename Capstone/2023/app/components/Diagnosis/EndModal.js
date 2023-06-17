@@ -4,7 +4,7 @@ import { StyleSheet, Modal, View, Pressable, Text } from "react-native";
 // 진단 후 게시물을 업로드 하고 난 뒤 나오는 모달
 
 function EndModal({ visible, onClose }) {
-  //모달 문구
+  // 모달 문구
   let modalheader = `상담 게시글이 업로드 되었어요!`;
   let modalsentence1 = `게시글을 확인하려면 카테고리를 확인해주세요.`;
   let modalsentence2 = `확인 버튼을 누르면 홈으로 돌아가요.`;

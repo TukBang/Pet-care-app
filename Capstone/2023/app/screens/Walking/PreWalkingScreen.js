@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, } from "re
 import { useUserContext } from "../../contexts/UserContext";
 // 저장된 펫 정보를 불러오기위해 사용
 import { getPetInfoByUserID } from "../../lib/petInfo";
+import LinearGradient from 'react-native-linear-gradient';
 
 const PreWalkingScreen = ({onPress}) => {
   const [walkingStart, setWalkingStart] = useState(false);
@@ -38,8 +39,14 @@ const PreWalkingScreen = ({onPress}) => {
   }, [user, petList]);
 
   return (
+    <LinearGradient
+      colors={['#f6faff', '#f6faff']}
+      // colors={['#F0F8FF', '#D1EEFD']}
+
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+    >
     <View style={styles.container}>
-      <Image source={require('../../assets/google-maps-blur.png')} style={styles.backgroundImage} />
       <Text style={styles.header}>함께 산책하기</Text>
       <ScrollView 
         horizontal={true}
@@ -67,6 +74,7 @@ const PreWalkingScreen = ({onPress}) => {
         </TouchableOpacity>
       </View>
     </View>
+    </LinearGradient>
   );
 };
 

@@ -105,12 +105,12 @@ function SimpleTodo() {
         <TouchableOpacity onPress={() => onPressWalking()} style={[Boxstyles.boxView2, {marginRight : 7.5}]} activeOpacity={0.8}>
           {beforeDay === 0 ? (
             <>
-              <Text style={[Boxstyles.boxTitle, {fontSize: 20}]}>오늘도 즐거웠어요!</Text>
+              <Text style={[Boxstyles.boxTitle, {fontSize: 20}]}>산책 하러 가기</Text>
               <Text style={Boxstyles.boxSentence}>내일도 같이가요!</Text>
             </>
           ): (
             <>
-              <Text style={Boxstyles.boxTitle}>산책 해주세요!</Text>
+              <Text style={Boxstyles.boxTitle}>산책하러 가기</Text>
             </>
           )}
           <Text style={Boxstyles.boxSentence}>{walkText}</Text>

@@ -96,7 +96,7 @@ function ProfileSetting() {
           style={styles.avatar}
         />
         <View style={styles.userInfo}>
-          <Text style={styles.name}>{user.displayName} 님 반갑습니다!</Text>
+          <Text style={styles.name}>{user.displayName}님 반갑습니다!</Text>
           <Text>가입 일자 : {formattedDate}</Text>
           <Text>지금까지 {dayDiff}일 동안 함께 하셨습니다</Text>
         </View>
@@ -134,26 +134,34 @@ function ProfileSetting() {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#f6faff",
   },
+
   profile: {
+    margin: 20,
     flexDirection: "row",
     marginBottom: 20,
   },
+
   avatar: {
     width: 70,
     height: 70,
     borderRadius: 45,
     marginRight: 10,
   },
+  
   name: {
     fontWeight: "bold",
     fontSize: 20,
     // marginLeft:10,
   },
+
   userInfo: {
     marginLeft: 10,
   },
+
   border: {
     height: 1,
     backgroundColor: "gray",
@@ -162,17 +170,20 @@ const styles = StyleSheet.create({
     // marginRight: 20,
     marginTop: 10,
   },
+
   content: {
     height: 60,
     flexDirection: "row",
     alignItems: "center",
     // justifyContent: "center",
   },
+
   icon: {
     marginLeft: 10,
     marginRight: 10,
     // color: 'red',
   },
+
   logout: {
     color: "red",
   },

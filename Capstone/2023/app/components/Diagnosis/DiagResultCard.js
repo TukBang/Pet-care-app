@@ -29,11 +29,11 @@ function DiagResultCard({
       <View style={styles.paddingBlock}>
         <View style={styles.header}>
           <Image
-                  source={{ uri: petImage}}
-                  style={styles.image1}
-                  resizeMethod="resize"
-                  resizeMode="cover"
-                  />
+            source={{ uri: petImage}}
+            style={styles.image1}
+            resizeMethod="resize"
+            resizeMode="cover"
+          />
           <Text style={styles.name}>{petName}</Text>
         </View>
         <View style={styles.profile}>
@@ -65,6 +65,7 @@ function DiagResultCard({
     </>
   );
 }
+
 const styles = StyleSheet.create({
   // 펫 프로필 이미지와 펫 이름 뷰 스타일
   header: {
@@ -100,7 +101,6 @@ const styles = StyleSheet.create({
   petProfile:{
     width: '50%',
     marginTop: 10,
-    
   },
 
   text:{
@@ -117,15 +117,18 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 20,
   },
+
   avatar: {
     width: 15,
     height: 15,
     borderRadius: 16,
     // alignSelf:'right'
   },
+
   paddingBlock: {
     paddingHorizontal: 16,
   },
+
   head: {
     // flexDirection: "row",
     marginTop: 16,
@@ -133,14 +136,17 @@ const styles = StyleSheet.create({
     // marginBotton: 20,
     // paddingBotton: 14,
   },
+
   tail: {
     flexDirection: "row",
     marginBottom: 10,
   },
+
   profile: {
     flexDirection: "row",
     // alignItems: 'center',
   },
+
   displayName: {
     // lineHeight: 20,
     fontSize: 13,
@@ -148,12 +154,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     justifyContent: "space-between",
   },
+
   boardTitle: {
     // lineHeight: 20,
     fontSize: 16,
     marginLeft: 6,
     fontWeight: "bold",
   },
+
   image: {
     backgroundColor: "#bdbdbd",
     width: "65%",
@@ -163,11 +171,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 10,
   },
+
   description: {
     fontSize: 16,
     // lineHeight: 24,
     marginLeft: 8,
   },
+  
   date: {
     color: "#757575",
     fontSize: 12,

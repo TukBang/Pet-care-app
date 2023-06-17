@@ -10,10 +10,7 @@ import { v4 } from "uuid";
 import events from "../../lib/events";
 import LinearGradient from "react-native-linear-gradient";
 
-
-
-
-  function DiagIngScreen ({
+function DiagIngScreen ({
     aiResult,setAiResult,
     petList,uid,
     selectedImage, setSelectedImage,
