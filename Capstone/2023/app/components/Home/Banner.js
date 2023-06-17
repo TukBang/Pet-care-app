@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         borderRadius: 10,
         width: '100%',
-        height: '12%',
+        // height: '12%',
         padding: 10,
         alignSelf: 'center',
         marginBottom: 25,
@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
     },
 
     tutorialButton: {
-        top: 35,
-        marginTop: 10,
+        // top: 35,
+        marginTop: 45,
         backgroundColor: "#3A8DF0",
         alignItems: 'center',
         paddingHorizontal: 5,
