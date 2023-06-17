@@ -1,31 +1,26 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TouchableWithoutFeedback } from "react-native";
 import { useUserContext } from "../../contexts/UserContext";
 // 저장된 펫 정보를 불러오기위해 사용
 import { getPetInfoByUserID } from "../../lib/petInfo";
 import LinearGradient from 'react-native-linear-gradient';
 
-const PreWalkingScreen = ({onPress}) => {
+const PreWalkingScreen = ({ onPress }) => {
   const [walkingStart, setWalkingStart] = useState(false);
   const [isWalked, setIsWalked] = useState(false);
 
-  // 펫 정보 불러오기 위함
   const [petList, setPetList] = useState([]);
-
-  // user uid 를 위해 사용
   const { user } = useUserContext();
   const uid = user["id"];
 
-  // 버튼을 눌렀을 때, 함수
   const [isPressed, setIsPressed] = useState(null);
-  // 펫 정보 불러오기
+
+  const [selectedPet, setSelectedPet] = useState(null);
+
   useEffect(() => {
     if (user) {
-      // uid를 통해서 펫 정보 가져옴
       getPetInfoByUserID(uid)
         .then((pets) => {
-          // createdAt 값이 null인 경우를 대비하여 예외처리 추가 (에러방지)
-          // 펫 정보 오름차순 정렬
           const sortedPets = pets.sort((a, b) => {
             const dateA = a.createdAt ? a.createdAt.toDate() : 0;
             const dateB = b.createdAt ? b.createdAt.toDate() : 0;
@@ -36,44 +31,56 @@ const PreWalkingScreen = ({onPress}) => {
         })
         .catch((error) => console.error("펫 정보 불러오기 실패", error));
     }
-  }, [user, petList]);
+  }, [user]);
+
+  const handlePressPet = (petId) => {
+    setSelectedPet((prevPet) => (prevPet === petId ? null : petId));
+  };
 
   return (
     <LinearGradient
       colors={['#f6faff', '#f6faff']}
-      // colors={['#F0F8FF', '#D1EEFD']}
-
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
     >
-    <View style={styles.container}>
-      <Text style={styles.header}>함께 산책하기</Text>
-      <ScrollView 
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.scrollViewContent}
-      >
-        {petList.map((pet) => (
-          <TouchableOpacity 
-            key={pet.id} 
-            //onPress={() => handlePressPet(pet.id)} 
-            style={[styles.petListContainer ,isPressed ? styles.buttonPressed : null]}>
-            <View style={styles.petInfoContainer}>
-              <Image source={pet.petImage ? { uri: pet.petImage } : require("../../assets/dog.png")} style={styles.petImage} />
-              <Text style={styles.petText}>{pet.petName}</Text>
+      <View style={styles.container}>
+        <Text style={styles.header}>날씨</Text>
+        <View style={styles.box}>
+          <Text style={styles.boxText}>여기 날씨 보여주자구</Text>
+        </View>
+        <Text style={styles.header}>함께 산책하기</Text>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollViewContent}
+        >
+          {petList.map((pet) => (
+            <View
+              key={pet.id}
+              style={[
+                styles.petListContainer,
+                selectedPet !== pet.id && styles.blurContainer,
+                selectedPet === pet.id && styles.selectedPetContainer,
+              ]}
+            >
+              <TouchableWithoutFeedback onPressIn={() => handlePressPet(pet.id)}>
+                <View style={styles.petInfoContainer}>
+                  <Image
+                    source={pet.petImage ? { uri: pet.petImage } : require("../../assets/dog.png")}
+                    style={styles.petImage}
+                  />
+                  <Text style={[styles.petText, selectedPet === pet.id && styles.selectedPetText]}>{pet.petName}</Text>
+                </View>
+              </TouchableWithoutFeedback>
             </View>
+          ))}
+        </ScrollView>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={onPress} style={styles.Boxstyles}>
+            <Text style={styles.textStyle}>산책 시작</Text>
           </TouchableOpacity>
-        ))}
-      </ScrollView>
-      <View style={styles.box}>
-        <Text style={styles.boxText}>여기 이전 산책 기록 보여주면 좋을거 같아</Text>
+        </View>
       </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => onPress()} style={styles.Boxstyles}>         
-          <Text style={styles.textStyle}>산책 시작</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
     </LinearGradient>
   );
 };
@@ -166,12 +173,12 @@ const styles = StyleSheet.create({
 
   box:{
     width: 380,
-    height: 200,
+    height: 150,
     backgroundColor: '#DDDDDD',
     alignItems: 'center',
     alignSelf: 'center',
     elevation: 10,
-    marginBottom: 30,
+    marginBottom: 10,
     borderRadius: 15,
   },
 
@@ -179,8 +186,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     color: 'black',
-  }
+  },
 
+  petListContainer: {
+    width: 200,
+    marginHorizontal: 5,
+    alignItems: 'center',
+  },
+  blurContainer: {
+    opacity: 0.3, // 흐릿한 효과를 위한 투명도 조절
+  },
 })
 
 export default PreWalkingScreen;
