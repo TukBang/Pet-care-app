@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 
 import AnimatedMarkers from "../../components/Walking/MapView";
@@ -25,7 +25,9 @@ const WalkingScreen = () => {
           <PreWalkingScreen onPress={() => setWalkingStart(true)}/>
         </View>
       ) : (
-        <View>
+        <View
+          style={styles.container}
+        >
           <AnimatedMarkers />
         </View>
       )
@@ -34,5 +36,12 @@ const WalkingScreen = () => {
     </LinearGradient>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    height: "100%",
+  },
+});
 
 export default WalkingScreen;

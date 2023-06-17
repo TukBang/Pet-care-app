@@ -79,7 +79,11 @@ const PreWalkingScreen = ({onPress}) => {
 };
 
 const styles = StyleSheet.create({
- 
+  container: {
+    width: "100%",
+    height: "100%",
+  },
+
   header:{
     fontSize: 25,
     fontWeight: "bold",
@@ -131,7 +135,7 @@ const styles = StyleSheet.create({
 
   buttonContainer:{
     alignItems: 'center',
-    
+    marginBottom: 20,
   },
 
   Boxstyles: {
@@ -143,6 +147,7 @@ const styles = StyleSheet.create({
     padding: 15,
     elevation:10,
   },
+
   backgroundImage: {
     position: "absolute",
     top: 0,
@@ -152,6 +157,7 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     height: '105%',
   },
+
   textStyle: {
     fontSize: 15,
     fontWeight: "bold",
