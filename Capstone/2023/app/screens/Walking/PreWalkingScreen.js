@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TouchableWithoutFeedback } from "react-native";
 import { useUserContext } from "../../contexts/UserContext";
+
 // 저장된 펫 정보를 불러오기위해 사용
 import { getPetInfoByUserID } from "../../lib/petInfo";
 import LinearGradient from 'react-native-linear-gradient';
