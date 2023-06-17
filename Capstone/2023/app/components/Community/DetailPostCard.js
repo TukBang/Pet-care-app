@@ -9,7 +9,7 @@ import ActionSheetModal from "../ActionSheetModal";
 
 // 게시글을 렌더링하기 위해 사용
 // BoardScreen에서 사용
-
+import LinearGradient from "react-native-linear-gradient";
 
 function DetailPostCards({ user, category, title, photoURL, description, createdAt, id }) {
   // route에서 post에 대한 파라미터를 불러온다.
@@ -38,6 +38,14 @@ function DetailPostCards({ user, category, title, photoURL, description, created
 
   return (
     <>
+    <LinearGradient
+      colors={['#f6faff', '#f6faff']}
+      // colors={['#F0F8FF', '#D1EEFD']}
+
+      style={{flex : 1}}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+    >
       <View style={styles.block}>
         <View style={styles.head}>
           {/* 프로필 정보 및 제목이 들어가는 공간 */}
@@ -83,6 +91,7 @@ function DetailPostCards({ user, category, title, photoURL, description, created
       </View>
       {/* 게시글 수정 및 삭제 버튼이 있는 Modal, 아래 함수의 파라미터는 56번째 usePostAction() 부분을 참고하면 된다. */}
       <ActionSheetModal visible={isSelecting} actions={actions} onClose={onClose} />
+    </LinearGradient>
     </>
   );
 }

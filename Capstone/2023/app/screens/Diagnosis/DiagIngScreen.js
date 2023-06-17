@@ -8,7 +8,7 @@ import { createDiagnosisResult } from "../../lib/diagnosis";
 import storage from "@react-native-firebase/storage";
 import { v4 } from "uuid";
 import events from "../../lib/events";
-  
+import LinearGradient from "react-native-linear-gradient";
 
 
 
@@ -117,6 +117,14 @@ import events from "../../lib/events";
     
   return(
       <>
+      <LinearGradient
+        colors={['#f6faff', '#f6faff']}
+        // colors={['#F0F8FF', '#D1EEFD']}
+
+        style={{flex : 1}}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+      >
         <Text style={diagnosisSelectStyles.text1}>{DiagnosisText1}</Text>
         <Text style={diagnosisSelectStyles.text2}>{DiagnosisText2}</Text>
         <View style={diagnosisSelectStyles.imageView}>
@@ -154,6 +162,7 @@ import events from "../../lib/events";
             <Text style={diagnosisSelectStyles.buttonText}>{buttonText1}</Text>
           </TouchableOpacity>
         </View>
+      </LinearGradient>
       </>
 
     )

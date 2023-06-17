@@ -22,6 +22,7 @@ import { RefreshControl } from "react-native";
 import events from "../../lib/events";
 import CommentCard from "../../components/Community/CommentCard";
 import DetailPostCard from "../../components/Community/DetailPostCard";
+import LinearGradient from "react-native-linear-gradient";
 
 // CommunityScreen 에서 게시글을 클릭하면 나오는 화면
 // PostCard의 navigation.push 를 통해서 온다
@@ -130,6 +131,14 @@ function BoardScreen({ route }) {
   }, []);
 
   return (
+    <LinearGradient
+      colors={['#f6faff', '#f6faff']}
+      // colors={['#F0F8FF', '#D1EEFD']}
+
+      style={{flex : 1}}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 0 }}
+    >
     <View style={{ flex: 1 }}>
       <ScrollView 
         contentContainerStyle={ styles.scrollViewContent }
@@ -169,6 +178,7 @@ function BoardScreen({ route }) {
         <Button onPress={onSubmit} title="작성" />
       </View>
     </View>
+    </LinearGradient>
   );
 }
 

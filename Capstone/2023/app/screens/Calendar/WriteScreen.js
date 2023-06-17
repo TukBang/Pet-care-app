@@ -4,6 +4,7 @@ import { StyleSheet, View, KeyboardAvoidingView, Platform, Alert } from "react-n
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import events from "../../lib/events";
 import LogContext from "../../contexts/LogContext";
 import WriteHeader from "../../components/Calendar/WriteHeader";
 import WriteEditor from "../../components/Calendar/WriterEditor";

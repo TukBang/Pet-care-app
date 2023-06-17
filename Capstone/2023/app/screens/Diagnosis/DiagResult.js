@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from "rea
 import DiagModal from "../../components/Diagnosis/DiagModal";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import ProbChart from "../../components/Diagnosis/HorizontalBarChart";
-
+import LinearGradient from "react-native-linear-gradient";
 
 
 function DiagResult({
@@ -35,6 +35,14 @@ function DiagResult({
     }(이)가 의심됩니다.`);
     
     return (
+      <LinearGradient
+        colors={['#f6faff', '#f6faff']}
+        // colors={['#F0F8FF', '#D1EEFD']}
+
+        style={{flex : 1}}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+      >
       <View style={{ backgroundColor: 'f6faff' }}>
         {diagEnd ? (
           // 진단 결과 스크린
@@ -92,6 +100,7 @@ function DiagResult({
           <Text></Text>
         )}
       </View>
+      </LinearGradient>
     );
 }
 
