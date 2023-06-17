@@ -17,7 +17,8 @@ function Disease() {
         loop
         autoplayTimeout={3}
         containerStyle={styles.diseaseBox}
-        
+        dotStyle={styles.swiperDot} // Added dotStyle to customize the dot
+        activeDotStyle={styles.swiperActiveDot} // Added activeDotStyle to customize the active dot
         >
         <View style={styles.diseaseContent}>
           <Text style={styles.diseaseTitle}>다음은 진단 할 수 있는 질병이에요!</Text>
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
   diseaseBox: {
     marginTop: 10,
     // width: 370,
-    height: 200,
+    height: 240,
     width: "100%",
     // height: "30%",
     // marginRight: 20,
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
   },
 
   diseaseContent: {
-    padding: 10,
+    margin: 10,
   },
 
   diseaseTitle: {
@@ -152,6 +153,15 @@ const styles = StyleSheet.create({
   diseaseDescription: {
     fontSize: 14,
     color: "black",
+  },
+
+  swiperDot: {
+    marginBottom: 0, 
+  },
+
+  swiperActiveDot: {
+    marginBottom: 0, 
+    // backgroundColor: "blue",
   },
 });
 
