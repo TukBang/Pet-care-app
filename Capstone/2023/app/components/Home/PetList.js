@@ -47,6 +47,7 @@ function PetList() {
     petImage: require("../../assets/dog.png"),
   });
   const [showModal, setShowModal] = useState(false);
+
   // 펫 정보 불러오기 위함
   const [petList, setPetList] = useState([]);
   const animation = useRef(new Animated.Value(0)).current;
@@ -57,6 +58,9 @@ function PetList() {
 
   // 버튼을 눌렀을 때, 함수
   const [isPressed, setIsPressed] = useState(null);
+  
+  // Text 변수들
+  const petListText = "나의 반려동물";
 
   // 펫 정보 불러오기
   useEffect(() => {
@@ -116,8 +120,6 @@ function PetList() {
 
   };
 
-
-
   // 스크롤 뷰 펫 누르면 펫 정보 띄우기
   const handlePressPet = (petId) => {
     navigation.navigate("PetProfile", { petId: petId });
@@ -134,12 +136,10 @@ function PetList() {
     if (res.didCancel || !res) {
       return;
     }
-    
+
     console.log(res);
     console.log(res.path);
     setCameraInfo(res);
-
-
   };
 
   // 카메라 실행 함수
@@ -186,7 +186,14 @@ function PetList() {
 
   return (
     <>
-      <Text style={styles.titleText}> 나의 반려동물 </Text>
+      <View style={{
+        flexDirection: 'row',
+        alignItems: "flex-start",
+        justifyContent: "center",
+      }}>
+        <Text style={styles.titleSign}>■ </Text>
+        <Text style={styles.titleText}> {petListText} </Text>
+      </View>
       <View style={styles.petListScrollView}>
         <ScrollView
           horizontal={true}
@@ -324,19 +331,23 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "center",
   },
+
   scrollViewContent: {
     flexDirection: "row",
   },
+
   subtitle: {
     fontWeight: "bold",
     fontSize: 16,
     marginTop: 20,
     marginBottom: 10,
   },
+
   errorText: {
     color: "red",
     marginTop: 5,
   },
+
   saving: {
     marginTop: 10,
   },
@@ -368,22 +379,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
   },
+
   addButtonText: {
     color: "black",
     fontSize: 25,
     textAlign: "center",
     // marginTop: -5,
   },
-  // 스크롤 뷰 스타일
+
+  // 스크롤 뷰 스타일------------------------------------------------------------
   scrollView: {
     backgroundColor: "#FFFFFF",
   },
+
   scrollViewContent: {
     // padding: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
   },
+
   petListContainer: {
     width: 150,
     height: 180,
@@ -395,6 +410,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     elevation: 5,
   },
+
   petImage: {
     width: 140,
     height: 140,
@@ -405,20 +421,23 @@ const styles = StyleSheet.create({
     marginRight: 6,
     alignSelf: 'center',
   },
+
   petText: {
-    fontSize: 15,
+    top: 4,
+    fontSize: 12.5,
     color: 'black',
     textAlign: 'center',
     marginLeft: 5,
   },
+
   petInfoContainer: {
     paddingLeft: 5,
     flexDirection: 'row',
     alignItems: 'flex-start',
     justifyContent: 'center',
     flexDirection: 'column',
-    
   },
+
   buttonContainer: {
     flexDirection: "row-reverse",
     position: "absolute",
@@ -426,6 +445,7 @@ const styles = StyleSheet.create({
     left: 10,
     right: 10,
   },
+
   deleteButton: {
     backgroundColor: "red",
     paddingVertical: 8,
@@ -433,23 +453,26 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginLeft: 8,
   },
+
   buttonText: {
     color: "white",
     fontSize: 12,
     fontWeight: "bold",
   },
+
   petListScrollView: {
     flexDirection: "row-reverse",
+    paddingBottom: 5,
   },
-  //--------------------------------------------------------------------
-  // 모달 창 스타일
-
+  
+  // 모달 창 스타일------------------------------------------------------------
   background: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.6)",
   },
+
   whiteBox: {
     width: "80%",
     backgroundColor: "white",
@@ -462,12 +485,14 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+
   modalTitle: {
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 15,
     textAlign: "left",
   },
+
   modalInput: {
     width: "100%",
     borderWidth: 2,
@@ -478,6 +503,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize: 18,
   },
+
   modalButtons: {
     width: "100%",
     paddingVertical: 2,
@@ -489,16 +515,23 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     alignSelf: "center"
   },
-  buttonPressed: {
 
+  buttonPressed: {
   },
+
+  titleSign: {
+    paddingTop: 24,
+    marginBottom: 10,
+    fontSize: 15,
+    color: "#3A8DF0",
+  },
+
   titleText: {
     color: "black",
     fontWeight: "bold",
-    // marginLeft: 16,
     paddingTop: 20,
     marginBottom: 10,
-    fontSize: 25,
+    fontSize: 20,
   },
 });
 //--------------------------------------------------------------------

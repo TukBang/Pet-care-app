@@ -8,7 +8,7 @@ function HeaderProfile({ user, onPress }) {
     <>
     <View style={styles.container}>
       <Text style={styles.textStyle}>{user.isExpert ? 'Expert+' : '일반회원'}</Text>
-      <Icon style={styles.iconImage} name='help-outline' size={53} />
+      <Icon style={styles.iconImage} name='help-outline' size={40} />
       <View style={styles.block}>
         <Pressable onPress={onPress} style={styles.press}>
           <Image
@@ -51,32 +51,32 @@ const styles = StyleSheet.create({
   },
 
   press: {
-    top: 8,
+    top: 12,
     right: 69,
   },
 
   avatar: {
-    width: 44,
-    height: 44,
-    left: 500,
+    width: 34,
+    height: 34,
+    left: 505,
     borderRadius: 22,
   },
 
   iconImage: {
     position: "absolute",
     marginRight: 40,
-    top: 3,
-    right: 33,
-    color: '#2296F3',
+    top: 9,
+    right: 30,
+    color: '#3A8DF0',
   },
 
   textStyle: {
     position: 'absolute',
-    top: 15,
-    right: 344,
+    top: 17,
+    right: 350,
     color: "black",
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: 17,
     backgroundColor: "#F6FAFF"
   },
 

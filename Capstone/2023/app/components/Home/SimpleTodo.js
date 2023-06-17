@@ -10,7 +10,6 @@ import useWalk from "../../hooks/walking/useWalk";
 // 홈 화면을 구성하는 요소 - 기능 요약의 형태
 
 function SimpleTodo() {
-
   const { onecal } = useCal();
   const { walk } = useWalk()
   const navigation = useNavigation();
@@ -24,6 +23,10 @@ function SimpleTodo() {
   const [ walkedRecent, setWalkedRecent ] = useState()
   const [ beforeDay, setBeforeDay] = useState()
 
+
+  const todoText = todo ? todo : "일정이 없어요!";
+  const walkText = "마지막 산책 : " + (walkedRecent && beforeDay === 0 ? '오늘' : beforeDay + '일 전');
+  const diagnosisText = recentDiagnosis ? recentDiagnosis : '진단 기록 바로 가기';
 
   useEffect(() =>{
     if (onecal) {
@@ -83,25 +86,26 @@ function SimpleTodo() {
     <View style={styles.container} >
       {/* 가장 가까운 일정 표기 */}
       <View style={[styles.block, { marginBottom: 5 }]}>
-        <Text style={styles.header}>함께하기</Text>
+        <Text style={styles.titleSign}>■ </Text>
+        <Text style={styles.header}> 함께하기</Text>
       </View>
       {/* 박스 형태로 확인할 수 있는 뷰 */}
       <View style={Boxstyles.boxContainer}>
-        <TouchableOpacity onPress={() => onPressCalendar()} style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => onPressCalendar()} style={[Boxstyles.boxView1, {marginLeft : 7.5}]} activeOpacity={0.8}>
             <Text style={Boxstyles.boxTitle}>최근 일정</Text>
               {!todoRecent ? (
-              <Text style={Boxstyles.boxSentence}>일정이 없어요!</Text>
+              <Text style={Boxstyles.boxSentence}>일정을 등록해보세요.</Text>
               ) : (
               <>
-                <Text style={Boxstyles.boxSentence}>{afterDay ? afterDay+'일 뒤에' : '오늘' } 일정이 있어요!</Text>
-                <Text style={Boxstyles.boxSentence}>{todo}</Text>
+                <Text style={Boxstyles.boxSentence}>{afterDay ? afterDay + '일 뒤에' : '오늘' } 일정이 있어요!</Text>
+                <Text style={Boxstyles.boxSentence}>"{todoText}"</Text>
               </>
               )}
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => onPressWalking()} style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => onPressWalking()} style={[Boxstyles.boxView2, {marginRight : 7.5}]} activeOpacity={0.8}>
           {beforeDay === 0 ? (
             <>
-              <Text style={[Boxstyles.boxTitle,{fontSize: 20}]}>오늘도 즐거웠어요!</Text>
+              <Text style={[Boxstyles.boxTitle, {fontSize: 20}]}>오늘도 즐거웠어요!</Text>
               <Text style={Boxstyles.boxSentence}>내일도 같이가요!</Text>
             </>
           ): (
@@ -109,8 +113,8 @@ function SimpleTodo() {
               <Text style={Boxstyles.boxTitle}>산책 해주세요!</Text>
             </>
           )}
-          <Text style={Boxstyles.boxSentence}>마지막 산책 : </Text>
-          <Text style={Boxstyles.boxSentence}>{walkedRecent && beforeDay===0 ? '오늘' : beforeDay+'일 전'}</Text>
+          <Text style={Boxstyles.boxSentence}>{walkText}</Text>
+          
           <Image style={Boxstyles.image} source={require("../../assets/dog_walking.png")} />
         </TouchableOpacity>
       </View>
@@ -120,13 +124,13 @@ function SimpleTodo() {
       {/* /////////////////////////////////////////////////////// */}
       
       <View style={Boxstyles.boxContainer}>
-        <TouchableOpacity onPress={() => onPressDiagnosis()} style={[Boxstyles.boxView, {marginLeft : 7.5}]} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => onPressDiagnosis()} style={[Boxstyles.boxView3, {marginLeft : 7.5}]} activeOpacity={0.8}>
             <Text style={Boxstyles.boxTitle}>진단 기록</Text>
-            <Text style={Boxstyles.boxSentence}>{recentDiagnosis ? recentDiagnosis : '진단 기록 보러가기'}</Text>
+            <Text style={Boxstyles.boxSentence}>{diagnosisText}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => onPressConsult()} style={[Boxstyles.boxView, {marginRight : 7.5}]} activeOpacity={0.8}>
+        <TouchableOpacity onPress={() => onPressConsult()} style={[Boxstyles.boxView4, {marginRight : 7.5}]} activeOpacity={0.8}>
               <Text style={Boxstyles.boxTitle}>상담 하기</Text>
-              <Text style={Boxstyles.boxSentence}>전문가에게 상담해보세요!</Text>
+              <Text style={Boxstyles.boxSentence}>전문가에게 물어보세요!</Text>
 
         </TouchableOpacity>
       </View>
@@ -137,28 +141,40 @@ function SimpleTodo() {
 const styles = StyleSheet.create({
   block: {
     width: '100%',
+    flexDirection: 'row',
   },
+
   container: {
     width: '100%',
-    // height: '30%',
     marginBottom: 25,
   },
+
+  titleSign: {
+    paddingTop: 15,
+    marginBottom: 10,
+    fontSize: 15,
+    color: "#3A8DF0",
+  },
+
   header: {
     paddingTop: 10,
     color: "black",
     fontWeight: "bold",
     paddingBottom: 2,
-    fontSize: 25,
+    fontSize: 20,
   },
+
   detail: {
     color: "#827397",
     paddingLeft: 10,
     fontSize: 15,
   },
+
   sentence: {
     color: "black",
     fontSize: 22,
   },
+
   endsentence: {
     color: "black",
     fontSize: 22,
@@ -166,44 +182,80 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     right: 0,
   },
-
 });
 
 const Boxstyles = StyleSheet.create({
   boxContainer: {
+    top: -5,
     flexDirection: "row",
     alignItems: 'center',
     justifyContent: 'center', // 추가
     // height: '30%',
     padding: 5,
-    },
-  boxView: {
+  },
+
+  boxView1: {
     width: '50%',
     height: 180,
     borderRadius: 15,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#F0C660",
     padding: 12,
     marginRight: 5,
     marginLeft: 5,
     elevation:7,
   },
+
+  boxView2: {
+    width: '50%',
+    height: 180,
+    borderRadius: 15,
+    backgroundColor: "#65B065",
+    padding: 12,
+    marginRight: 5,
+    marginLeft: 5,
+    elevation:7,
+  },
+
+  boxView3: {
+    width: '50%',
+    height: 180,
+    borderRadius: 15,
+    backgroundColor: "#409AFF",
+    padding: 12,
+    marginRight: 5,
+    marginLeft: 5,
+    elevation:7,
+  },
+
+  boxView4: {
+    width: '50%',
+    height: 180,
+    borderRadius: 15,
+    backgroundColor: "#E07070",
+    padding: 12,
+    marginRight: 5,
+    marginLeft: 5,
+    elevation:7,
+  },
+
   boxTitle: {
-    color: "black",
-    fontSize: 22,
+    color: "white",
+    fontSize: 20,
     fontWeight: "bold",
-    
   },
+
   boxSentence: {
-    color: "black",
-    fontSize: 15,
+    color: "white",
+    fontSize: 15, 
   },
+
   image: {
-    width: '60%',
-    height: '60%',
     position: 'absolute',
     resizeMode: 'contain',
-    bottom: 0,
-    right: 1,
+    width: '80%',
+    height: '80%',
+    top: 60,
+    left: 12,
   }
 })
 export default SimpleTodo;
