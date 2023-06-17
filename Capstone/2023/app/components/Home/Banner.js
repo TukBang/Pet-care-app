@@ -87,9 +87,9 @@ const styles = StyleSheet.create({
 
     iconImage: {
         position: 'absolute',
-        alignSelf: 'flex-end',
         top: 5,
-        left: 268,        
+        // left: 268,        
+        right: 5,
         color: '#3A8DF0',
     }
 })

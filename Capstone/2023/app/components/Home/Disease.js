@@ -12,14 +12,13 @@ function Disease() {
         <Text style={styles.titleSign}>■ </Text>
         <Text style={styles.title}> 질병 사전</Text>
       </View>
-      {/* <ScrollView contentContainerStyle={styles.scrollView} horizontal={true}> */}
       <Swiper 
         loop
-        autoplayTimeout={3}
+        // autoplay
+        // autoplayTimeout={10}
         containerStyle={styles.diseaseBox}
-        dotStyle={styles.swiperDot} // Added dotStyle to customize the dot
-        activeDotStyle={styles.swiperActiveDot} // Added activeDotStyle to customize the active dot
-        >
+        dotStyle={styles.swiperDot}
+        activeDotStyle={styles.swiperActiveDot} >
         <View style={styles.diseaseContent}>
           <Text style={styles.diseaseTitle}>다음은 진단 할 수 있는 질병이에요!</Text>
           <Text style={styles.subDiseaseTitle}>1. 구진, 플라크 </Text>
@@ -82,7 +81,6 @@ function Disease() {
           <Text style={styles.diseaseDescription}>   피부 또는 피부 아래 조직에서 발생하는 종양을 의미합니다. 종괴는 일반적으로 피부의 표면이나 피부 아래에 형성되며, 다양한 크기와 형태를 가질 수 있습니다. 종류에 따라 양성 종괴와 악성 종괴로 구분될 수 있으며, 정확한 진단을 위해서는 수의사의 도움이 필요합니다.</Text>
         </View>
       </Swiper>
-      {/* </ScrollView> */}
     </View>
   );
 }
@@ -91,7 +89,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    // paddingBottom: 20,
   },
   
   titleSign: {
