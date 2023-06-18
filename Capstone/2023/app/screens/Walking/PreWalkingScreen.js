@@ -1,22 +1,69 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image, TouchableWithoutFeedback } from "react-native";
+import { View,
+         Text,
+         TouchableOpacity, 
+         StyleSheet, 
+         ScrollView, 
+         Image, 
+         TouchableWithoutFeedback, 
+         PermissionsAndroid } from "react-native";
 import { useUserContext } from "../../contexts/UserContext";
+
+import Geolocation from "@react-native-community/geolocation";
 
 // 저장된 펫 정보를 불러오기위해 사용
 import { getPetInfoByUserID } from "../../lib/petInfo";
 import LinearGradient from 'react-native-linear-gradient';
+import axios from "axios";
 
-const PreWalkingScreen = ({ onPress }) => {
-  const [walkingStart, setWalkingStart] = useState(false);
-  const [isWalked, setIsWalked] = useState(false);
 
+const PreWalkingScreen = ({ onPress, selectedPet, setSelectedPet }) => {
   const [petList, setPetList] = useState([]);
   const { user } = useUserContext();
   const uid = user["id"];
+  
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [weatherData, setWeatherData] = useState(null);
 
-  const [isPressed, setIsPressed] = useState(null);
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        // const response = await fetch(
+        //   `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=a410fd86af4308c1b5eb8adf787879b3&lang=kr&units=metric`,
+        // );
+        const response = await axios.get(
+          `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=a410fd86af4308c1b5eb8adf787879b3`
+        );
+        console.log(response)
+        if (response.ok) {
+          const data = await response.json();
+          setWeatherData(data);
+        } else {
+          throw new Error('날씨 정보를 가져오는 중 오류가 발생했습니다.');
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  const [selectedPet, setSelectedPet] = useState(null);
+    const getCurrentLocation = () => {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLatitude(latitude);
+          setLongitude(longitude);
+        },
+        (error) => {
+          console.error(error);
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      );
+    };
+
+    getCurrentLocation();
+    fetchWeatherData();
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -47,7 +94,15 @@ const PreWalkingScreen = ({ onPress }) => {
       <View style={styles.container}>
         <Text style={styles.header}>날씨</Text>
         <View style={styles.box}>
-          <Text style={styles.boxText}>여기 날씨 보여주자구</Text>
+          <View>
+            {weatherData ? (
+              <Text>
+                현재 날씨: {weatherData.weather[0].main}, {weatherData.weather[0].description}
+              </Text>
+            ) : (
+              <Text>날씨 정보를 가져오는 중...</Text>
+            )}
+          </View>
         </View>
         <Text style={styles.header}>함께 산책하기</Text>
         <ScrollView

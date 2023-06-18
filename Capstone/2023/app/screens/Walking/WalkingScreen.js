@@ -10,6 +10,7 @@ import PreWalkingScreen from "./PreWalkingScreen";
 const WalkingScreen = () => {
   const [walkingStart, setWalkingStart] = useState(false);
   const [isWalked, setIsWalked] = useState(false);
+  const [selectedPet, setSelectedPet] = useState(null);
   
   return (
     <LinearGradient
@@ -22,13 +23,13 @@ const WalkingScreen = () => {
     <View>
       { !walkingStart ? (
         <View>
-          <PreWalkingScreen onPress={() => setWalkingStart(true)}/>
+          <PreWalkingScreen onPress={() => setWalkingStart(true)} selectedPet={selectedPet} setSelectedPet={setSelectedPet}/>
         </View>
       ) : (
         <View
           style={styles.container}
         >
-          <AnimatedMarkers setWalkingStart={setWalkingStart}/>
+          <AnimatedMarkers setWalkingStart={setWalkingStart} selectedPet={selectedPet} />
         </View>
       )
     }

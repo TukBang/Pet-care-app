@@ -50,9 +50,8 @@ let count = 0;
 //   console.log("#0-----------------------------------------------------------------------------");
 // });
 
-function AnimatedMarkers({setWalkingStart}) {
+function AnimatedMarkers({setWalkingStart, selectedPet}) {
   // 변수 부문 ----------------------------------------------------------------------------------------------------------------------------------
-
   // 맵 로딩 관련 useState 변수
   const [mapLoaded, setMapLoaded] = useState(false);
   const [initialLoading, setInitialLoading] = useState(false);
