@@ -14,7 +14,7 @@ function CustomButton({ onPress, title, hasMarginBottom, theme }) {
           Platform.OS === "ios" && pressed && { opacity: 0.5 },
         ]}
         android_ripple={{
-          color: isPrimary ? "#ffffff" : "#6200ee",
+          color: isPrimary ? "#ffffff" : "#3A8DF0",
         }}
       >
         <Text style={[styles.text, isPrimary ? styles.primaryText : styles.secondaryText]}>
@@ -34,15 +34,23 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     overflow: "hidden",
   },
+  block: {
+    alignItems: "center",
+  },
   wrapper: {
-    borderRadius: 4,
+    width: "100%",
     height: 48,
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: '#6200ee',
+    backgroundColor: "#FFF", // 흰색 바탕
+    borderWidth: 1,
+    borderColor: "#C0C0C0", // 회색 테두리 색상
+    borderRadius: 5,
+    borderWidth: 2,
   },
   primaryWrapper: {
-    backgroundColor: "#6200ee",
+    backgroundColor: "#3A8DF0",
+    elevation: 5,
   },
   text: {
     fontWeight: "bold",
@@ -53,10 +61,10 @@ const styles = StyleSheet.create({
     color: "white",
   },
   secondaryText: {
-    color: "#6200ee",
+    color: "#3A8DF0",
   },
   margin: {
-    marginBottom: 8,
+    marginBottom: 10,
   },
 });
 

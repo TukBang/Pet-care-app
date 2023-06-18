@@ -7,6 +7,7 @@ import {
   Text,
   View,
   Alert,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SignButtons from "../../components/Login/SignButtons";
@@ -26,7 +27,7 @@ function SignInScreen({ navigation, route }) {
   });
   const [loading, setLoading] = useState(false);
   const { setUser } = useUserContext();
-
+  const pcaImage = require('../../assets/puppyy.png');
   useEffect(() => {
     return () => {
       setLoading(false);
@@ -81,7 +82,10 @@ function SignInScreen({ navigation, route }) {
       behavior={Platform.select({ ios: "padding" })}
     >
       <SafeAreaView style={styles.fullscreen}>
-        <Text style={styles.text}>Welcome to PCA</Text>
+        <View style={styles.container}>
+          <Image source={pcaImage} style={styles.image}  resizeMode="contain"/>
+          <Text style={styles.text}>PCA</Text>
+        </View>
         <View style={styles.form}>
           <SignInForm
             isSignUp={isSignUp}
@@ -99,21 +103,32 @@ function SignInScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   keyboardAvoidingView: {
     flex: 1,
+    backgroundColor: "#F6FAFF",
   },
   fullscreen: {
-    flex: 1,
+    // flex: 1,
+    marginTop: 100,
     alignItems: "center",
     justifyContent: "center",
   },
   text: {
-    fontSize: 32,
+    fontSize: 50,
     fontWeight: "bold",
     color: "black",
   },
   form: {
-    marginTop: 64,
-    width: "100%",
-    paddingHorizontal: 16,
+    marginTop: 100,
+    width: "90%",
+    // paddingHorizontal: 10,
+  },
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20, // Text와 Image 사이의 간격 조정
+  },
+  image: {
+    width: 80,
+    height: 80,
   },
 });
 
