@@ -36,9 +36,10 @@ const styles = StyleSheet.create({
   },
   block: {
     alignItems: "center",
+    flexDirection: 'row',
   },
   wrapper: {
-    width: "100%",
+    width: 185,
     height: 48,
     alignItems: "center",
     justifyContent: "center",
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     color: "#3A8DF0",
   },
   margin: {
-    marginBottom: 10,
+    //marginBottom: 10,
   },
 });
 

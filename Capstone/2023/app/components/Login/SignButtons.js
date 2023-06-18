@@ -27,8 +27,8 @@ function SignButtons({ isSignUp, onSubmit, loading }) {
 
   return (
     <View style={styles.buttons}>
-      <CustomButton title={primaryTitle} hasMarginBottom onPress={onSubmit} />
-      <CustomButton title={secondaryTitle} theme="secondary" onPress={onSecondaryButtonPress} />
+      <CustomButton style={styles.primary} title={primaryTitle} hasMarginBottom onPress={onSubmit} />
+      <CustomButton style={styles.secondary} title={secondaryTitle} theme="secondary" onPress={onSecondaryButtonPress} />
     </View>
   );
 }
@@ -39,10 +39,27 @@ const styles = StyleSheet.create({
     height: 104,
     justifyContent: "center",
     alignItems: "center",
+    
   },
   buttons: {
-    marginTop: 64,
+    marginTop: 15,
+    flexDirection: 'row',
+    // position: 'absolute',
+
   },
+  // primary:{
+  //   position: 'absolute',
+  //   width: 500,
+  //   height: 60,
+  //   top: 0,
+  //   left: -100,
+  // },
+  // secondary:{
+  //   position: 'absolute',
+  //   left: 100,
+  // },
 });
 
 export default SignButtons;
+
+
