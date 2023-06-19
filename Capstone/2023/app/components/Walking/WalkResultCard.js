@@ -23,16 +23,22 @@ function WalkResultCard({
   const [petInfo, setPetInfo] = useState();
   const [filteredPet, setFilteredPet] = useState();
 
-  getPetInfoByUserID(userID).then((_petInfo) => {
-    setPetInfo(_petInfo);
-  });
+  
 
   useEffect(() => {
+    getPetInfoByUserID(userID).then((_petInfo) => {
+        setPetInfo(_petInfo);
+      });
     if (petInfo) {
-        setFilteredPet(petInfo.filter((pet) => pet.id === petID));
+        petInfo.forEach(item => {
+            if (item.id === petID) {
+                setFilteredPet(item.petName); // petID와 일치하는 요소의 petName 출력
+            }
+          });
+        // setFilteredPet(pet);
       console.log('filtered',filteredPet)  
     }
-  }, [petID]);
+  }, []);
 
   return (
     <>
@@ -48,6 +54,7 @@ function WalkResultCard({
         <View style={styles.profile}>
           <View style={styles.walkingBox}>
             {/* <Text>펫 이름 : {filteredPet.petName}</Text> */}
+            <Text>펫 이름 : {filteredPet}</Text>
             <Text>거리 : {distance}</Text>
             <Text>소모 칼로리 : {kcal}</Text>
             <Text>걸린 시간 : {time}</Text>

@@ -39,7 +39,14 @@ function SignInScreen({ navigation, route }) {
   const onSubmit = async () => {
     Keyboard.dismiss();
     const { email, password, confirmPassword } = form;
-
+    if (email === "" || email === null) {
+      Alert.alert("실패", "이메일을 입력해주세요.");
+      return;
+    }
+    if (password === "" || password === null) {
+      Alert.alert("실패", "비밀번호를 입력해주세요.");
+      return;
+    }
     if (isSignUp && password !== confirmPassword) {
       Alert.alert("실패", "비밀번호가 일치하지 않습니다.");
       console.log({ password, confirmPassword });
@@ -78,32 +85,27 @@ function SignInScreen({ navigation, route }) {
       style={styles.keyboardAvoidingView}
       behavior={Platform.select({ ios: "padding", android: "height" })}
     >
-      <ScrollView style={styles.scrollView}>
-        <SafeAreaView style={styles.fullscreen}>
-          <View style={styles.container}>
-            <Image source={pcaImage} style={styles.image}  resizeMode="contain"/>
-            <Text style={styles.text}>PCA</Text>
-            <Image source={catImage} style={styles.image2}  resizeMode="contain"/>
-          </View>
-          <View style={styles.form}>
-            <SignInForm
-              isSignUp={isSignUp}
-              onSubmit={onSubmit}
-              form={form}
-              createChangeTextHandler={createChangeTextHandler}
-            />
-            <SignButtons isSignUp={isSignUp} onSubmit={onSubmit} loading={loading} />
-          </View>
-        </SafeAreaView>
-      </ScrollView>
+      <SafeAreaView style={styles.fullscreen}>
+        <View style={styles.container}>
+          <Image source={pcaImage} style={styles.image}  resizeMode="contain"/>
+          <Text style={styles.text}>PCA</Text>
+          <Image source={catImage} style={styles.image2}  resizeMode="contain"/>
+        </View>
+        <View style={styles.form}>
+          <SignInForm
+            isSignUp={isSignUp}
+            onSubmit={onSubmit}
+            form={form}
+            createChangeTextHandler={createChangeTextHandler}
+          />
+          <SignButtons isSignUp={isSignUp} onSubmit={onSubmit} loading={loading} />
+        </View>
+      </SafeAreaView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView:{
-    
-  },
 
   keyboardAvoidingView: {
     flex: 1,

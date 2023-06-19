@@ -141,8 +141,8 @@ const PreWalkingScreen = ({ onPress, selectedPet, setSelectedPet }) => {
           ))}
         </ScrollView>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity disabled={selectedPet} onPress={onPress} style={styles.Boxstyles}>
-            <Text style={styles.textStyle}>산책 시작</Text>
+          <TouchableOpacity disabled={!selectedPet} onPress={onPress} style={[styles.Boxstyles,!selectedPet && styles.disabledButton]}>
+            <Text style={styles.textStyle}>{selectedPet ? '산책 시작' : '펫을 선택해주세요'}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -261,6 +261,15 @@ const styles = StyleSheet.create({
   blurContainer: {
     opacity: 0.3, // 흐릿한 효과를 위한 투명도 조절
   },
+  disabledButton: {
+    width: 250,
+    height: 50,
+    borderRadius: 15,
+    backgroundColor: "#D3D3D3",
+    alignItems: 'center',
+    padding: 15,
+    elevation:10,
+  }
 })
 
 const weatherStyles = StyleSheet.create({

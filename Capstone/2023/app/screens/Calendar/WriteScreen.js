@@ -42,6 +42,18 @@ function WriteScreen({ route }) {
   
   //저장함수
   const onSave = () => {
+    if (title === "" || title === null) {
+      Alert.alert("실패", "제목을 입력해주세요.");
+      return;
+    }
+    if (body === "" || body === null) {
+      Alert.alert("실패", "내용을 입력해주세요.");
+      return;
+    }
+    if (date > endDate) {
+      Alert.alert("실패", "시작 시간이 종료 시간보다 늦을 수 없어요.");
+      return;
+    }
     createCalendar({
       calendarUid: createId,
       title: title,

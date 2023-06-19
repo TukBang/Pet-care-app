@@ -10,6 +10,7 @@ import {
   useWindowDimensions,
   Platform,
   Pressable,
+  Alert,
 } from "react-native";
 
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -21,6 +22,7 @@ import { createPost } from "../../lib/post";
 import storage from "@react-native-firebase/storage";
 import KeyboardAvoidingView from "react-native/Libraries/Components/Keyboard/KeyboardAvoidingView";
 import RNFS from "react-native-fs";
+import AutoHeightImage from "react-native-auto-height-image";
 import { Picker } from "@react-native-picker/picker";
 import EndModal from "../../components/Diagnosis/EndModal";
 import { CommonActions } from "@react-navigation/native";
@@ -54,6 +56,14 @@ function UploadScreen() {
   console.log("Hello World!");
   console.log(predictions);
   const onSubmit = useCallback(async () => {
+    if (title === "" || title === null) {
+      Alert.alert("실패", "제목을 입력해주세요.");
+      return;
+    }
+    if (description === "" || description === null) {
+      Alert.alert("실패", "내용을 입력해주세요.");
+      return;
+    }
     setIsLoading(true);
     if (!isSolution) {
       const asset = res.assets[0];
@@ -140,15 +150,9 @@ function UploadScreen() {
         value={title}
         returnKeyType="next"
       />
-
-      <Image
-        source={{
-          uri: isSolution ? res.path : res.assets[0]?.uri,
-        }}
-        style={styles.image}
-        resizeMode="contain"
-        transform={[{ scale: 1 }]}
-      />
+      <AutoHeightImage
+        width={width-20}
+        source={{uri : isSolution ? res.path : res.assets[0]?.uri,}} />
       <TextInput
         style={styles.bodyTextInput}
         placeholder={bodyPlaceHolder}
@@ -176,11 +180,13 @@ const styles = StyleSheet.create({
   block: {
     flex: 1,
     backgroundColor: "#f6faff",
+    paddingHorizontal: 10
   },
 
   titleTextInput: {
     paddingVertical: 5,
     paddingHorizontal: 12,
+    marginBottom:  10,
 
     // 밑줄
     borderBottomWidth: 2,
@@ -196,14 +202,9 @@ const styles = StyleSheet.create({
     borderColor: "#FFA000",
   },
 
-  image: {
-    marginLeft: 15,
-    height: "50%",
-    width: "50%",
-  },
-
   bodyTextInput: {
     textAlignVertical: "top",
+    marginTop:  10,
     marginLeft: 10,
     paddingVertical: 5,
     height: 200,

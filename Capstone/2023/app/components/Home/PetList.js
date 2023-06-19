@@ -3,7 +3,7 @@ import {
   View, ScrollView, Image, Text, TextInput, 
   TouchableOpacity, Pressable, Button,
   Modal, Animated, 
-  StyleSheet,
+  StyleSheet, Alert
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";  // 아이콘 받기위해 사용
 import { useNavigation } from "@react-navigation/native";    // 화면이동을 위해 사용
@@ -43,6 +43,9 @@ function PetList() {
   const [isPressed, setIsPressed] = useState(null);   // 버튼을 눌렀을 때, 함수
   const petListText = "나의 반려동물";                 // Text 변수들
 
+  // 펫 등록 모달 변수
+  const [petGender, setPetGender] = useState("");
+
   // 펫 정보 불러오기
   useEffect(() => {
     if (user) {
@@ -65,6 +68,27 @@ function PetList() {
 
   // 펫 정보 저장하기
   const handleSavePetInfo = async () => {
+    if (petInfo.petName === "" || petInfo.petName === null) {
+      Alert.alert("실패", "이름을 올바르게 입력해주세요.");
+      return;
+    }
+    if (petInfo.petAge === "" || petInfo.petAge === null || isNaN(petInfo.petAge)) {
+      Alert.alert("실패", "나이를 올바르게 입력해주세요.");
+      return;
+    }
+    if (petInfo.petWeight === "" || petInfo.petWeight === null || isNaN(petInfo.petWeight)) {
+      Alert.alert("실패", "무게를 올바르게 입력해주세요.");
+      return;
+    }
+    if (petInfo.petKind === "" || petInfo.petKind === null) {
+      Alert.alert("실패", "종류를 올바르게 입력해주세요.");
+      return;
+    }
+    if (petInfo.petGender === "" || petInfo.petGender === null) {
+      Alert.alert("실패", "성별을 올바르게 입력해주세요.");
+      return;
+    }
+
     console.log(cameraInfo);
 
     if (cameraInfo) {
@@ -101,6 +125,15 @@ function PetList() {
     .catch((error) => {
       console.error("펫 정보 저장 실패", error);
     });
+    setPetInfo({
+      petName: "",
+      petAge: "",
+      petWeight: "",
+      petGender: "",
+      petKind: "",
+      petImage: require("../../assets/dog.png"),
+    });
+    setShowModal(false);
   };
 
   // 스크롤 뷰 펫 누르면 펫 정보 띄우기
@@ -209,30 +242,42 @@ function PetList() {
         <Pressable style={styles.background}>
           <View style={styles.whiteBox}>
             <Text style={styles.modalTitle}>반려동물을 등록해주세요</Text>
-
             <TextInput
               style={styles.modalInput}
               value={petInfo.petName}
               onChangeText={(text) => setPetInfo({ ...petInfo, petName: text })}
               placeholder="이름"
             />
+            {/* 둘 중 하나만 쓰고 싶으면 쓸 것 */}
+              {/* textinput 으로 입력 */}
             <TextInput
               style={styles.modalInput}
               value={petInfo.petGender}
               onChangeText={(text) => setPetInfo({ ...petInfo, petGender: text })}
               placeholder="성별"
             />
+            <Text>성별</Text>
+              {/* picker 로 성별 선택 */}
+            <Picker
+              style={styles.modalInput}
+              selectedValue={petGender}
+              onValueChange={(value) => [setPetInfo({ ...petInfo, petGender: value }), setPetGender(value)]}
+            >
+              <Picker.Item label="암컷" value="암컷" />
+              <Picker.Item label="수컷" value="수컷" />
+            </Picker>
+            {/* 둘 중 하나만 쓰고 싶으면 쓸 것 */}
             <TextInput
               style={styles.modalInput}
               value={petInfo.petWeight}
               onChangeText={(text) => setPetInfo({ ...petInfo, petWeight: text })}
-              placeholder="무게"
+              placeholder="무게 (숫자 만)"
             />
             <TextInput
               style={styles.modalInput}
               value={petInfo.petAge}
               onChangeText={(text) => setPetInfo({ ...petInfo, petAge: text })}
-              placeholder="나이"
+              placeholder="나이 (세)"
             />
             <TextInput
               style={styles.modalInput}
@@ -272,15 +317,6 @@ function PetList() {
                 title="Save"
                 onPress={() => {
                   handleSavePetInfo();
-                  setPetInfo({
-                    petName: "",
-                    petAge: "",
-                    petWeight: "",
-                    petGender: "",
-                    petKind: "",
-                    petImage: require("../../assets/dog.png"),
-                  });
-                  setShowModal(false);
                 }}
               />
             </View>

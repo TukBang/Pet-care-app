@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { View, StyleSheet, Text, Image, Pressable, Dimensions } from "react-native";
+import { View, StyleSheet, Text, Image, Pressable, Dimensions, useWindowDimensions } from "react-native";
 import { useUserContext } from "../../contexts/UserContext";
 import usePostActions from "../../hooks/posts/usePostAciton";
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -10,10 +10,12 @@ import ActionSheetModal from "../ActionSheetModal";
 // 게시글을 렌더링하기 위해 사용
 // BoardScreen에서 사용
 import LinearGradient from "react-native-linear-gradient";
+import AutoHeightImage from "react-native-auto-height-image";
 
 function DetailPostCards({ user, category, title, photoURL, description, createdAt, id }) {
   // route에서 post에 대한 파라미터를 불러온다.
   const { user: me } = useUserContext();
+  const { width } = useWindowDimensions();
 
   //me.id ( 현재 로그인 되어있는 세션) 와 user.id (게시글의 주인)
   //을 비교하여 isMyPost 에 내 게시물인지 bool 형태로 저장
@@ -78,11 +80,15 @@ function DetailPostCards({ user, category, title, photoURL, description, created
         </Text>
         <View style={styles.border} />
         {/* 게시글 사진 */}
-        <Image
+        {/* <Image
           source={{ uri: photoURL }}
           style={styles.image}
           resizeMode="contain"
           // transform={[{ scale: 1 }]}
+        /> */}
+        <AutoHeightImage
+          width={width-20}
+          source={{ uri: photoURL }}
         />
         <View style={styles.border} />
         {/* 게시글 내용 */}
@@ -97,7 +103,7 @@ function DetailPostCards({ user, category, title, photoURL, description, created
 }
 const styles = StyleSheet.create({
   block: {
-    margin: 10,
+    // margin: 10,
     
   },
   paddingBlock: {

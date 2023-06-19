@@ -41,14 +41,6 @@ function WriteEditor(
     hideDatePicker(picker);
   };
 
-  const CustomPickerItem = ({ label, value }) => {
-    return (
-      <View>
-        <Text style={styles.pickerLabel}>{label}</Text>
-      </View>
-    );
-  };
-
   let titlePlaceHolder = "제목";
   let bodyPlaceHolder = "메모";
   let petPlaceHolder = "펫 선택"
