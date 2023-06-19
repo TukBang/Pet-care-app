@@ -21,9 +21,7 @@ function DiagResultCard({
     () => (createdAt ? new Date(createdAt._seconds * 1000) : new Date()),
     [createdAt]
   );
-  const navigation = useNavigation();
   
-
   return (
     <>
       <View style={styles.paddingBlock}>

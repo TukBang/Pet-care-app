@@ -29,17 +29,20 @@ const PreWalkingScreen = ({ onPress, selectedPet, setSelectedPet }) => {
   const lang = 'kr';
   const metric = 'metric';
 
+  // const fetch_site = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${appId}&lang=${lang}&units=${metric}`
+  // const response = fetch(fetch_site);
+
   useEffect(() => {
+
     const fetchWeatherData = async () => {
       try {
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${appId}&lang=${lang}&units=${metric}`
-        );
+        const fetch_site = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${appId}&lang=${lang}&units=${metric}`
+        const response = await fetch(fetch_site);
         if (response) {
           const data = await response.json();
-          
-          setWeatherData(data["current"]);
-          console.log(weatherData)
+          console.log(data)
+          setWeatherData(data.current);
+          console.log('weather',weatherData)
         } else {
           throw new Error('날씨 정보를 가져오는 중 오류가 발생했습니다.');
         }
@@ -61,10 +64,11 @@ const PreWalkingScreen = ({ onPress, selectedPet, setSelectedPet }) => {
         { enableHighAccuracy: true, timeout: 500000, maximumAge: 10000 }
       );
     };
-
+    
     getCurrentLocation();
     fetchWeatherData();
-  }, [weatherData === undefined ? weatherData : '']);
+  }, [latitude, longitude, weatherData ? '': weatherData]);
+
 
   useEffect(() => {
     if (user) {
