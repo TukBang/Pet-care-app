@@ -8,6 +8,7 @@ import {
   View,
   Alert,
   Image,
+  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import SignButtons from "../../components/Login/SignButtons";
@@ -80,37 +81,44 @@ function SignInScreen({ navigation, route }) {
   return (
     <KeyboardAvoidingView
       style={styles.keyboardAvoidingView}
-      behavior={Platform.select({ ios: "padding" })}
+      behavior={Platform.select({ ios: "padding", android: "height" })}
     >
-      <SafeAreaView style={styles.fullscreen}>
-        <View style={styles.container}>
-          <Image source={pcaImage} style={styles.image}  resizeMode="contain"/>
-          <Text style={styles.text}>PCA</Text>
-          <Image source={catImage} style={styles.image2}  resizeMode="contain"/>
-        </View>
-        <View style={styles.form}>
-          <SignInForm
-            isSignUp={isSignUp}
-            onSubmit={onSubmit}
-            form={form}
-            createChangeTextHandler={createChangeTextHandler}
-          />
-          <SignButtons isSignUp={isSignUp} onSubmit={onSubmit} loading={loading} />
-        </View>
-      </SafeAreaView>
+      <ScrollView style={styles.scrollView}>
+        <SafeAreaView style={styles.fullscreen}>
+          <View style={styles.container}>
+            <Image source={pcaImage} style={styles.image}  resizeMode="contain"/>
+            <Text style={styles.text}>PCA</Text>
+            <Image source={catImage} style={styles.image2}  resizeMode="contain"/>
+          </View>
+          <View style={styles.form}>
+            <SignInForm
+              isSignUp={isSignUp}
+              onSubmit={onSubmit}
+              form={form}
+              createChangeTextHandler={createChangeTextHandler}
+            />
+            <SignButtons isSignUp={isSignUp} onSubmit={onSubmit} loading={loading} />
+          </View>
+        </SafeAreaView>
+      </ScrollView>
+
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollView:{
+    
+  },
   keyboardAvoidingView: {
+    //marginBottom: 40,
     flex: 1,
     backgroundColor: "#F6FAFF",
     
   },
   fullscreen: {
-    // flex: 1,
-    marginTop: 170,
+    //flex: 1,
+    marginTop: "20%",
     alignItems: "center",
     justifyContent: "center",
     

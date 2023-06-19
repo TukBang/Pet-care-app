@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   buttons: {
     marginTop: 15,
     flexDirection: 'row',
+    marginBottom: 30,
     // position: 'absolute',
 
   },
