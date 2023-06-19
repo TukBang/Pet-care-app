@@ -14,31 +14,32 @@ import Geolocation from "@react-native-community/geolocation";
 // 저장된 펫 정보를 불러오기위해 사용
 import { getPetInfoByUserID } from "../../lib/petInfo";
 import LinearGradient from 'react-native-linear-gradient';
-import axios from "axios";
 
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const PreWalkingScreen = ({ onPress, selectedPet, setSelectedPet }) => {
   const [petList, setPetList] = useState([]);
   const { user } = useUserContext();
   const uid = user["id"];
-  
+
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [weatherData, setWeatherData] = useState(null);
+  const appId = 'a410fd86af4308c1b5eb8adf787879b3';
+  const lang = 'kr';
+  const metric = 'metric';
 
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
-        // const response = await fetch(
-        //   `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=a410fd86af4308c1b5eb8adf787879b3&lang=kr&units=metric`,
-        // );
-        const response = await axios.get(
-          `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=a410fd86af4308c1b5eb8adf787879b3`
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${appId}&lang=${lang}&units=${metric}`
         );
-        console.log(response)
-        if (response.ok) {
+        if (response) {
           const data = await response.json();
-          setWeatherData(data);
+          
+          setWeatherData(data["current"]);
+          console.log(weatherData)
         } else {
           throw new Error('날씨 정보를 가져오는 중 오류가 발생했습니다.');
         }
@@ -57,13 +58,13 @@ const PreWalkingScreen = ({ onPress, selectedPet, setSelectedPet }) => {
         (error) => {
           console.error(error);
         },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        { enableHighAccuracy: true, timeout: 500000, maximumAge: 10000 }
       );
     };
 
     getCurrentLocation();
     fetchWeatherData();
-  }, []);
+  }, [weatherData === undefined ? weatherData : '']);
 
   useEffect(() => {
     if (user) {
@@ -94,15 +95,19 @@ const PreWalkingScreen = ({ onPress, selectedPet, setSelectedPet }) => {
       <View style={styles.container}>
         <Text style={styles.header}>날씨</Text>
         <View style={styles.box}>
-          <View>
-            {weatherData ? (
-              <Text>
-                현재 날씨: {weatherData.weather[0].main}, {weatherData.weather[0].description}
-              </Text>
-            ) : (
-              <Text>날씨 정보를 가져오는 중...</Text>
-            )}
-          </View>
+          {weatherData ? (
+            <>
+              <Text>습도 : {weatherData.humidity}%</Text>
+              <Text>온도 : {weatherData.temp.toFixed(0)}ºC</Text>
+              <Text>오늘은 {weatherData.weather[0].description}!</Text>
+              <Image 
+                style={weatherStyles.icon} 
+                source={{uri: 'https://openweathermap.org/img/wn/'+weatherData.weather[0].icon+'@2x.png'}} 
+              />
+            </>
+          ) : (
+            <Text>날씨 정보를 가져오는 중...</Text>
+          )}
         </View>
         <Text style={styles.header}>함께 산책하기</Text>
         <ScrollView
@@ -132,7 +137,7 @@ const PreWalkingScreen = ({ onPress, selectedPet, setSelectedPet }) => {
           ))}
         </ScrollView>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={onPress} style={styles.Boxstyles}>
+          <TouchableOpacity disabled={selectedPet} onPress={onPress} style={styles.Boxstyles}>
             <Text style={styles.textStyle}>산책 시작</Text>
           </TouchableOpacity>
         </View>
@@ -252,6 +257,14 @@ const styles = StyleSheet.create({
   blurContainer: {
     opacity: 0.3, // 흐릿한 효과를 위한 투명도 조절
   },
+})
+
+const weatherStyles = StyleSheet.create({
+  icon: {
+    width: '50%',
+    height:'50%',
+    resizeMode: 'contain'
+  }
 })
 
 export default PreWalkingScreen;

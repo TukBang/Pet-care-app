@@ -4,9 +4,9 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 
 import HomeScreen from "./Home/HomeScreen";
 import CalendarScreen from "./Calendar/CalendarScreen";
-import WalkingScreen from "./Walking/WalkingScreen";
 import CommunityScreen from "./Community/CommunityScreen";
 import DiagTabNavigator from "./Diagnosis/DiagTabNavigator";
+import WalkTabNavigator from "./Walking/WalkingTabNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -37,7 +37,7 @@ function MainScreen() {
       />
       <Tab.Screen
         name="WalkingScreen"
-        component={WalkingScreen}
+        component={WalkTabNavigator}
         options={{
           title: "산책",
           tabBarIcon: ({ color, size }) => <Icon name="pets" color={color} size={size} />,

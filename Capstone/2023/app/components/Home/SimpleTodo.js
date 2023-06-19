@@ -11,7 +11,7 @@ import useWalk from "../../hooks/walking/useWalk";
 
 function SimpleTodo() {
   const { onecal } = useCal();
-  const { walk } = useWalk()
+  const { oneWalk } = useWalk()
   const navigation = useNavigation();
 
   const [todoRecent, setTodoRecent ] = useState(null)
@@ -51,14 +51,13 @@ function SimpleTodo() {
   },[onecal])
 
   useEffect(() => {
-    if (walk && walk.createdAt !== null) {
+    if (oneWalk && oneWalk.createdAt !== null) {
       const options = {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
       };
-      console.log(walk)
-      const recentDate = new Date(walk.createdAt.seconds * 1000)
+      const recentDate = new Date(oneWalk.createdAt.seconds * 1000)
       const today= new Date()
       const diffInMilliseconds = Math.abs(recentDate - today);
       const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
@@ -68,7 +67,7 @@ function SimpleTodo() {
       setWalkedRecent(null)
       setBeforeDay(null)
     }
-},[walk])
+},[oneWalk])
 
   const onPressCalendar = () => {
     navigation.navigate("CalendarScreen")

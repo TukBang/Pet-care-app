@@ -292,6 +292,7 @@ function AnimatedMarkers({setWalkingStart, selectedPet}) {
       time: elapsedTime, 
       distance : distanceTravelled,
       kcal : kcal,
+      petID: selectedPet,
       userID: uid, 
       walkingImage: walkImage
     });

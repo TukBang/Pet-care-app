@@ -3,7 +3,7 @@ import auth from "@react-native-firebase/auth";
 
 export const walkInfoCollection = firestore().collection("walkInfo");
 
-export function createWalkInfo({ time, distance, kcal , userID, walkingImage }) {
+export function createWalkInfo({ time, distance, kcal , petID, userID, walkingImage }) {
   const docRef = walkInfoCollection.doc();
   const walkID = docRef.id;
 
@@ -13,6 +13,7 @@ export function createWalkInfo({ time, distance, kcal , userID, walkingImage }) 
     distance,
     kcal,
     userID,
+    petID,
     createdAt: firestore.FieldValue.serverTimestamp(),
     walkingImage,
   });
@@ -39,3 +40,54 @@ export const getNextClosestWalkingByUser = async () => {
     throw error;
   }
 };
+
+export const PAGE_SIZE = 15;
+
+export async function getWalk() {
+  const currentUser = auth().currentUser;
+  const snapshot = await walkInfoCollection
+    .where("userID", "==", currentUser.uid)
+    .orderBy("createdAt", "desc")
+    .limit(PAGE_SIZE)
+    .get();
+  const Walk = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+  return Walk;
+}
+
+export async function getOlderWalk(id) {
+  const currentUser = auth().currentUser;
+  const cursorDoc = await walkInfoCollection.doc(id).get();
+  const snapshot = await walkInfoCollection
+  .where("userID", "==", currentUser.uid)
+    .orderBy("createdAt", "desc")
+    .startAfter(cursorDoc)
+    .limit(PAGE_SIZE)
+    .get();
+
+  const Walk = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  return Walk;
+}
+
+export async function getNewerWalk(id) {
+  const currentUser = auth().currentUser;
+  const cursorDoc = await walkInfoCollection.doc(id).get();
+  const snapshot = await walkInfoCollection
+  .where("userID", "==", currentUser.uid)
+    .orderBy("createdAt", "desc")
+    .endBefore(cursorDoc)
+    .limit(PAGE_SIZE)
+    .get();
+
+  const Walk = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+  return Walk;
+}
