@@ -9,21 +9,19 @@ function HeaderProfile({ user, onPress }) {
     <View style={styles.container}>
       <Text style={styles.textStyle}>{user.isExpert ? 'Expert+' : '일반회원'}</Text>
       <Icon style={styles.iconImage} name='help-outline' size={40} />
-      <View style={styles.block}>
-        <Pressable onPress={onPress} style={styles.press}>
-          <Image
-            source={
-              user.photoURL
-                ? {
-                    uri: user.photoURL,
-                  }
-                : require("../../assets/user.png")
-            }
-            resizeMode="cover"
-            style={styles.avatar}
-          />
-        </Pressable>
-      </View>
+      <Pressable onPress={onPress} style={styles.press}>
+        <Image
+          source={
+            user.photoURL
+            ? {
+                uri: user.photoURL,
+              }
+            : require("../../assets/user.png")
+          }
+          resizeMode="cover"
+          style={styles.avatar}
+        />
+      </Pressable>
     </View>
     <View style={styles.border} />
     </>
@@ -31,16 +29,6 @@ function HeaderProfile({ user, onPress }) {
 }
 
 const styles = StyleSheet.create({
-  block: {
-    width: 44,
-    height: 44,
-    top: -4,
-    right: 5,
-    marginRight: 20,
-    borderWidth: 4,
-    borderColor: 'gray',
-  },
-  
   container: {
     position: 'absolute',
     width: 500,
@@ -51,13 +39,15 @@ const styles = StyleSheet.create({
   },
 
   press: {
+    width: 34,
+    height: 34,
     top: 12,
     right: 69,
   },
 
   avatar: {
-    width: 34,
-    height: 34,
+    width: "100%",
+    height: "100%",
     left: 505,
     borderRadius: 22,
   },
@@ -85,7 +75,7 @@ const styles = StyleSheet.create({
     top: 32,
     left: 100,
     width: 1000,
-    backgroundColor: "#C0CDDF",
+    backgroundColor: "#E2E6EB",
   },
 });
 

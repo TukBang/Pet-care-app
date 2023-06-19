@@ -1,39 +1,24 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  ScrollView,
+import { 
+  View, ScrollView, Image, Text, TextInput, 
+  TouchableOpacity, Pressable, Button,
+  Modal, Animated, 
   StyleSheet,
-  Modal,
-  TextInput,
-  Button,
-  Pressable,
-  Animated,
 } from "react-native";
-// 아이콘 받기위해 사용
-import Icon from "react-native-vector-icons/MaterialIcons";
-// import Icon from "react-native-vector-icons/MaterialIcons";
-// 펫 정보 firebase에 저장
-import { createPetInfo } from "../../lib/petInfo";
-// 저장된 펫 정보를 불러오기위해 사용
-import { getPetInfoByUserID } from "../../lib/petInfo";
-// 펫 정보 삭제를 위해 사용
-import { deletePetInfo } from "../../lib/petInfo";
-// user uid 를 위해 사용
-import { useUserContext } from "../../contexts/UserContext";
-// 화면이동을 위해 사용
-import { useNavigation } from "@react-navigation/native";
-// 이미지피커
-import ImagePicker from "react-native-image-crop-picker";
-import ActionSheetModal from "../ActionSheetModal";
-
-import storage from "@react-native-firebase/storage";
+import Icon from "react-native-vector-icons/MaterialIcons";  // 아이콘 받기위해 사용
+import { useNavigation } from "@react-navigation/native";    // 화면이동을 위해 사용
+import ImagePicker from "react-native-image-crop-picker";    // 이미지피커
+import { Picker } from '@react-native-picker/picker';
 import { v4 } from "uuid";
+import storage from "@react-native-firebase/storage";
 import RNFS from "react-native-fs";
 
-import { Picker } from '@react-native-picker/picker';
+// 사용자 모듈
+import { createPetInfo } from "../../lib/petInfo";           // 펫 정보 firebase에 저장
+import { getPetInfoByUserID } from "../../lib/petInfo";      // 저장된 펫 정보를 불러오기위해 사용
+import { deletePetInfo } from "../../lib/petInfo";           // 펫 정보 삭제를 위해 사용
+import { useUserContext } from "../../contexts/UserContext"; // user uid 를 위해 사용
+import ActionSheetModal from "../ActionSheetModal";
 
 function PetList() {
   const { user } = useUserContext();
@@ -53,14 +38,10 @@ function PetList() {
   const animation = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
-  // 카메라 경로저장 변수
-  const [cameraInfo, setCameraInfo] = useState(null);
-
-  // 버튼을 눌렀을 때, 함수
-  const [isPressed, setIsPressed] = useState(null);
   
-  // Text 변수들
-  const petListText = "나의 반려동물";
+  const [cameraInfo, setCameraInfo] = useState(null); // 카메라 경로저장 변수
+  const [isPressed, setIsPressed] = useState(null);   // 버튼을 눌렀을 때, 함수
+  const petListText = "나의 반려동물";                 // Text 변수들
 
   // 펫 정보 불러오기
   useEffect(() => {
@@ -84,13 +65,14 @@ function PetList() {
 
   // 펫 정보 저장하기
   const handleSavePetInfo = async () => {
-    console.log(cameraInfo)
-    if(cameraInfo) {
+    console.log(cameraInfo);
+
+    if (cameraInfo) {
       console.log('if문 진입')
       const extension = cameraInfo.path.split(".").pop();
       var reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
 
-      //image : path to base64 변환
+      // image : path to base64 변환
       const image = await RNFS.readFile(cameraInfo.path, "base64");
       if (Platform.OS === "android") {
         await reference.putString(image, "base64", { contentType: cameraInfo.mime });
@@ -104,20 +86,21 @@ function PetList() {
     else {
       var petImage = null;
     }
+    
     console.log(petImage);
 
     createPetInfo({ ...petInfo, userID: uid , petImage: petImage })
-      .then(() => {
-        console.log("펫 정보 저장 성공");
-        // 저장 후에 최신 데이터로 업데이트
-        getPetInfoByUserID(uid).then((pets) => {
-          setPetList(pets);
-        });
-      })
-      .catch((error) => {
-        console.error("펫 정보 저장 실패", error);
-      });
+    .then(() => {
+      console.log("펫 정보 저장 성공");
 
+      // 저장 후에 최신 데이터로 업데이트
+      getPetInfoByUserID(uid).then((pets) => {
+        setPetList(pets);
+      });
+    })
+    .catch((error) => {
+      console.error("펫 정보 저장 실패", error);
+    });
   };
 
   // 스크롤 뷰 펫 누르면 펫 정보 띄우기
@@ -139,37 +122,38 @@ function PetList() {
 
     console.log(res);
     console.log(res.path);
+
     setCameraInfo(res);
   };
 
   // 카메라 실행 함수
   const onLaunchCamera = () => {
     ImagePicker.openCamera(imagePickerOption)
-      .then((image) => {
-        ImagePicker.openCropper({
-          path: image.path,
-          width: image.width,
-          height: image.height,
-        })
-          .then(onCropImage)
-          .catch((error) => console.log(error));
+    .then((image) => {
+      ImagePicker.openCropper({
+        path: image.path,
+        width: image.width,
+        height: image.height,
       })
+      .then(onCropImage)
       .catch((error) => console.log(error));
+    })
+    .catch((error) => console.log(error));
   };
 
   // 이미지 선택 함수
   const onLaunchImageLibrary = () => {
     ImagePicker.openPicker(imagePickerOption)
-      .then((image) => {
-        ImagePicker.openCropper({
-          path: image.path,
-          width: image.width,
-          height: image.height,
-        })
-          .then(onCropImage)
-          .catch((error) => console.log(error));
+    .then((image) => {
+      ImagePicker.openCropper({
+        path: image.path,
+        width: image.width,
+        height: image.height,
       })
+      .then(onCropImage)
       .catch((error) => console.log(error));
+    })
+    .catch((error) => console.log(error));
   };
   
   // Animation for Pressable Button
@@ -182,10 +166,9 @@ function PetList() {
     }).start();
   }, [animation]);
 
-
-
   return (
     <>
+      {/* 글씨 뷰 */}
       <View style={{
         flexDirection: 'row',
         alignItems: "flex-start",
@@ -194,6 +177,7 @@ function PetList() {
         <Text style={styles.titleSign}>■ </Text>
         <Text style={styles.titleText}> {petListText} </Text>
       </View>
+
       <View style={styles.petListScrollView}>
         <ScrollView
           horizontal={true}
@@ -201,7 +185,6 @@ function PetList() {
           contentContainerStyle={styles.scrollViewContent}
         >
           {petList.map((pet) => (
-            
             <TouchableOpacity 
               key={pet.id} 
               onPress={() => handlePressPet(pet.id)} 
@@ -210,7 +193,6 @@ function PetList() {
                 <Image source={pet.petImage ? { uri: pet.petImage } : require("../../assets/dog.png")} style={styles.petImage} />
                 <Text style={styles.petText}>{pet.petName}</Text>
               </View>
-              
             </TouchableOpacity>
           ))}
           <TouchableOpacity
@@ -221,6 +203,7 @@ function PetList() {
           </TouchableOpacity>
         </ScrollView>
         </View>
+        
       {/* 펫 등록 화면 모달 */}
       <Modal visible={showModal} transparent={true} animationType="fade">
         <Pressable style={styles.background}>

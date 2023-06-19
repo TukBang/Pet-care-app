@@ -37,18 +37,6 @@ function Disease() {
           <Text style={styles.diseaseDescription}>  일반적으로 피부의 비듬 또는 각질 형태로 나타나는 상태를 말합니다. 플라크는 피부의 과도한 각질 생성으로 인해 발생할 수 있으며, 흰색이나 회색의 작은 비늘 형태로 피부 표면에 나타납니다.</Text>
         </View>
         <View style={styles.diseaseContent}>
-          <Text style={styles.diseaseTitle}>비듬</Text>
-          <Text style={styles.diseaseDescription}>  피부 상피 층의 과도한 각질 형성으로 인해 발생하는 현상입니다. 일반적으로 피부의 지루 형태로 나타나며, 피부의 가려움과 발색 변화를 동반할 수 있습니다.</Text>
-        </View>
-        <View style={styles.diseaseContent}>
-          <Text style={styles.diseaseTitle}>각질</Text>
-          <Text style={styles.diseaseDescription}>  피부 상피 세포의 이상적인 형성과 정상적인 업데이트 과정이 교란되어 발생하는 상태입니다. 이로 인해 피부의 각질 층이 두꺼워지고 불규칙한 형태를 보이게 됩니다.</Text>
-        </View>
-        <View style={styles.diseaseContent}>
-          <Text style={styles.diseaseTitle}>상피성진고리</Text>
-          <Text style={styles.diseaseDescription}>  피부 상피 세포의 비정상적인 증식으로 인해 발생하는 피부 질환입니다. 이 질환은 피부 상피 세포의 증식과 이상적인 형태 변화로 인해 피부의 진관이 형성되고 이로 인해 진과 고리 형태의 변화가 나타나는 특징적인 증상을 보입니다.</Text>
-        </View>
-        <View style={styles.diseaseContent}>
           <Text style={styles.diseaseTitle}>태선화</Text>
           <Text style={styles.diseaseDescription}>  피부에 과다한 색소침착이 발생하는 피부 질환입니다. 태선화는 일반적으로 멍, 주근깨, 검은 점 또는 피부의 어두운 반점과 같은 색소 침착을 특징으로 합니다.</Text>
         </View>

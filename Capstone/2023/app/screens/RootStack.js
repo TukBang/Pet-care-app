@@ -52,12 +52,37 @@ function RootStack() {
             <Stack.Screen
               name="ProfileSetting"
               component={ProfileSetting}
-              options={{ title: "프로필 화면", headerBackTitle: "뒤로가기" }}
+              options={{
+                title: "프로필 화면", 
+                headerBackTitle: "뒤로가기", 
+                headerStyle: {
+                  backgroundColor: '#F6FAFF',
+                },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: "#282828",
+                },
+                headerTintColor: "#3A8DF8",
+              }}
             />
             <Stack.Screen
               name="PetProfile"
               component={PetProfile}
-              options={{ title: "펫 정보 화면", headerBackTitle: "뒤로가기" }}
+              
+              options={{
+                title: "펫 정보 화면", 
+                headerBackTitle: "뒤로가기", 
+                headerStyle: {
+                  backgroundColor: '#F6FAFF',
+                },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: "#282828",
+                },
+                headerTintColor: "#3A8DF8",
+              }}
             />
             <Stack.Screen
               name="ChatBot"

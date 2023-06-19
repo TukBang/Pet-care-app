@@ -15,9 +15,17 @@ function FeedList({ logs, onScrolledToBottom, ListHeaderComponent }) {
   return (
     <FlatList
       style={styles.block}
-      ItemSeparatorComponent={() => <View style={{ height: 5 }} />}
+      ItemSeparatorComponent={() => 
+        <View style={{width: "100%", height: "5%"}}>
+          <View style={[styles.border]} />
+        </View>
+      }
       data={logs}
-      renderItem={({ item }) => <FeedListItem log={item} />}
+      renderItem={({ item }) => 
+        <FeedListItem 
+          log={item} 
+        />
+      }
       keyExtractor={(log) => log.id}
       ListHeaderComponent={ListHeaderComponent}
       onScroll={onScroll}
@@ -33,6 +41,11 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 10,
     marginRight: 10,
+  },
+
+  border: {
+    height: 1,
+    backgroundColor: "#C0CDDF",
   },
 });
 

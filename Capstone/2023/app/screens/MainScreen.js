@@ -11,15 +11,12 @@ import WalkTabNavigator from "./Walking/WalkingTabNavigator";
 const Tab = createBottomTabNavigator();
 
 // 하단 네비케이터를 구성하고 있는 모듈
-
 function MainScreen() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarActiveTintColor: "gray",
-        // tabBarInactiveTintColor: "black",
-        
+        tabBarActiveTintColor: "#3A8DF8",        
         tabBarActiveBackgroundColor: '#D1EEFD',
         tabBarShowLabel: true,
         headerShown: false,
@@ -60,7 +57,6 @@ function MainScreen() {
           title: "진단",
           tabBarIcon: ({ color, size }) => (
             <Icon name="medical-services" color={color} size={size} />
-            // <Icon name='stethoscope' color={color} size={size}/>
           ),
         }}
       />
@@ -75,4 +71,5 @@ function MainScreen() {
     </Tab.Navigator>
   );
 }
+
 export default MainScreen;

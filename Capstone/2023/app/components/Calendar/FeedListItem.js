@@ -41,9 +41,9 @@ function FeedListItem({ log }) {
     <Pressable
       style={({ pressed }) => [
         styles.block,
-        Platform.OS === "ios" && pressed && { backgroundColor: "#efefef" },
+        Platform.OS === "ios" && pressed && { backgroundColor: "#F6FAFF" },
       ]}
-      android_ripple={{ color: "#ededed" }}
+      android_ripple={{ color: "#F6FAFF" }}
       onPress={onPress}
     >
       <Text style={styles.title}>{showTitle}</Text>
@@ -65,14 +65,14 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     fontWeight: "bold",
     fontSize: 16,
-    color: "#000000",
+    color: "#282828",
   },
 
   time: {
     marginLeft: 10,
     marginBottom: 8,
     fontSize: 13,
-    color: "#9E9E9E",
+    color: "#8E8E8E",
   },
 });
 

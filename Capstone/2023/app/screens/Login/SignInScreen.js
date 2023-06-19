@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
+import { Keyboard, KeyboardAvoidingView, 
+  Platform, StyleSheet, 
+  View, ScrollView, Image, Text, 
   Alert,
-  Image,
-  ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
 import SignButtons from "../../components/Login/SignButtons";
 import SignInForm from "../../components/Login/SignForm";
 import { useUserContext } from "../../contexts/UserContext";
@@ -18,7 +13,6 @@ import { signIn, signUp } from "../../lib/auth";
 import { getUser } from "../../lib/users";
 
 // 로그인 화면
-
 function SignInScreen({ navigation, route }) {
   const { isSignUp } = route.params || {};
   const [form, setForm] = useState({
@@ -30,6 +24,7 @@ function SignInScreen({ navigation, route }) {
   const { setUser } = useUserContext();
   const pcaImage = require('../../assets/dog.png');
   const catImage = require('../../assets/catt.png');
+
   useEffect(() => {
     return () => {
       setLoading(false);
@@ -40,7 +35,7 @@ function SignInScreen({ navigation, route }) {
     setForm({ ...form, [name]: value });
   };
 
-  //로그인 시도함수
+  // 로그인 시도함수
   const onSubmit = async () => {
     Keyboard.dismiss();
     const { email, password, confirmPassword } = form;
@@ -54,7 +49,7 @@ function SignInScreen({ navigation, route }) {
     setLoading(true);
     const info = { email, password };
 
-    //로그인 예외 설정
+    // 로그인 예외 설정
     try {
       const { user } = isSignUp ? await signUp(info) : await signIn(info);
       const profile = await getUser(user.uid);
@@ -101,7 +96,6 @@ function SignInScreen({ navigation, route }) {
           </View>
         </SafeAreaView>
       </ScrollView>
-
     </KeyboardAvoidingView>
   );
 }
@@ -110,41 +104,43 @@ const styles = StyleSheet.create({
   scrollView:{
     
   },
+
   keyboardAvoidingView: {
-    //marginBottom: 40,
     flex: 1,
     backgroundColor: "#F6FAFF",
     
   },
+
   fullscreen: {
-    //flex: 1,
     marginTop: "20%",
     alignItems: "center",
     justifyContent: "center",
     
   },
+
   text: {
     fontSize: 50,
     fontWeight: "bold",
     color: "#3a8df0",
   },
+
   form: {
     marginTop: 155,
     width: "90%",
-    // paddingHorizontal: 10,
-    
   },
+
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 100, // Text와 Image 사이의 간격 조정
-
+    marginBottom: 100,    // Text와 Image 사이의 간격 조정
   },
+
   image: {
     width: 60,
     height: 60,
     marginRight: 10,
   },
+
   image2: {
     width: 60,
     height: 60,

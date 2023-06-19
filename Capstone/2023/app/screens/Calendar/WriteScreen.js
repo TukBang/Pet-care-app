@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { StyleSheet, View, KeyboardAvoidingView, Platform, Alert } from "react-native";
+import { StyleSheet, View, KeyboardAvoidingView, Platform, Alert, ScrollView } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,7 +20,6 @@ import { v4 as uuidv4 } from "uuid";
 import { deleteCalendarRecordFromFirebase } from "../../lib/calendar";
 
 // 일정 작성 화면
-
 function WriteScreen({ route }) {
   const log = route.params?.log;
   // const selectedDate = route.params.selectedDate;
@@ -147,18 +146,29 @@ function WriteScreen({ route }) {
         style={styles.avoidingView}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
+        <ScrollView>
         {/* 쓰기 화면의 헤더 부분 */}
         <WriteHeader
           onSave={onSave}
           onAskRemove={onAskRemove}
           isEditing={!!log}
           date={date}
+          onChangeDate={setDate}
+        />
+        {/* 헤더 아래 글쓰는 부분 (에디터) */}
+        <WriteEditor 
+          title={title} 
+          body={body} 
+          pet={pet} 
+          onChangeTitle={setTitle} 
+          onChangeBody={setBody} 
+          onChangePet={setPet}
+          date={date}
           endDate={endDate}
           onChangeDate={setDate}
           onEndChangeDate={setEndDate}
         />
-        {/* 헤더 아래 글쓰는 부분 (에디터) */}
-        <WriteEditor title={title} body={body} pet={pet} onChangeTitle={setTitle} onChangeBody={setBody} onChangePet={setPet} />
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -172,6 +182,7 @@ const styles = StyleSheet.create({
 
   avoidingView: {
     flex: 1,
+    height: "100%",
   },
 });
 

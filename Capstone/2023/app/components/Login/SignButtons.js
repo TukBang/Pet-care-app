@@ -20,47 +20,33 @@ function SignButtons({ isSignUp, onSubmit, loading }) {
   if (loading) {
     return (
       <View style={styles.spinnerWrapper}>
-        <ActivityIndicator size={32} color="#6200ee" />
+        <ActivityIndicator size={32} color="#3A8DF8" />
       </View>
     );
   }
 
   return (
     <View style={styles.buttons}>
-      <CustomButton style={styles.primary} title={primaryTitle} hasMarginBottom onPress={onSubmit} />
-      <CustomButton style={styles.secondary} title={secondaryTitle} theme="secondary" onPress={onSecondaryButtonPress} />
+      <CustomButton title={primaryTitle} hasMarginBottom onPress={onSubmit} />
+      <CustomButton title={secondaryTitle} theme="secondary" onPress={onSecondaryButtonPress} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   spinnerWrapper: {
-    marginTop: 64,
-    height: 104,
     justifyContent: "center",
     alignItems: "center",
     
+    height: 104,
+    marginTop: 64,
   },
-  buttons: {
-    marginTop: 15,
-    flexDirection: 'row',
-    marginBottom: 30,
-    // position: 'absolute',
 
+  buttons: {
+    flexDirection: 'row',
+    marginTop: 15,
+    marginBottom: 30,    
   },
-  // primary:{
-  //   position: 'absolute',
-  //   width: 500,
-  //   height: 60,
-  //   top: 0,
-  //   left: -100,
-  // },
-  // secondary:{
-  //   position: 'absolute',
-  //   left: 100,
-  // },
 });
 
 export default SignButtons;
-
-

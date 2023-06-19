@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
+import { View, StyleSheet, TextInput, TouchableOpacity, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import TransparentCircleButton from "./TransparentCircleButton";
@@ -9,15 +9,14 @@ import ko from "date-fns/locale";
 
 function WriteHeader({ 
   onSave, onAskRemove, isEditing, 
-  date, endDate, 
-  onChangeDate, onEndChangeDate }) {
-    
+  date, onChangeDate }) {
+   
   const navigation = useNavigation();
   const onGoBack = () => {
     navigation.pop();
   };
 
-  const [isDatePickerVisible, setDatePickerVisibility] = useState({picker1: false, picker2: false, picker3: false});
+  const [isDatePickerVisible, setDatePickerVisibility] = useState({picker: false});
 
   const showDatePicker = (picker) => {
     setDatePickerVisibility({...isDatePickerVisible, [picker]: true });
@@ -29,11 +28,7 @@ function WriteHeader({
 
   const handleConfirm = (date, picker) => {
     console.log("A date has been picked: ", date);
-    if (picker === 'picker3') {
-      onEndChangeDate(date);
-    } else {
-      onChangeDate(date);
-    }
+    onChangeDate(date);
     hideDatePicker(picker);
   };
 
@@ -46,44 +41,22 @@ function WriteHeader({
 
       <View style={styles.buttonContainer}>
         {/* 날짜 */}
-        <TouchableOpacity onPress={() => showDatePicker('picker1')} style={styles.button1}>
+        <TouchableOpacity onPress={() => showDatePicker('picker')} style={styles.button}>
           <Text style={styles.Text}>
             {format(new Date(date), "yyyy년 MM월 dd일", { locale: ko })}
           </Text>
         </TouchableOpacity>
         <DateTimePickerModal
-          isVisible={isDatePickerVisible.picker1}
+          isVisible={isDatePickerVisible.picker}
           mode="date"
           date={date}
-          onConfirm={(date) => handleConfirm(date, 'picker1')}
-          onCancel={() => hideDatePicker('picker1')}
+          onConfirm={(date) => handleConfirm(date, 'picker')}
+          onCancel={() => hideDatePicker('picker')}
         />
 
         {/* 날짜, 시간 분리 여백 */}
         <View style={{ width: 8 }} />
 
-        {/* 시작 시간 */}
-        <TouchableOpacity onPress={() => showDatePicker('picker2')} style={styles.button2}>
-          <Text style={styles.Text}>{format(new Date(date), "hh시 mm분", { locale: ko })}</Text>
-        </TouchableOpacity>
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible.picker2}
-          mode="time"
-          date={date}
-          onConfirm={(date) => handleConfirm(date, 'picker2')}
-          onCancel={() => hideDatePicker('picker2')}
-        />
-        {/* 종료 시간 */}
-        <TouchableOpacity onPress={() => showDatePicker('picker3')} style={styles.button2}>
-          <Text style={styles.Text}>{format(new Date(endDate), "hh시 mm분", { locale: ko })}</Text>
-        </TouchableOpacity>
-        <DateTimePickerModal
-          isVisible={isDatePickerVisible.picker3}
-          mode="time"
-          date={endDate}
-          onConfirm={(date) => handleConfirm(date, 'picker3')}
-          onCancel={() => hideDatePicker('picker3')}
-        />
       </View>
 
       <View style={styles.buttons}>
@@ -112,8 +85,8 @@ const styles = StyleSheet.create({
     height: 50,
 
     // 밑줄
-    borderBottomWidth: 2,
-    borderBottomColor: "#C0CDDF",
+    borderBottomWidth: 1.3,
+    borderBottomColor: "#E2E6EB",
   },
 
   // 뒤로가기 버튼
@@ -137,30 +110,20 @@ const styles = StyleSheet.create({
   },
 
   // 날짜 버튼
-  button1: {
+  button: {
     // 정렬
     justifyContent: "center",
     alignItems: "center",
 
-    height: 20,
-    width: 120,
+    height: "100%",
+    width: "40%",
     borderRadius: 5,
-    backgroundColor: "#FFFFFF",
-  },
-
-  // 시간 버튼
-  button2: {
-    justifyContent: "center",
-    alignItems: "center",
-
-    height: 20,
-    width: 72,
-    borderRadius: 5,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#F6FAFF",
   },
 
   Text: {
-    color: "#000000",
+    fontSize: 18,
+    color: "#282828",
   },
 });
 
