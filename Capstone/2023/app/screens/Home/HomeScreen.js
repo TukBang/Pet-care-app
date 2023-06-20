@@ -24,8 +24,7 @@ function HomeScreen() {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: "",
-      headerRight: () => <HeaderProfile user={user} onPress={onPress} />,
+      header: () => <HeaderProfile user={user} onPress={onPress} />,
     });
   }, [navigation]);
 
