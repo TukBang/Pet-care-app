@@ -11,6 +11,7 @@ import {
   Platform,
   Pressable,
   Alert,
+  ScrollView,
 } from "react-native";
 
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -126,6 +127,7 @@ function UploadScreen() {
   }, [navigation, onSubmit]);
 
   return (
+    <ScrollView style={{backgroundColor: "#F6FAFF"}}>
     <KeyboardAvoidingView
       behavior={Platform.select({ ios: "height" })}
       style={styles.block}
@@ -150,9 +152,18 @@ function UploadScreen() {
         value={title}
         returnKeyType="next"
       />
-      <AutoHeightImage
-        width={width-20}
-        source={{uri : isSolution ? res.path : res.assets[0]?.uri,}} />
+
+      <View style={{width: "100%", height: "1%"}}>
+        <View style={[styles.border]} />
+      </View>
+      
+      <View style={styles.imageView}>
+        <Image
+          source={{uri : isSolution ? res.path : res.assets[0]?.uri}}
+          style={styles.image}
+        />
+      </View>
+
       <TextInput
         style={styles.bodyTextInput}
         placeholder={bodyPlaceHolder}
@@ -166,48 +177,51 @@ function UploadScreen() {
         <Modal transparent={true} animationType="fade">
           <Pressable style={styles.background}>
             <View style={styles.loading}>
-              <ActivityIndicator size="large" />
+              <ActivityIndicator size="large" color="#3A8DF8" />
             </View>
           </Pressable>
         </Modal>
       )}
       <EndModal visible={endModalVisible} onClose={onCloseModal} />
+
     </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-    backgroundColor: "#f6faff",
+    backgroundColor: "#F6FAFF",
     paddingHorizontal: 10
+  },
+
+  border: {
+    height: 2,
+    marginBottom: 5,
+    backgroundColor: "#C0CDDF",
   },
 
   titleTextInput: {
     paddingVertical: 5,
-    paddingHorizontal: 12,
-    marginBottom:  10,
-
-    // 밑줄
-    borderBottomWidth: 2,
-    borderBottomColor: "#FFA000",
-
-    fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 16,
   },
 
-  container: {
-    borderWidth: 2,
-    borderRadius: 10,
-    borderColor: "#FFA000",
+  imageView: {
+    height: "38%", 
+    width: "50%",
+    marginTop: 5,
+    marginRight: 10,
+  },
+
+  image: {
+    aspectRatio: 1,
   },
 
   bodyTextInput: {
     textAlignVertical: "top",
-    marginTop:  10,
-    marginLeft: 10,
-    paddingVertical: 5,
     height: 200,
+    marginTop: 3,    
     fontSize: 16,
   },
 

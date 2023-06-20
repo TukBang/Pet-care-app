@@ -56,12 +56,36 @@ function RootStack() {
             <Stack.Screen
               name="Upload"
               component={UploadScreen}
-              options={{ title: "새 게시물", headerBackTitle: "뒤로가기" }}
+              options={{
+                title: "새 게시물", 
+                headerBackTitle: "뒤로가기", 
+                headerStyle: {
+                  backgroundColor: '#F6FAFF',
+                },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: "#282828",
+                },
+                headerTintColor: "#3A8DF8",
+              }}
             />
             <Stack.Screen
               name="Board"
               component={BoardScreen}
-              options={{ title: "커뮤니티", headerBackTitle: "뒤로가기" }}
+              options={{
+                title: "커뮤니티", 
+                headerBackTitle: "뒤로가기", 
+                headerStyle: {
+                  backgroundColor: '#F6FAFF',
+                },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: "#282828",
+                },
+                headerTintColor: "#3A8DF8",
+              }}
             />
             <Stack.Screen
               name="Modify"

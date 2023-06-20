@@ -132,9 +132,7 @@ function BoardScreen({ route }) {
 
   return (
     <LinearGradient
-      colors={['#f6faff', '#f6faff']}
-      // colors={['#F0F8FF', '#D1EEFD']}
-
+      colors={['#F6FAFF', '#F6FAFF']}
       style={{flex : 1}}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
@@ -147,12 +145,14 @@ function BoardScreen({ route }) {
         <View style={styles.block}>
           {/* 게시물 공간 */}
           <DetailPostCard {...board} />
-          {/* <Text style={styles.boardDescription}>{description}</Text> */}
-  
+         
+          <View style={{width: "100%"}}>
+            <View style={[styles.border]} />
+          </View>
+
           {/* 댓글 목록 및 업데이트 */}
-          <View style={styles.border} />
+
           <View style={styles.commentContainer}>
-            <Text style={styles.commentTitle}>댓글</Text>
             {filteredComments !== null && filteredComments.map((comment) => (
               <CommentCard
                 key={comment.id}
@@ -166,12 +166,13 @@ function BoardScreen({ route }) {
           </View>
         </View>
       </ScrollView>
+
       {/* 댓글 입력 텍스트 박스 */}
       <View style={styles.commentInputContainer}>
         <TextInput
           style={styles.commentInput}
-          placeholder="  댓글을 입력하세요"
-          placeholderTextColor="#BCBCBC"
+          placeholder="  댓글을 입력하세요."
+          placeholderTextColor="#707D7F"
           value={txt}
           onChangeText={(value) => setTxt(value)}
         />
@@ -196,20 +197,23 @@ const styles = StyleSheet.create({
   },
 
   commentInput: {
-    elevation: 1,
+    marginLeft: 5,
+    marginRight: 5,
+    marginBottom: 5,
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "#C0CDDF",
+    backgroundColor: "#C0CDDF",
   },
 
   border: {
     height: 2,
-    backgroundColor: "#ced4da",
+    backgroundColor: "#C0CDDF",
     marginTop: 20,
     marginBottom: 10,
-    marginRight: 10,
-    marginLeft: 10,
   },
   
   commentTitle: {
-    marginLeft: 10,
   },
 
 });

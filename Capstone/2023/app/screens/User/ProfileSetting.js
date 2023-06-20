@@ -125,6 +125,7 @@ function ProfileSetting() {
         <Icon style={styles.inquireIcon} name="contact-support" size={35} />
         <Text style={styles.normalText}>문의하기</Text>
       </TouchableOpacity>
+      <QnAModal visible={qna} unvisible={CloseQnAModal} />
 
       <View style={{width: "97%", height: "1%", bottom: 9, left: 7}}>
         <View style={[styles.border]} />
@@ -135,7 +136,7 @@ function ProfileSetting() {
         <Text style={styles.normalText}>전문가 계정 인증하기</Text>
       </TouchableOpacity>
       <AuthExpertModal visible={authExpert} unvisible={CloseAuthExpertModal} />
-      <QnAModal visible={qna} unvisible={CloseQnAModal} />
+      
 
       <View style={{width: "97%", height: "1%", bottom: 28, left: 7}}>
         <View style={[styles.border]} />

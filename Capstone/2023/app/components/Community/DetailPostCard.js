@@ -41,9 +41,7 @@ function DetailPostCards({ user, category, title, photoURL, description, created
   return (
     <>
     <LinearGradient
-      colors={['#f6faff', '#f6faff']}
-      // colors={['#F0F8FF', '#D1EEFD']}
-
+      colors={['#F6FAFF', '#F6FAFF']}
       style={{flex : 1}}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
@@ -57,16 +55,18 @@ function DetailPostCards({ user, category, title, photoURL, description, created
               resizeMode="cover"
               style={styles.avatar}
             />
-            <Text style={styles.displayName}>{user.displayName + " 님"}</Text>
-            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.boardTitle}>
-              {"[" + category + "] - "}
-              {title}
-            </Text>
+            <View style={{flexDirection: "column"}}>
+              <Text style={styles.displayName}>{user.displayName}</Text>
+              <Text date={date} style={styles.date}>
+                {format(date, "MM/dd hh:mm", { locale: ko })}
+              </Text>
+            </View>
           </Pressable>
+
           {/* 게시글 수정 or 삭제 버튼 */}
           {isMyPost && (
             <Pressable
-              style={{ marginBottom: 3, alignSelf: "flex-end" }}
+              style={{ marginBottom: 7, alignSelf: "flex-end" }}
               onPress={onPressMore}
               hitSlop={8}
             >
@@ -74,23 +74,21 @@ function DetailPostCards({ user, category, title, photoURL, description, created
             </Pressable>
           )}
         </View>
-        {/* 게시시간 */}
-        <Text date={date} style={styles.date}>
-          {format(date, "MM월 dd일 (EEE) hh시 mm분", { locale: ko })}에 작성됨
-        </Text>
-        <View style={styles.border} />
+        
+        <View style={{flexDirection: "row"}}>
+          <Text style={styles.categoryTitle}>{category}</Text>
+          <Text style={styles.boardTitle}>{title}</Text>
+        </View>
+
+        <View style={{width: "100%"}}>
+          <View style={[styles.border]} />
+        </View>
+
         {/* 게시글 사진 */}
-        {/* <Image
-          source={{ uri: photoURL }}
-          style={styles.image}
-          resizeMode="contain"
-          // transform={[{ scale: 1 }]}
-        /> */}
         <AutoHeightImage
           width={width-20}
           source={{ uri: photoURL }}
         />
-        <View style={styles.border} />
         {/* 게시글 내용 */}
         <Text style={styles.description}>{description}</Text>
         
@@ -106,6 +104,14 @@ const styles = StyleSheet.create({
     // margin: 10,
     
   },
+
+  border: {
+    height: 2,
+    marginTop: 5,
+    marginBottom: 5,
+    backgroundColor: "#C0CDDF",
+  },
+
   paddingBlock: {
     paddingHorizontal: 0,
   },
@@ -118,9 +124,9 @@ const styles = StyleSheet.create({
   },
 
   avatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 30,
+    height: 30,
+    borderRadius: 5,
   },
 
   profile: {
@@ -129,26 +135,32 @@ const styles = StyleSheet.create({
   },
 
   displayName: {
-    lineHeight: 20,
+    top: 1,
+    left: 8,
+
     fontSize: 16,
-    marginLeft: 10,
     fontWeight: "bold",
+    color: "#282828",
+  },
+
+  categoryTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: "#3A8DF8",
   },
 
   boardTitle: {
-    lineHeight: 20,
+    marginLeft: 7,
     fontSize: 16,
-    marginLeft: 5,
     fontWeight: "bold",
+    color: "#282828",
   },
 
   date: {
-    color: "#757575",
+    bottom: 4,
+    left: 8,
+    color: "#686868",
     fontSize: 12,
-    lineHeight: 20,
-    marginTop: 5,
-    marginLeft: 3,
-    marginBottom: 10,
   },
 
   image: {
@@ -160,14 +172,10 @@ const styles = StyleSheet.create({
   },
 
   description: {
-    fontSize: 16,
-    marginBottom: 8,
     marginTop: 5,
-  },
-  border: {
-    height: 2,
-    backgroundColor: "#ced4da",
-    marginBottom: 5,
+
+    fontSize: 16,
+    color: "#282828",
   },
 });
 

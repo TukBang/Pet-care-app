@@ -205,11 +205,6 @@ const diagnosisSelectStyles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     overflow: "hidden",
-
-    // 여백
-    marginTop: 20,
-    marginLeft: 30,
-    marginRight: 30,
   },
 
   button: {

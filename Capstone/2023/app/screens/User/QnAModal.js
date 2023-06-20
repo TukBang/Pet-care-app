@@ -10,9 +10,9 @@ function QnAModal({visible, unvisible}) {
     <Modal visible={visible} onRequestClose={unvisible} transparent={true} animationType="fade">
       <Pressable style={styles.background} onPress={unvisible}>
         <View style={styles.whiteBox}>
-          <Text>이메일로 문의 하시려면 아래 이메일을 통해 보내주세요</Text>
-          <Text>pca_QnA@gmail.com</Text>
-          <Text>화면을 클릭하면 꺼집니다.</Text>
+          <Text style={styles.mainText}>문의는 아래 이메일로 보내주세요</Text>
+          <Text style={[styles.subText, {color: "#3A8DF8"}]}>pca_QnA@gmail.com</Text>
+          <Text style={styles.mainText}>화면을 클릭하면 꺼집니다.</Text>
         </View>
       </Pressable>
     </Modal>
@@ -28,12 +28,26 @@ const styles = StyleSheet.create({
   },
 
   whiteBox: {
+    width: "80%",
+    height: "13%",
     flexDirection: "column",
     alignItems: "center",
-    width: "80%",
+
     backgroundColor: "white",
     borderRadius: 4,
     elevation: 2,
+  },
+
+  mainText: {
+    marginTop: 5,
+
+    fontSize: 18,
+    color: "#282828",
+  },
+
+  subText: {
+    fontSize: 16,
+    color: "#686868",
   },
 });
 

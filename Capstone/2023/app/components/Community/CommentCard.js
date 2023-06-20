@@ -38,19 +38,42 @@ function CommentCard({ user, txt, postId, createdAt, id }) {
             <View style={{ flexDirection: "row" }}>
               {/* 프로필 - 프사, 닉네임 */}
               <Pressable style={styles.profile} onPress={onOpenProfile}>
-                <Image
-                  source={
-                    user.photoURL
-                      ? {
-                          uri: user.photoURL,
-                        }
-                      : require("../../assets/user.png")
-                  }
-                  resizeMode="cover"
-                  style={styles.avatar}
-                />
-                <Text style={styles.displayName}>{user.isExpert == 1 ? '[전문가] ' : ''}{user.displayName}</Text>
+                {
+                  user.isExpert == 1 ? (
+                    <Image
+                      source={
+                        user.photoURL
+                        ? { uri: user.photoURL, }
+                        : require("../../assets/user.png")
+                      }
+                      resizeMode="cover"
+                      style={[styles.avatar, {borderWidth: 2, borderColor: "#DBAC34",}]}
+                    />
+                  ) : (
+                    <Image
+                      source={
+                        user.photoURL
+                        ? { uri: user.photoURL, }
+                        : require("../../assets/user.png")
+                      }
+                      resizeMode="cover"
+                      style={[styles.avatar]}
+                    />
+                  )                      
+                }
+                {
+                  user.isExpert == 1 ? (
+                    <Text style={[styles.displayName, {color: "#DBAC34"}]}>
+                      {user.displayName}
+                    </Text>
+                  ) : (
+                  <Text style={[styles.displayName]}>
+                    {user.displayName}
+                  </Text>
+                  )
+                }
               </Pressable>
+
               {/* 내 게시물 여부(isMyPost(bool))에 따라 게시물 관리 버튼 표시 */}
               {isMyPost && (
                 <Pressable style={{ alignSelf: "flex-end" }} onPress={onPressMore} hitSlop={8}>
@@ -58,17 +81,19 @@ function CommentCard({ user, txt, postId, createdAt, id }) {
                 </Pressable>
               )}
             </View>
+            
             {/* 댓글 내용 */}
-            <Text style={{ fontSize: 15, marginTop: 4, marginLeft: 1, marginBottom: 5 }}>
-              {txt}
-            </Text>
+            <Text style={styles.comment}>{txt}</Text>
             <Text date={date} style={styles.date}>
-              {format(date, "MM월 dd일 (EEE) hh시 mm분", { locale: ko })}
+              {format(date, "MM/dd hh:mm", { locale: ko })}
             </Text>
           </View>
         </View>
-        {/* 보더 */}
-        <View style={styles.border} />
+
+        <View style={{width: "100%"}}>
+          <View style={[styles.border]} />
+        </View>
+
       </View>
       {/* 댓글 삭제 모달 */}
       <ActionSheetModal visible={isSelecting} actions={actions} onClose={onClose} />
@@ -77,28 +102,21 @@ function CommentCard({ user, txt, postId, createdAt, id }) {
 }
 const styles = StyleSheet.create({
   block: {
-    // paddingTop: 16,
-    // paddingBottom: 16,
   },
 
   border: {
-    height: 1,
-    backgroundColor: "gray",
-    // marginBottom: 10,
-    marginLeft: 10,
-    marginRight: 10,
+    height: 2,
+    backgroundColor: "#C0CDDF",
+    marginBottom: 10,
   },
 
   avatar: {
     width: 30,
     height: 30,
-    borderRadius: 16,
-    // alignSelf:'right'
+    borderRadius: 5,
   },
 
   paddingBlock: {
-    paddingHorizontal: 16,
-    marginTop: 10,
     marginBottom: 10,
     justifyContent: "center",
   },
@@ -115,27 +133,24 @@ const styles = StyleSheet.create({
   },
 
   displayName: {
-    // lineHeight: 20,
-    fontSize: 13,
-    marginLeft: 3,
-    fontWeight: "bold",
     justifyContent: "center",
+    marginLeft: 6,
+    top: 5,
+
+    fontSize: 14,
+    color: "#282828",
   },
 
-  image: {
-    backgroundColor: "#bdbdbd",
-    width: "20%",
-    aspectRatio: 1,
-    // marginBottom: 6,
-    // marginTop: 6,
-    borderRadius: 10,
+  comment: {
+    marginBottom: 2,
+    fontSize: 14,
+    color: "#282828",
   },
 
   date: {
-    color: "#757575",
+    color: "#686868",
     fontSize: 12,
-    lineHeight: 18,
-    marginLeft: 0,
+    marginLeft: 1,
   },
 });
 

@@ -241,22 +241,22 @@ function PetList() {
       <Modal visible={showModal} transparent={true} animationType="fade">
         <Pressable style={styles.background}>
           <View style={styles.whiteBox}>
-            <Text style={styles.modalTitle}>반려동물을 등록해주세요</Text>
+            <View style={styles.modalTitleView}>
+              <Text style={styles.modalTitle}>반려동물을 정보를 입력 해주세요!</Text>
+            </View>
+            
             <TextInput
               style={styles.modalInput}
               value={petInfo.petName}
               onChangeText={(text) => setPetInfo({ ...petInfo, petName: text })}
               placeholder="이름"
             />
-            {/* 둘 중 하나만 쓰고 싶으면 쓸 것 */}
-              {/* textinput 으로 입력 */}
-            <TextInput
-              style={styles.modalInput}
-              value={petInfo.petGender}
-              onChangeText={(text) => setPetInfo({ ...petInfo, petGender: text })}
-              placeholder="성별"
-            />
-            <Text>성별</Text>
+
+            <View style={{width: "100%", height: "1%"}}>
+              <View style={[styles.border]} />
+            </View>
+
+            <Text style={[styles.modalInput, {marginTop: 5, marginLeft: 5}]}>성별</Text>
               {/* picker 로 성별 선택 */}
             <Picker
               style={styles.modalInput}
@@ -267,76 +267,98 @@ function PetList() {
               <Picker.Item label="수컷" value="수컷" />
             </Picker>
             {/* 둘 중 하나만 쓰고 싶으면 쓸 것 */}
-            <TextInput
-              style={styles.modalInput}
-              value={petInfo.petWeight}
-              onChangeText={(text) => setPetInfo({ ...petInfo, petWeight: text })}
-              placeholder="무게 (숫자 만)"
-            />
+
+            <View style={{width: "100%", height: "1%"}}>
+              <View style={[styles.border]} />
+            </View>
+
             <TextInput
               style={styles.modalInput}
               value={petInfo.petAge}
               onChangeText={(text) => setPetInfo({ ...petInfo, petAge: text })}
-              placeholder="나이 (세)"
+              placeholder="나이"
             />
+
+            <View style={{width: "100%", height: "1%"}}>
+              <View style={[styles.border]} />
+            </View>
+
+            <TextInput
+              style={styles.modalInput}
+              value={petInfo.petWeight}
+              onChangeText={(text) => setPetInfo({ ...petInfo, petWeight: text })}
+              placeholder="체중"
+            />
+
+            <View style={{width: "100%", height: "1%"}}>
+              <View style={[styles.border]} />
+            </View>
+
             <TextInput
               style={styles.modalInput}
               value={petInfo.petKind}
               onChangeText={(text) => setPetInfo({ ...petInfo, petKind: text })}
-              placeholder="종류"
+              placeholder="품종"
             />
-            <TouchableOpacity
-              onPress={() => setModalVisible(true)}
 
-            >
-              <Image 
-                style={styles.petProfile}
-                resizeMode='cover' 
+            <View style={{width: "100%", height: "1%"}}>
+              <View style={[styles.border]} />
+            </View>
+
+            <Text style={[styles.modalInput, {marginTop: 5, marginLeft: 5}]}>이미지 선택</Text>
+            <TouchableOpacity 
+              style={styles.imageButton}
+              onPress={() => setModalVisible(true)}>
+              <Image    
+                style={styles.petProfile}               
+                resizeMode='stretch' 
                 source={cameraInfo ? { uri: cameraInfo.path } : require("../../assets/dog.png")}  
               />
             </TouchableOpacity>
+
             <ActionSheetModal
-                visible={modalVisible}
-                onClose={() => setModalVisible(false)}
-                actions={[
-                  {
-                    icon: "camera-alt",
-                    text: "카메라로 촬영하기",
-                    onPress: onLaunchCamera,
-                  },
-                  {
-                    icon: "photo",
-                    text: "사진 선택하기",
-                    onPress: onLaunchImageLibrary,
-                  },
-                ]}
-              />
+              visible={modalVisible}
+              onClose={() => setModalVisible(false)}
+              actions={[{
+                icon: "camera-alt",
+                text: "카메라로 촬영하기",
+                onPress: onLaunchCamera,
+              }, {
+                icon: "photo",
+                text: "사진 선택하기",
+                onPress: onLaunchImageLibrary,
+              },]}
+            />
 
-            <View style={styles.modalButtons}>
-              <Button
-                title="Save"
-                onPress={() => {
-                  handleSavePetInfo();
-                }}
-              />
+            <View style={{width: "100%", height: "1%"}}>
+              <View style={[styles.border]} />
             </View>
+            
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                handleSavePetInfo();
+              }}
+            >
+              <Text style={styles.modalButtonText}>등록하기</Text>
+            </TouchableOpacity>
 
-            <View style={styles.modalButtons}>
-              <Button
-                title="Cancel"
-                onPress={() => {
-                  setPetInfo({
-                    petName: "",
-                    petAge: "",
-                    petWeight: "",
-                    petGender: "",
-                    petKind: "",
-                    petImage: require("../../assets/dog.png"),
-                  });
-                  setShowModal(false);
-                }}
-              />
-            </View>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => {
+                setPetInfo({
+                  petName: "",
+                  petAge: "",
+                  petWeight: "",
+                  petGender: "",
+                  petKind: "",
+                  petImage: require("../../assets/dog.png"),
+                });
+                setShowModal(false);
+              }}
+            >
+              <Text style={styles.modalButtonText}>취소</Text>
+            </TouchableOpacity>
           </View>
         </Pressable>
       </Modal>
@@ -390,9 +412,12 @@ const styles = StyleSheet.create({
 
   addButton: {
     flex: 1,
-    width: 90,
-    height: 45,
+    width: 60,
+    height: 60,
+    marginLeft: 12,
     borderRadius: 40,
+    borderWidth: 1,
+    borderColor: "#C0CDDF",
     backgroundColor: "#FFFFFF",
     justifyContent: "center",
     alignItems: "center",
@@ -494,6 +519,7 @@ const styles = StyleSheet.create({
 
   whiteBox: {
     width: "80%",
+    height: "85%",
     backgroundColor: "white",
     borderRadius: 10,
     paddingVertical: 20,
@@ -505,34 +531,72 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 
+  border: {
+    height: 1,
+    backgroundColor: "#C0CDDF",
+  },
+
+  modalTitleView: {
+    alignItems: "center",
+  },
+
   modalTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 15,
-    textAlign: "left",
+    color: "#282828",
   },
 
   modalInput: {
-    width: "100%",
-    borderWidth: 2,
-    borderRadius: 5,
-    borderColor: "#CDCDCD",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    marginBottom: 15,
-    fontSize: 18,
+    fontSize: 16,
   },
 
-  modalButtons: {
-    width: "100%",
-    paddingVertical: 2,
+  imageButton: {
+    width: "30%",
+    height: "15%",
+    marginBottom: 15,
   },
+
+  modalButtonContainer: {
+    // 정렬
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    overflow: "hidden",
+
+    // 여백
+    marginTop: 20,
+    marginLeft: 30,
+    marginRight: 30,
+  },
+
+  modalButton: {
+    justifyContent: "center",
+    alignItems: "center",
+
+    height: "6%",
+    width: "100%",
+
+    // 여백
+    marginTop: 5,
+
+    // 모양
+    borderRadius: 2,
+
+    // 배경색
+    backgroundColor: "#3A8DF8",
+  },
+
+  modalButtonText: {
+    fontSize: 15,
+    color: "#FFFFFF",
+  },
+
   // 펫 프로필 사진
   petProfile: {
-    width: "30%",
-    height: "30%",
-    borderRadius: 50,
-    alignSelf: "center"
+    width: "100%",
+    height: "100%",
+    marginTop: 5,
+    marginLeft: 6,
   },
 
   buttonPressed: {

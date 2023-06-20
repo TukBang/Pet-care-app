@@ -9,7 +9,6 @@ import { useRoute } from "@react-navigation/native";
 import LinearGradient from "react-native-linear-gradient";
 
 // 커뮤니티 메인화면
-
 function CommunityScreen() {
   const [boardCategory, setBoardCategory] = useState("전체");
   const route = useRoute();
@@ -24,7 +23,6 @@ function CommunityScreen() {
   const uid = user["id"];
   const pickerRef = useRef();
   
-
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { posts, noMorePost, refreshing, onLoadMore, onRefresh, removePost } = usePosts(boardCategory, user["isExpert"]);
 
@@ -76,6 +74,7 @@ function CommunityScreen() {
     </LinearGradient>
   );
 }
+
 const renderItem = ({ item }) => (
   <PostCard
     createdAt={item.createdAt}
@@ -92,14 +91,16 @@ const styles = StyleSheet.create({
   block: {
     flex: 1,
     zIndex: 0,
-    
   },
+
   container: {
     paddingBottom: 48,
   },
+
   spinner: {
     height: 64,
   },
+
   border: {
     height: 2,
     backgroundColor: "#ced4da",

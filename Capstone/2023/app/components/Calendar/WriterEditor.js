@@ -61,97 +61,97 @@ function WriteEditor(
 
   return (
     <View style={styles.block}>
-        {/* 제목 */}
-        <TextInput
-          style={styles.titleTextInput}
-          placeholder={titlePlaceHolder}
-          placeholderTextColor={placeholderTextColor}
-          onChangeText={onChangeTitle}
-          value={title}
-          returnKeyType="next"
-          onSubmitEditing={() => {
-            bodyRef.current.focus();
-          }}
+      {/* 제목 */}
+      <TextInput
+        style={styles.titleTextInput}
+        placeholder={titlePlaceHolder}
+        placeholderTextColor={placeholderTextColor}
+        onChangeText={onChangeTitle}
+        value={title}
+        returnKeyType="next"
+        onSubmitEditing={() => {
+          bodyRef.current.focus();
+        }}
+      />
+      <View style={{width: "100%", height: "1%"}}>
+        <View style={[styles.border]} />
+      </View>
+      
+      <View style={[styles.timeView, {width: "100%", height: "25%"}]}>
+        {/* 시작 시간 */}
+        <TouchableOpacity 
+          onPress={() => showDatePicker('picker1')}
+          style={[styles.button, {left: 30}]}
+        >
+          <Text style={styles.Text}>{format(new Date(date), "hh시 mm분", { locale: ko })}</Text>
+        </TouchableOpacity>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible.picker1}
+          mode="time"
+          date={date}
+          onConfirm={(date) => handleConfirm(date, 'picker1')}
+          onCancel={() => hideDatePicker('picker1')}
         />
-        <View style={{width: "100%", height: "1%"}}>
-          <View style={[styles.border]} />
-        </View>
-        
-        <View style={[styles.timeView, {width: "100%", height: "25%"}]}>
-          {/* 시작 시간 */}
-          <TouchableOpacity 
-            onPress={() => showDatePicker('picker1')}
-            style={[styles.button, {left: 30}]}
-          >
-            <Text style={styles.Text}>{format(new Date(date), "hh시 mm분", { locale: ko })}</Text>
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible.picker1}
-            mode="time"
-            date={date}
-            onConfirm={(date) => handleConfirm(date, 'picker1')}
-            onCancel={() => hideDatePicker('picker1')}
-          />
 
-          <Text style={[styles.Text, {top: 15}]}>→</Text>
+        <Text style={[styles.Text, {top: 15}]}>→</Text>
 
-          {/* 종료 시간 */}
-          <TouchableOpacity 
-            onPress={() => showDatePicker('picker2')} 
-            style={[styles.button, {right: 30}]}
-          >
-            <Text style={styles.Text}>{format(new Date(endDate), "hh시 mm분", { locale: ko })}</Text>
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible.picker2}
-            mode="time"
-            date={endDate}
-            onConfirm={(date) => handleConfirm(date, 'picker2')}
-            onCancel={() => hideDatePicker('picker2')}
-          />
-        </View>
-        
-        <View style={{width: "100%", height: "1%", bottom: 3}}>
-          <View style={[styles.border]} />
-        </View>
-
-        {/* 펫 선택 */}
-        <View style={[{width: "100%", height: "25%"}]}>
-          <Picker
-            selectedValue={pet}
-            onValueChange={(pet) => {
-              setSelectedPet(pet);
-              onChangePet(pet); // onChangePet 함수를 호출하여 선택된 펫 값을 업데이트
-            }}
-            style={styles.picker}
-            itemStyle={styles.pickerItem}
-          >
-            <Picker.Item key="0" label={petPlaceHolder} value={undefined} />
-            {petList.map((pet) => (
-              <Picker.Item 
-                key={pet.id} 
-                label={pet.petName} 
-                value={pet.petName} 
-              />
-            ))}
-          </Picker>
-        </View>
-
-        <View style={{width: "100%", height: "1%", bottom: 3}}>
-          <View style={[styles.border]} />
-        </View>
-
-        {/* 메모 */}
-        <TextInput
-          style={styles.bodyTextInput}
-          placeholder={bodyPlaceHolder}
-          placeholderTextColor={placeholderTextColor}
-          onChangeText={onChangeBody}
-          value={body}
-          multiline={true}
-          ref={bodyRef}
+        {/* 종료 시간 */}
+        <TouchableOpacity 
+          onPress={() => showDatePicker('picker2')} 
+          style={[styles.button, {right: 30}]}
+        >
+          <Text style={styles.Text}>{format(new Date(endDate), "hh시 mm분", { locale: ko })}</Text>
+        </TouchableOpacity>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible.picker2}
+          mode="time"
+          date={endDate}
+          onConfirm={(date) => handleConfirm(date, 'picker2')}
+          onCancel={() => hideDatePicker('picker2')}
         />
       </View>
+      
+      <View style={{width: "100%", height: "1%", bottom: 3}}>
+        <View style={[styles.border]} />
+      </View>
+
+      {/* 펫 선택 */}
+      <View style={[{width: "100%", height: "25%"}]}>
+        <Picker
+          selectedValue={pet}
+          onValueChange={(pet) => {
+            setSelectedPet(pet);
+            onChangePet(pet); // onChangePet 함수를 호출하여 선택된 펫 값을 업데이트
+          }}
+          style={styles.picker}
+          itemStyle={styles.pickerItem}
+        >
+          <Picker.Item key="0" label={petPlaceHolder} value={undefined} />
+          {petList.map((pet) => (
+            <Picker.Item 
+              key={pet.id} 
+              label={pet.petName} 
+              value={pet.petName} 
+            />
+          ))}
+        </Picker>
+      </View>
+
+      <View style={{width: "100%", height: "1%", bottom: 3}}>
+        <View style={[styles.border]} />
+      </View>
+
+      {/* 메모 */}
+      <TextInput
+        style={styles.bodyTextInput}
+        placeholder={bodyPlaceHolder}
+        placeholderTextColor={placeholderTextColor}
+        onChangeText={onChangeBody}
+        value={body}
+        multiline={true}
+        ref={bodyRef}
+      />
+    </View>
   );
 }
 

@@ -63,7 +63,7 @@ function WriteHeader({
         {isEditing && (
           <TransparentCircleButton
             name="delete-forever"
-            color="#ef5350"
+            color="#DF3030"
             hasMarginRight
             onPress={onAskRemove}
           />
