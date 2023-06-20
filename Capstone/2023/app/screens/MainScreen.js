@@ -12,6 +12,7 @@ const Tab = createBottomTabNavigator();
 
 // 하단 네비케이터를 구성하고 있는 모듈
 function MainScreen() {
+
   return (
     <Tab.Navigator
       initialRouteName="Home"

@@ -37,12 +37,13 @@ const styles = StyleSheet.create({
 
   block: {
     alignItems: "center",
+    width: "48%",
     flexDirection: 'row',
-    marginRight: 10,
+    // marginRight: 10,
   },
 
   wrapper: {
-    width: 180,
+    width: "100%",
     height: 48,
     alignItems: "center",
     justifyContent: "center",

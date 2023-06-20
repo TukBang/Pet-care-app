@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { useRef, useEffect } from "react";
+import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MainScreen from "./MainScreen";
 import WriteScreen from "./Calendar/WriteScreen";
@@ -13,13 +13,37 @@ import ModifyCommentScreen from "./Community/ModifyCommentScreen";
 import ProfileSetting from "./User/ProfileSetting";
 import PetProfile from "../components/Home/PetProfile";
 import ChattingBot from "./ChatBot/ChatBot";
-
+import { BackHandler, ToastAndroid } from "react-native";
 const Stack = createNativeStackNavigator();
-
 // 화면 스택이 구성되어 있는 모듈
-
 function RootStack() {
   const { user } = useUserContext();
+
+  // const exitApp = useRef(false); // 앱 종료 여부를 저장하는 useRef
+
+  // useEffect(() => {
+  //   const backHandler = BackHandler.addEventListener("hardwareBackPress", handleBackPress);
+
+  //   return () => {
+  //     backHandler.remove();
+  //   };
+  // }, []);
+
+  // const handleBackPress = () => {
+  //   if (exitApp.current) {
+  //     BackHandler.exitApp(); // 앱 종료
+  //     return true;
+  //   }
+
+  //   exitApp.current = true;
+  //   ToastAndroid.show("한번 더 뒤로가기를 누르면 종료됩니다.", ToastAndroid.SHORT);
+
+  //   setTimeout(() => {
+  //     exitApp.current = false;
+  //   }, 2000);
+
+  //   return true;
+  // };
 
   return (
     <NavigationContainer independent={true}>

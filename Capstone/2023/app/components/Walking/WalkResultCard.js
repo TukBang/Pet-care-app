@@ -27,7 +27,7 @@ function WalkResultCard({
 
   useEffect(() => {
     getPetInfoByUserID(userID).then((_petInfo) => {
-        setPetInfo(_petInfo);
+      setPetInfo(_petInfo);
       });
     if (petInfo) {
         petInfo.forEach(item => {
@@ -38,7 +38,7 @@ function WalkResultCard({
         // setFilteredPet(pet);
       console.log('filtered',filteredPet)  
     }
-  }, []);
+  }, [petID, userID]);
 
   return (
     <>

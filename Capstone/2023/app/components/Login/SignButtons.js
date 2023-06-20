@@ -26,7 +26,7 @@ function SignButtons({ isSignUp, onSubmit, loading }) {
   }
 
   return (
-    <View style={styles.buttons}>
+    <View style={[styles.buttons,{justifyContent: 'space-between'}]}>
       <CustomButton title={primaryTitle} hasMarginBottom onPress={onSubmit} />
       <CustomButton title={secondaryTitle} theme="secondary" onPress={onSecondaryButtonPress} />
     </View>
