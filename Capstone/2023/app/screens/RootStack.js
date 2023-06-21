@@ -90,7 +90,19 @@ function RootStack() {
             <Stack.Screen
               name="Modify"
               component={ModifyScreen}
-              options={{ title: "게시글 수정", headerBackTitle: "뒤로가기" }}
+              options={{
+                title: "커뮤니티", 
+                headerBackTitle: "뒤로가기", 
+                headerStyle: {
+                  backgroundColor: '#F6FAFF',
+                },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: "#282828",
+                },
+                headerTintColor: "#3A8DF8",
+              }}
             />
             <Stack.Screen
               name="ModifyComment"
@@ -135,7 +147,20 @@ function RootStack() {
             <Stack.Screen
               name="ChatBot"
               component={ChattingBot}
-              options={{ title: "챗봇", headerBackTitle: "뒤로가기" }}
+
+              options={{
+                title: "챗봇", 
+                headerBackTitle: "뒤로가기", 
+                headerStyle: {
+                  backgroundColor: '#F6FAFF',
+                },
+                headerTitleStyle: {
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: "#282828",
+                },
+                headerTintColor: "#3A8DF8",
+              }}
             />
           </>
         ) : (

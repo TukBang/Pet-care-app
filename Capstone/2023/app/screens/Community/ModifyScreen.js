@@ -2,11 +2,13 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useState, useEffect, useCallback } from "react";
 import { Image } from "react-native";
 import {
+  View,
   StyleSheet,
   TextInput,
   Platform,
   KeyboardAvoidingView,
   useWindowDimensions,
+  ScrollView,
 } from "react-native";
 import IconRightButton from "../../components/Community/IconRightButton";
 import { updatePost } from "../../lib/post";
@@ -39,14 +41,15 @@ function ModifyScreen() {
     navigation.pop();
   }, [navigation, params.id, title, description]);
 
-  //헤더 우측의 버튼
+  // 헤더 우측의 버튼
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <IconRightButton onPress={onSubmit} name="check" />,
+      headerRight: () => <IconRightButton onPress={onSubmit} name="check" color="#3A8DF8"/>,
     });
   }, [navigation, onSubmit]);
 
   return (
+    <ScrollView style={{backgroundColor: "#F6FAFF"}}>
     <KeyboardAvoidingView
       behavior={Platform.select({ ios: "height" })}
       style={styles.block}
@@ -56,19 +59,23 @@ function ModifyScreen() {
     >
       <TextInput
         style={styles.titleInput}
-        multiline={true}
         placeholder="제목을 입력하세요..."
-        textAlignVertical="top"
-        value={title}
         onChangeText={setTitle}
+        value={title}
+        returnKeyType="next"     
       />
-      <Image
-        source={{
-          uri: photo,
-        }}
-        style={[styles.image, { height: width }]}
-        resizeMode="cover"
-      />
+
+      <View style={{width: "100%", height: "1%"}}>
+        <View style={[styles.border]} />
+      </View>
+
+      <View style={styles.imageView}>
+        <Image
+          source={{uri : photo}}
+          style={styles.image}
+        />
+      </View>
+
       <TextInput
         style={styles.input}
         multiline={true}
@@ -78,6 +85,7 @@ function ModifyScreen() {
         onChangeText={setDescription}
       />
     </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
@@ -86,20 +94,30 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 10,
   },
-  image: { width: "100%" },
-  titleInput: {
-    paddingVertical: 0,
-    // flex: 1,
-    fontSize: 20,
-    // paddingBottom: 1,
-    color: "#263238",
-    fontWeight: "bold",
+
+  border: {
+    height: 2,
+    marginBottom: 5,
+    backgroundColor: "#C0CDDF",
   },
+
+  imageView: {
+    height: "67%", 
+    width: "50%",
+    marginTop: 5,
+    marginRight: 10,
+  },
+
+  image: {
+    aspectRatio: 1,
+  },
+
+  titleInput: {
+    paddingVertical: 5,
+    fontSize: 16,
+  },
+
   input: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 16,
-    flex: 1,
     fontSize: 16,
   },
 });

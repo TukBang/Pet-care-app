@@ -4,7 +4,7 @@ import ChatScreenCom from './ChatScreenCom';
 
 function ChatBot() {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F6FAFF" }}>
       <StatusBar 
         barStyle="dark-content" />
       <ChatScreenCom />
