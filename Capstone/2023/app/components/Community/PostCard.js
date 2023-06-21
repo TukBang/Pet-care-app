@@ -2,6 +2,9 @@ import React, { useMemo } from "react";
 import { View, StyleSheet, Text, Image, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import { format, formatDistanceToNow } from "date-fns";
+import ko from "date-fns/locale/ko";
+
 function PostCard({ user, category, title, photoURL, description, createdAt, id }) {
   const date = useMemo(
     () => (createdAt ? new Date(createdAt._seconds * 1000) : new Date()),
@@ -22,10 +25,10 @@ function PostCard({ user, category, title, photoURL, description, createdAt, id 
 
   return (
     <>
-      <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-        <View style={styles.paddingBlock}>
-          <View>
-            <Pressable style={styles.profile} onPress={onOpenProfile}>
+      <Pressable onPress={onOpenBoard} style={{flexDirection: "row", justifyContent: "space-between"}}>
+        <View>
+          <View style={styles.paddingBlock}>
+            <View style={styles.profile}>
               <Image
                 source={
                   user.photoURL
@@ -38,10 +41,8 @@ function PostCard({ user, category, title, photoURL, description, createdAt, id 
                 style={styles.avatar}
               />
               <Text style={styles.displayName}>{user.displayName}</Text>
-            </Pressable>
-          </View>
+            </View>
 
-          <Pressable onPress={onOpenBoard}>
             <View style={styles.head}>
               {/* 카테고리 여부에 따라 다르게 표기 */}
               <View style={styles.textContainer}>
@@ -69,19 +70,19 @@ function PostCard({ user, category, title, photoURL, description, createdAt, id 
                     <Text style={styles.description}>{description}</Text>
                   )
                 }
-                <Text date={date} style={styles.date}>{date.toLocaleString()}</Text>
+                <Text date={date} style={styles.date}>{format(date, "MM월 dd일 hh:mm", { locale: ko })}</Text>
               </View>
             </View>
-          </Pressable>
+          </View>
         </View>
-        
+
         <View style={styles.imageView}>
           <Image
             source={{uri: photoURL}}
             style={styles.image}
           />
         </View>
-      </View>
+      </Pressable>
 
       <View style={{width: "100%"}}>
         <View style={[styles.border]} />
@@ -143,15 +144,15 @@ const styles = StyleSheet.create({
   },
 
   textContainer: {
-    flex: 3,
+    marginBottom: 7,
     paddingRight: 10,
   },
 
   imageView: {
     height: "25%", 
     width: "25%",
-    marginTop: 20,
     marginRight: 10,
+    marginTop: 20,
   },
 
   image: {

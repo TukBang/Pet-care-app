@@ -38,7 +38,7 @@ function WalkResultCard({
         // setFilteredPet(pet);
       console.log('filtered',filteredPet)  
     }
-  }, [petID, userID]);
+  }, [petID, userID, petInfo ? '' : petInfo]);
 
   return (
     <>

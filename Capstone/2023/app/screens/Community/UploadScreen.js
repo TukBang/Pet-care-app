@@ -122,7 +122,7 @@ function UploadScreen() {
   // header 부분의 오른쪽 UI
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <IconRightButton onPress={onSubmit} name="send" />,
+      headerRight: () => <IconRightButton onPress={onSubmit} name="send" color="#3A8DF8"/>,
     });
   }, [navigation, onSubmit]);
 
@@ -139,9 +139,10 @@ function UploadScreen() {
         ref={pickerRef}
         selectedValue={category}
         onValueChange={(itemValue, itemIndex) => setCategory(itemValue)}
+        style={{width:"108%", right: 13}}
       >
-        <Picker.Item label="자유" value="자유" />
-        <Picker.Item label="상담" value="상담" />
+        <Picker.Item label="자유" value="자유" style={{fontSize: 18}}/>
+        <Picker.Item label="상담" value="상담" style={{fontSize: 18}}/>
       </Picker>
 
       <TextInput

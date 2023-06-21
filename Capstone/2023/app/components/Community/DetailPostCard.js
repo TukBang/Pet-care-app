@@ -3,8 +3,8 @@ import { View, StyleSheet, Text, Image, Pressable, Dimensions, useWindowDimensio
 import { useUserContext } from "../../contexts/UserContext";
 import usePostActions from "../../hooks/posts/usePostAciton";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import ko from "date-fns/locale/ko";
 import { format, formatDistanceToNow } from "date-fns";
+import ko from "date-fns/locale/ko";
 import ActionSheetModal from "../ActionSheetModal";
 
 // 게시글을 렌더링하기 위해 사용
@@ -88,6 +88,7 @@ function DetailPostCards({ user, category, title, photoURL, description, created
         <AutoHeightImage
           width={width-20}
           source={{ uri: photoURL }}
+          style={{marginTop: 3}}
         />
         {/* 게시글 내용 */}
         <Text style={styles.description}>{description}</Text>

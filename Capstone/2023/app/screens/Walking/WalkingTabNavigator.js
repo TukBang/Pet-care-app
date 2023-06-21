@@ -7,16 +7,12 @@ const Tab = createMaterialTopTabNavigator();
 
 function WalkTabNavigator() {
   return (
-    <Tab.Navigator
-      initialRouteName="산책 하기" 
-      screenOptions={{
-        
-      }}
-      >
+    <Tab.Navigator initialRouteName="산책 하기">
       <Tab.Screen
         name="산책 하기"
         component={WalkingScreen}
-        options={{}}
+        options={{
+        }}
       />
       <Tab.Screen
         name="산책 기록"

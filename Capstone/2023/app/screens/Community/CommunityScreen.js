@@ -66,7 +66,7 @@ function CommunityScreen() {
           onEndReached={onLoadMore}
           onEndReachedThreshold={0.75}
           ListFooterComponent={
-            !noMorePost && <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
+            !noMorePost && <ActivityIndicator style={styles.spinner} size={32} color="#3A8DF8" />
           }
           refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}
         />

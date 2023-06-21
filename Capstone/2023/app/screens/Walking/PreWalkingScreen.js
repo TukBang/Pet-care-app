@@ -97,17 +97,18 @@ const PreWalkingScreen = ({ onPress, selectedPet, setSelectedPet }) => {
       end={{ x: 1, y: 0 }}
     >
       <View style={styles.container}>
-        <Text style={styles.header}>날씨</Text>
         <View style={styles.box}>
           {weatherData ? (
             <>
-              <Text>습도 : {weatherData.humidity}%</Text>
-              <Text>온도 : {weatherData.temp.toFixed(0)}ºC</Text>
-              <Text>오늘은 {weatherData.weather[0].description}!</Text>
-              <Image 
-                style={weatherStyles.icon} 
-                source={{uri: 'https://openweathermap.org/img/wn/'+weatherData.weather[0].icon+'@2x.png'}} 
-              />
+              <View style={weatherStyles.weatherBox}>
+                <Image 
+                  style={weatherStyles.icon} 
+                  source={{uri: 'https://openweathermap.org/img/wn/' + weatherData.weather[0].icon+'@2x.png'}} 
+                />
+                <Text style={weatherStyles.weatherText}>{weatherData.temp.toFixed(1)}º</Text>
+              </View>
+              <Text style={weatherStyles.weatherSubText}>{weatherData.weather[0].description}</Text>
+              <Text style={[weatherStyles.weatherSubText, {fontSize: 16, }]}>체감 {weatherData.feels_like}º 습도 {weatherData.humidity}%</Text>
             </>
           ) : (
             <Text>날씨 정보를 가져오는 중...</Text>
@@ -154,6 +155,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
+    paddingHorizontal: 20,
   },
 
   header:{
@@ -237,14 +239,16 @@ const styles = StyleSheet.create({
   },
 
   box:{
-    width: 380,
-    height: 150,
-    backgroundColor: '#DDDDDD',
+    width: "100%",
+    height: "18%",
     alignItems: 'center',
-    alignSelf: 'center',
-    elevation: 10,
+    marginTop: 20,
     marginBottom: 10,
+
+    borderWidth: 1,
     borderRadius: 15,
+    borderColor: "#C0CDDF",
+    backgroundColor: "#C0CDDF",
   },
 
   boxText:{
@@ -258,9 +262,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     alignItems: 'center',
   },
+
   blurContainer: {
     opacity: 0.3, // 흐릿한 효과를 위한 투명도 조절
   },
+
   disabledButton: {
     width: 250,
     height: 50,
@@ -274,10 +280,33 @@ const styles = StyleSheet.create({
 
 const weatherStyles = StyleSheet.create({
   icon: {
-    width: '50%',
-    height:'50%',
-    resizeMode: 'contain'
-  }
+    width: "20%",
+    height:"100%",
+  },
+
+  weatherBox: {
+    flexDirection: "row", 
+    width: "100%", 
+    height: "50%", 
+    justifyContent: "center"
+  },
+
+  weatherText: {
+    alignSelf: 'center',
+    right: 5, 
+    bottom: 1, 
+    
+    fontSize: 25,
+    fontWeight: "bold",
+    color: "#282828",
+  },
+
+  weatherSubText: {
+    bottom: 6,
+
+    fontSize: 20,
+    color: "#282828",
+  },
 })
 
 export default PreWalkingScreen;

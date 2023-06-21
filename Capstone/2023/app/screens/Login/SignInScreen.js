@@ -83,7 +83,7 @@ function SignInScreen({ navigation, route }) {
   return (
     <KeyboardAvoidingView
       style={styles.keyboardAvoidingView}
-      behavior={Platform.select({ ios: "padding", android: "height" })}
+      behavior={Platform.select({ ios: "padding" })}
     >
       <SafeAreaView style={styles.fullscreen}>
         <View style={styles.container}>
