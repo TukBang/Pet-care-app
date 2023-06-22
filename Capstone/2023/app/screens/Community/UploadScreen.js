@@ -41,6 +41,7 @@ function UploadScreen() {
   const navigation = useNavigation();
   const res = route.params.res;
   const predictions = route.params.predictions;
+  const setBoardCategory = route.params.setBoardCategory;
   const { width } = useWindowDimensions();
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
@@ -53,9 +54,6 @@ function UploadScreen() {
 
   const { user } = useUserContext();
 
-  console.log(res);
-  console.log("Hello World!");
-  console.log(predictions);
   const onSubmit = useCallback(async () => {
     if (title === "" || title === null) {
       Alert.alert("실패", "제목을 입력해주세요.");
@@ -67,17 +65,15 @@ function UploadScreen() {
     }
     setIsLoading(true);
     if (!isSolution) {
-      const asset = res.assets[0];
-      const extension = asset.fileName.split(".").pop();
-
-      // firebase storge 에서 /photo/uid/랜덤변수.확장자 링크?
+      const extension = res.path.split(".").pop();
       var reference = storage().ref(`/photo/${user.id}/${v4()}.${extension}`);
+
+      //image : path to base64 변환
+      const image = await RNFS.readFile(res.path, "base64");
       if (Platform.OS === "android") {
-        await reference.putString(asset.base64, "base64", {
-          contentType: asset.type,
-        });
+        await reference.putString(image, "base64", { contentType: res.mime });
       } else {
-        await reference.putFile(asset.uri);
+        await reference.putFile(res.path);
       }
     } else {
       const extension = res.path.split(".").pop();
@@ -138,7 +134,7 @@ function UploadScreen() {
       <Picker
         ref={pickerRef}
         selectedValue={category}
-        onValueChange={(itemValue, itemIndex) => setCategory(itemValue)}
+        onValueChange={(itemValue, itemIndex) => [setCategory(itemValue),setBoardCategory(itemValue)]}
         style={{width:"108%", right: 13}}
       >
         <Picker.Item label="자유" value="자유" style={{fontSize: 18}}/>
@@ -160,7 +156,7 @@ function UploadScreen() {
       
       <View style={styles.imageView}>
         <Image
-          source={{uri : isSolution ? res.path : res.assets[0]?.uri}}
+          source={{uri : isSolution ? res.path : res.path}}
           style={styles.image}
         />
       </View>

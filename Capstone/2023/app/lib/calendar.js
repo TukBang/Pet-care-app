@@ -49,7 +49,7 @@ export const getNextClosestCalendarByUser = async () => {
 
     const snapshot = await firestore()
       .collection("calendar")
-      .orderBy("s_time", "desc")
+      .orderBy("s_time", "asc")
       .where("userID", "==", currentUser.uid)
       .where("s_time", ">=", firestore.Timestamp.now()) // 현재 시간 이후의 캘린더만 가져옴
       .limit(1)
@@ -67,23 +67,27 @@ export const getNextClosestCalendarByUser = async () => {
   }
 };
 
-export async function getOneNewerCal(id) {
-  const currentUser = auth().currentUser;
-  const cursorDoc = await calendarCollection.doc(id).get();
-  let query = postsCollection.orderBy("createdAt", "desc")
-  .collection("calendar")
-  .orderBy("s_time", "asc")
-  .where("userID", "==", currentUser.uid)
-  .where("s_time", ">=", currentTime) // 현재 시간 이후의 캘린더만 가져옴
-  
+// export async function getOneNewerCal(id) {
+//   const currentUser = auth().currentUser;
+//   const cursorDoc = await calendarCollection.doc(id).get();
 
-  const snapshot = await query.startAfter(cursorDoc).limit(1).get();
-  const cal = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-  return cal;
-}
+//   const snapshot = await firestore()
+//   .collection("calendar")
+//   // .orderBy("createdAt", "desc")
+  
+//   .where("userID", "==", currentUser.uid)
+//   .where("s_time", ">=", firestore.Timestamp.now()) // 현재 시간 이후의 캘린더만 가져옴
+//   .orderBy("s_time", "asc")
+//   .startAfter(cursorDoc)
+//   .limit(1)
+//   .get();
+
+//   const cal = snapshot.docs.map((doc) => ({
+//     id: doc.id,
+//     ...doc.data(),
+//   }));
+//   return cal;
+// }
 
 export const deleteCalendarRecordFromFirebase = async (logId) => {
   try {

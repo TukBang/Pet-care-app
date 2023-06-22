@@ -30,8 +30,10 @@ function CommunityScreen() {
   useEffect(() => {
     if (posts) {
       setFilteredPosts(posts);
-  }
-  }, [posts,boardCategory]);
+    }
+  }, [posts, boardCategory]);
+
+
 
   return (
     <LinearGradient
@@ -44,7 +46,7 @@ function CommunityScreen() {
     >
       <View style={styles.block}>
         {/* 게시글 추가버튼 */}
-        <CameraButton />
+        <CameraButton setBoardCategory={setBoardCategory}/>
         {/* 카테고리를 정하는 picker */}
         <Picker
           ref={pickerRef}

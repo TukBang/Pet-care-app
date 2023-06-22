@@ -124,11 +124,11 @@ function WriteEditor(
             onChangePet(pet); // onChangePet 함수를 호출하여 선택된 펫 값을 업데이트
           }}
           style={styles.picker}
-          itemStyle={styles.pickerItem}
         >
-          <Picker.Item key="0" label={petPlaceHolder} value={undefined} />
+          <Picker.Item style={{fontSize: 18}} key="0" label={petPlaceHolder} value={undefined} />
           {petList.map((pet) => (
             <Picker.Item 
+              style={{fontSize: 18}}
               key={pet.id} 
               label={pet.petName} 
               value={pet.petName} 
@@ -195,6 +195,10 @@ const styles = StyleSheet.create({
   },
 
   picker: {
+    width: "108%",
+    marginBottom: 5,
+    right: 13,
+    bottom: 3,
     backgroundColor: "#F6FAFF",
   },
   

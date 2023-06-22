@@ -7,55 +7,63 @@ import { useUserContext } from "../../contexts/UserContext";
 // 그라데이션
 import LinearGradient from 'react-native-linear-gradient';
 
-
 function WalkRecord() {
-    const [results, setResults] = useState([]);
+  const [results, setResults] = useState([]);
 
-    const {walk, oneWalk, refreshing, oneRefreshing, noMoreWalk, onOneRefresh, onRefresh, onLoadMore } = usewalk();
-    const {user} = useUserContext();
-    
-    useEffect(() => {
-        if (walk) {
-            setResults(walk);
-      }
-      }, [walk]);
+  const {walk, oneWalk, refreshing, oneRefreshing, noMoreWalk, onOneRefresh, onRefresh, onLoadMore } = usewalk();
+  const {user} = useUserContext();
+  
+  useEffect(() => {
+      if (walk) {
+          setResults(walk);
+    }
+    }, [walk]);
 
-    return (
-        <>
-            <LinearGradient
-                colors={['#f6faff', '#f6faff']}
-                // colors={['#F0F8FF', '#D1EEFD']}
+  return (
+    <>
+      <LinearGradient
+        colors={['#f6faff', '#f6faff']}
+        // colors={['#F0F8FF', '#D1EEFD']}
 
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 0 }}
-            >
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+      >
+        {
+          results.length !== 0 ? (
+            <>
+              <View style={{height: "100%"}}>
                 <FlatList
-                data={results}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id}
-                contentContainerStyle={styles.container}
-                onEndReached={onLoadMore}
-                onEndReachedThreshold={0.75}
-                ListFooterComponent={
-                    !noMoreWalk && <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
-                }
-                refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}
+                  data={results}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item.id}
+                  contentContainerStyle={styles.container}
+                  onEndReached={onLoadMore}
+                  onEndReachedThreshold={0.75}
+                  refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}
                 />
-            </LinearGradient>
-        </>
-    )
+              </View>
+            </>
+          ) : (
+            <View style={{height: "100%", backgroundColor: "#F6FAFF"}}>
+              <Text></Text>
+            </View>
+          )
+        }        
+      </LinearGradient>
+    </>
+  )
 }
 
 const renderItem = ({ item }) => (
     <WalkResultCard
-    walkID={item.walkID}
-    time={item.time}
-    distance={item.distance}
-    kcal={item.kcal}
-    userID={item.userID}
-    petID={item.petID}
-    walkingImage={item.walkingImage}
-    createdAt={item.createdAt}
+      walkID={item.walkID}
+      time={item.time}
+      distance={item.distance}
+      kcal={item.kcal}
+      userID={item.userID}
+      petID={item.petID}
+      walkingImage={item.walkingImage}
+      createdAt={item.createdAt}
     />
   );
 

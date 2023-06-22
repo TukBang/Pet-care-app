@@ -15,7 +15,7 @@ function CalendarScreen() {
   // 기존에 저장되어 있던 일정 기록들
   const { logs } = useContext(LogContext);
 
-  //선택된 날짜
+  // 선택된 날짜
   const [selectedDate, setSelectedDate] = useState(format(new Date(), "yyyy-MM-dd"));
   const [hidden, setHidden] = useState(false);
 
@@ -29,7 +29,7 @@ function CalendarScreen() {
     [logs]
   );
 
-  //특정날짜에 속한 일정을 보기위한 logs
+  // 특정날짜에 속한 일정을 보기위한 logs
   const filteredLogs = logs.filter(
     (log) => format(new Date(log.date), "yyyy-MM-dd") === selectedDate
   );

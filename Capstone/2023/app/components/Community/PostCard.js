@@ -56,7 +56,6 @@ function PostCard({ user, category, title, photoURL, description, createdAt, id 
                       )
                     }                  
                   </View>
-                  
                   <View style={{right: 4, bottom: 1.25,}}>
                     <Text style={styles.boardTitle}>{title}</Text>
                   </View>

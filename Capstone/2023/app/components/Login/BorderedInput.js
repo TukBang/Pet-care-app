@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TextInput } from "react-native";
+import { StyleSheet, TextInput, Keyboard } from "react-native";
 
 function BorderedInput({ hasMarginBottom, ...rest }, ref) {
   return <TextInput style={[styles.input, hasMarginBottom && styles.margin]} ref={ref} {...rest} />;

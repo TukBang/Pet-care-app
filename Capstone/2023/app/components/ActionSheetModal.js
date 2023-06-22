@@ -21,7 +21,7 @@ function ActionSheetModal({ visible, onClose, actions }) {
               }}
               key={action.text}
             >
-              <Icon name={action.icon} color="#757575" size={24} style={styles.icon} />
+              <Icon name={action.icon} color="#686868" size={24} style={styles.icon} />
               <Text style={styles.actionText}>{action.text}</Text>
             </Pressable>
           ))}

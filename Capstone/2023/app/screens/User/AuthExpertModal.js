@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
 
   mainText: {
-    marginTop: 5,
+    marginTop: "4%",
 
     fontSize: 18,
     color: "#282828",

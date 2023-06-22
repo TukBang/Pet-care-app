@@ -3,7 +3,7 @@ import {
   View, ScrollView, Image, Text, TextInput, 
   TouchableOpacity, Pressable, Button,
   Modal, Animated, 
-  StyleSheet, Alert
+  StyleSheet, Alert, KeyboardAvoidingView
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";  // 아이콘 받기위해 사용
 import { useNavigation } from "@react-navigation/native";    // 화면이동을 위해 사용
@@ -44,7 +44,7 @@ function PetList() {
   const petListText = "나의 반려동물";                 // Text 변수들
 
   // 펫 등록 모달 변수
-  const [petGender, setPetGender] = useState("");
+  const [petGender, setPetGender] = useState("성별");
 
   // 펫 정보 불러오기
   useEffect(() => {
@@ -84,8 +84,8 @@ function PetList() {
       Alert.alert("실패", "종류를 올바르게 입력해주세요.");
       return;
     }
-    if (petInfo.petGender === "" || petInfo.petGender === null) {
-      Alert.alert("실패", "성별을 올바르게 입력해주세요.");
+    if (petInfo.petGender === "" || petInfo.petGender === null || petInfo.petGender === '성별') {
+      Alert.alert("실패", "성별을 올바르게 선택해주세요.");
       return;
     }
 
@@ -235,11 +235,11 @@ function PetList() {
             <Text style={styles.addButtonText}>+</Text>
           </TouchableOpacity>
         </ScrollView>
-        </View>
+      </View>
         
       {/* 펫 등록 화면 모달 */}
-      <Modal visible={showModal} transparent={true} animationType="fade">
-        <Pressable style={styles.background}>
+      <Modal visible={showModal} transparent={true} animationType="fade" propagateSwipe={true} >
+        <View style={styles.background}>
           <View style={styles.whiteBox}>
             <View style={styles.modalTitleView}>
               <Text style={styles.modalTitle}>반려동물을 정보를 입력 해주세요!</Text>
@@ -256,15 +256,16 @@ function PetList() {
               <View style={[styles.border]} />
             </View>
 
-            <Text style={[styles.modalInput, {marginTop: 5, marginLeft: 5}]}>성별</Text>
+            <Text style={[{fontSize: 14, top: "1%", marginTop: 10,}]}>성별</Text>
               {/* picker 로 성별 선택 */}
             <Picker
-              style={styles.modalInput}
+              style={[styles.modalInput, {width: "110%", right: "5%"}]}
               selectedValue={petGender}
               onValueChange={(value) => [setPetInfo({ ...petInfo, petGender: value }), setPetGender(value)]}
             >
-              <Picker.Item label="암컷" value="암컷" />
-              <Picker.Item label="수컷" value="수컷" />
+              <Picker.Item style={{fontSize: 16}} label="성별" value="성별" />
+              <Picker.Item style={{fontSize: 16}} label="암컷" value="암컷" />
+              <Picker.Item style={{fontSize: 16}} label="수컷" value="수컷" />
             </Picker>
             {/* 둘 중 하나만 쓰고 싶으면 쓸 것 */}
 
@@ -305,15 +306,47 @@ function PetList() {
               <View style={[styles.border]} />
             </View>
 
-            <Text style={[styles.modalInput, {marginTop: 5, marginLeft: 5}]}>이미지 선택</Text>
+            <Text style={[styles.modalInput, {marginTop: "1%", marginLeft: "2.5%"}]}>이미지 선택</Text>
             <TouchableOpacity 
-              style={styles.imageButton}
+              style={[styles.imageButton]}
               onPress={() => setModalVisible(true)}>
               <Image    
-                style={styles.petProfile}               
+                style={[styles.petProfile, {borderWidth: 2, borderColor: "#C0CDDF", borderRadius: 10,}]}
                 resizeMode='stretch' 
-                source={cameraInfo ? { uri: cameraInfo.path } : require("../../assets/dog.png")}  
+                source={cameraInfo ? { uri: cameraInfo.path } : require("../../assets/dog_icon.png")}  
               />
+            </TouchableOpacity>
+
+            
+
+            <View style={{width: "100%", height: "1%"}}>
+              <View style={[styles.border]} />
+            </View>
+            
+            <TouchableOpacity
+              style={[styles.modalButton, {marginTop: "4%"}]}
+              onPress={() => {
+                handleSavePetInfo();
+              }}
+            >
+              <Text style={styles.modalButtonText}>등록하기</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.modalButton]}
+              onPress={() => {
+                setPetInfo({
+                  petName: "",
+                  petAge: "",
+                  petWeight: "",
+                  petGender: "",
+                  petKind: "",
+                  petImage: require("../../assets/dog.png"),
+                });
+                setShowModal(false);
+              }}
+            >
+              <Text style={styles.modalButtonText}>취소</Text>
             </TouchableOpacity>
 
             <ActionSheetModal
@@ -330,37 +363,8 @@ function PetList() {
               },]}
             />
 
-            <View style={{width: "100%", height: "1%"}}>
-              <View style={[styles.border]} />
-            </View>
-            
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                handleSavePetInfo();
-              }}
-            >
-              <Text style={styles.modalButtonText}>등록하기</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                setPetInfo({
-                  petName: "",
-                  petAge: "",
-                  petWeight: "",
-                  petGender: "",
-                  petKind: "",
-                  petImage: require("../../assets/dog.png"),
-                });
-                setShowModal(false);
-              }}
-            >
-              <Text style={styles.modalButtonText}>취소</Text>
-            </TouchableOpacity>
           </View>
-        </Pressable>
+        </View>
       </Modal>
     </>
   );
@@ -511,15 +515,18 @@ const styles = StyleSheet.create({
   
   // 모달 창 스타일------------------------------------------------------------
   background: {
-    flex: 1,
+    // flex: 1,
+    width: "100%",
+    height: "100%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.6)",
   },
 
   whiteBox: {
+    // flex: 1,
     width: "80%",
-    height: "85%",
+    height: "75%",
     backgroundColor: "white",
     borderRadius: 10,
     paddingVertical: 20,
@@ -529,6 +536,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    overflow: 'hidden',
+    zIndex: 0,
   },
 
   border: {
@@ -553,7 +562,6 @@ const styles = StyleSheet.create({
   imageButton: {
     width: "30%",
     height: "15%",
-    marginBottom: 15,
   },
 
   modalButtonContainer: {
@@ -578,12 +586,14 @@ const styles = StyleSheet.create({
 
     // 여백
     marginTop: 5,
-
+    // marginBottom: 500,
     // 모양
     borderRadius: 2,
 
     // 배경색
     backgroundColor: "#3A8DF8",
+
+    zIndex: 10,
   },
 
   modalButtonText: {
@@ -594,9 +604,9 @@ const styles = StyleSheet.create({
   // 펫 프로필 사진
   petProfile: {
     width: "100%",
-    height: "100%",
-    marginTop: 5,
-    marginLeft: 6,
+    height: "80%",
+    marginTop: "1%",
+    marginLeft: "7%",
   },
 
   buttonPressed: {

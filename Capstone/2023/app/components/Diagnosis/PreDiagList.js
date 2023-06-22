@@ -80,11 +80,11 @@ function PreDiagList(props) {
       <Modal visible={petModalVisible} transparent={true} animationType="fade" onRequestClose={() => {setPetModalVisible(false)}}>
         <View style={styles.background}>
           <View style={styles.whiteBox}>
-            <Text>진단하실 펫을 선택해주세요</Text>
+            <Text style={{alignSelf: "center", fontSize: 16, color: "#282828"}}>진단하실 펫을 선택해주세요</Text>
             {petList.map((pet) => (
               <TouchableOpacity style={styles.petSelect} key={pet.id} onPress={() => onSelectPet(pet)}>
-                <Image style={styles.petImage} source={{uri: pet.petImage}} />
-                <Text>{pet.petName}</Text>
+                <Image style={[styles.petImage, {marginTop: 5, borderWidth: 1, borderColor: "#686868"}]} source={{uri: pet.petImage}} />
+                <Text style={{top: 8, left: 5, fontSize: 14, color: "#282828"}}>{pet.petName}</Text>
               </TouchableOpacity>
             ))}
           </View>

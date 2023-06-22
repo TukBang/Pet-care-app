@@ -6,7 +6,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 function HeaderProfile({ user, onPress }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.textStyle}>{user.isExpert ? 'Expert+' : '일반회원'}</Text>
+      <Text style={[styles.textStyle, user.isExpert ? {color: "#DBAC34"} : {}]}>{user.isExpert ? 'Expert+' : '일반회원'}</Text>
       <View style={styles.profile}>
         <Icon style={styles.iconImage} name='help-outline' size={45} />
         <Pressable onPress={onPress} style={styles.press}>
@@ -38,9 +38,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: "#E2E6EB",
   },
+
   press: {
-    width: 40,
-    height:40,
+    width: 38.5,
+    height: 38.5,
   },
 
   avatar: {
@@ -58,9 +59,10 @@ const styles = StyleSheet.create({
     color: "black",
     fontWeight: "bold",
     fontSize: 17,
-    marginLeft: 10,
+    marginLeft: 15,
     backgroundColor: "#F6FAFF"
   },
+  
   profile: {
     flex: 1,
     flexDirection: 'row',

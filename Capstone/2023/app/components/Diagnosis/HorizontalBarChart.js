@@ -10,6 +10,10 @@ class ProbChart extends React.Component {
     super(props);
 
     this.state = {
+      chartTitle: this.props.chartTitle === null ? styles.chartTitle : this.props.chartTitle, 
+      chartView: this.props.chartView === null ? styles.chartView : this.props.chartView,
+      chartStyle: this.props.chartStyle === null ? styles.chart : this.props.chartStyle,
+
       legend: {
         enabled: false,
       },
@@ -18,7 +22,6 @@ class ProbChart extends React.Component {
         dataSets: [
           {
             values: [
-              { y: this.props.prediction[5] },
               { y: this.props.prediction[4] },
               { y: this.props.prediction[3] },
               { y: this.props.prediction[2] },
@@ -45,7 +48,6 @@ class ProbChart extends React.Component {
           "미란, 궤양",
           "농포, 여드름",
           "태선화, 과다색소침착",
-          "비듬, 각질, 상피성잔고리",
           "구진, 플라크",
         ],
         position: "BOTTOM",
@@ -83,11 +85,11 @@ class ProbChart extends React.Component {
     let chartTitleText = "진단 확률";
 
     return (
-      <View style={{ flex: 1 }}>
-        <Text style={styles.chartTitle}>{chartTitleText}</Text>
-        <View style={styles.chartView}>
+      <View style={{flex: 1}}>
+        <Text style={this.state.chartTitle}>{chartTitleText}</Text>
+        <View style={this.state.chartView}>
           <HorizontalBarChart
-            style={styles.chart}
+            style={this.state.chartStyle}
             data={this.state.data}
             xAxis={this.state.xAxis}
             yAxis={this.state.yAxis}
@@ -110,12 +112,16 @@ const styles = StyleSheet.create({
 
   chartView: {
     flex: 1,
+    
     height: "100%",
     width: "100%",
+
+    borderWidth: 1,
+    borderColor: "#C0CDDF",
   },
 
   chart: {
-    backgroundColor: "#DDDDDD",
+    backgroundColor: "#FFFFFF",
     height: 200,
     width: "100%",
   },

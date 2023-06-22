@@ -30,24 +30,14 @@ export default function useCal(userId) {
     }
     const firstCal = onecal;
     setRefreshing(true);
-    const oneNewerCal = await getOneNewerCal(firstCal.id);
+    const oneNewerCal = await getNextClosestCalendarByUser(firstCal.id);
     setRefreshing(false);
-    if (newerCal.length === 0) {
+    if (oneNewerCal.length === 0) {
       return;
     }
     setOneCal(oneNewerCal)
-    setCal(newerCal.concat(cal));
-  }, [cal, userId, refreshing]);
 
-  useEffect(() => {
-    getAllCalendarsByUser().then((_cal) => {
-    
-      setCal(_cal);
-      // if (_cal.length < PAGE_SIZE) {
-      //   setNoMoreCal(true);
-      // }
-    });
-  }, []);
+  }, [onecal,  userId, refreshing]);
 
   useEffect(() => {
     getNextClosestCalendarByUser().then((_cal) => {
@@ -61,7 +51,6 @@ export default function useCal(userId) {
   });
 
   return {
-    cal,
     onecal,
     // noMoreCal,
     refreshing,

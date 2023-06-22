@@ -21,12 +21,12 @@ function Disease() {
         activeDotStyle={styles.swiperActiveDot} >
         <View style={styles.diseaseContent}>
           <Text style={styles.diseaseTitle}>다음은 진단 할 수 있는 질병이에요!</Text>
+          <Text></Text>
           <Text style={styles.subDiseaseTitle}>1. 구진, 플라크 </Text>
-          <Text style={styles.subDiseaseTitle}>2. 비듬, 각질, 상피성진고리</Text>
-          <Text style={styles.subDiseaseTitle}>3. 태선화, 과다색소침착</Text>
-          <Text style={styles.subDiseaseTitle}>4. 농포, 여드름</Text>
-          <Text style={styles.subDiseaseTitle}>5. 미란, 궤양</Text>
-          <Text style={styles.subDiseaseTitle}>6. 결절, 종괴</Text>
+          <Text style={styles.subDiseaseTitle}>2. 태선화, 과다색소침착</Text>
+          <Text style={styles.subDiseaseTitle}>3. 농포, 여드름</Text>
+          <Text style={styles.subDiseaseTitle}>4. 미란, 궤양</Text>
+          <Text style={styles.subDiseaseTitle}>5. 결절, 종괴</Text>
         </View>
         <View style={styles.diseaseContent}>
           <Text style={styles.diseaseTitle}>구진</Text>

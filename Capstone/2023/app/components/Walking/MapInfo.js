@@ -1,50 +1,57 @@
 import { View, Text, StyleSheet } from "react-native"
 
 function MapInfo ({elapsedTime, distanceTravelled,kcal}) {
-
-    const Timer = ({ elapsedTime }) => {
-          const minutes = Math.floor(elapsedTime / 60000);
-          const seconds = Math.floor((elapsedTime % 60000) / 1000);
-          return (
-            <Text>
-            {`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
-            </Text>
-          )
-    }
-
+  const Timer = ({ elapsedTime }) => {
+    const minutes = Math.floor(elapsedTime / 60000);
+    const seconds = Math.floor((elapsedTime % 60000) / 1000);
     return (
-        <View style={styles.infoContainer}>
-          <View>
-            <Text>Time :</Text>
-            <Timer elapsedTime={elapsedTime} />
-          </View>
-          <View style={styles.border} />
-          <Text>
-            Distance : {"\n"}
-            {parseFloat(distanceTravelled).toFixed(2)} km
-          </Text>
-          <View style={styles.border} />
-          <Text>
-            Kcal : {"\n"}
-            {parseFloat(kcal).toFixed(2)} kcal
-          </Text>
-        </View>
+      <Text style={[styles.recordText, {alignSelf: "center", fontSize: 12,}]}>
+        {`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
+      </Text>
     )
+  }
+
+  return (    
+    <View style={styles.infoContainer}>
+      <View style={styles.recordView}>
+        <Text style={[styles.recordText, {alignSelf: "center", marginBottom: 2}]}>시간</Text>
+        <Timer elapsedTime={elapsedTime} />
+      </View>
+
+      <View style={styles.recordView}>
+        <Text style={[styles.recordText, {alignSelf: "center", marginBottom: 2}]}>거리</Text>
+        <Text style={[styles.recordText, {alignSelf: "center", fontSize: 12,}]}>{parseFloat(distanceTravelled).toFixed(1)} km</Text>
+      </View>
+
+      <View style={styles.recordView}>
+        <Text style={[styles.recordText, {alignSelf: "center", marginBottom: 2}]}>칼로리</Text>
+        <Text style={[styles.recordText, {alignSelf: "center", fontSize: 12,}]}>{parseFloat(kcal).toFixed(1)} kcal</Text>
+      </View>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-    infoContainer: {
-        width: "100%",
-        flexDirection: "row",
-        alignItems: "stretch",
-        justifyContent: "space-between",
-        margin: 10,
-      },
-      border: {
-        width: 1,
-        height: "100%",
-        backgroundColor: "gray",
-      },
+  infoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+  },
+
+  recordView: {
+    flexDirection: "column",
+    width: "33%", 
+    marginRight: 2, 
+    
+    borderWidth: 1, 
+    borderRadius: 5, 
+    borderColor: "#C0CDDF"
+  },
+
+  recordText: {
+    fontSize: 14,
+    color: "#282828",
+  },
 })
 
 export default MapInfo;

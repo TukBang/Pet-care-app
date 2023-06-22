@@ -22,21 +22,17 @@ const PreWalkingScreen = ({ onPress, selectedPet, setSelectedPet }) => {
   const { user } = useUserContext();
   const uid = user["id"];
 
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+  const {lagi, logi, setLagi, setLogi} = useUserContext();
   const [weatherData, setWeatherData] = useState(null);
   const appId = 'a410fd86af4308c1b5eb8adf787879b3';
   const lang = 'kr';
   const metric = 'metric';
 
-  // const fetch_site = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${appId}&lang=${lang}&units=${metric}`
-  // const response = fetch(fetch_site);
-
   useEffect(() => {
-
     const fetchWeatherData = async () => {
       try {
-        const fetch_site = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=alerts&appid=${appId}&lang=${lang}&units=${metric}`
+        const fetch_site = `https://api.openweathermap.org/data/2.5/onecall?lat=${lagi}&lon=${logi}&exclude=alerts&appid=${appId}&lang=${lang}&units=${metric}`
+        console.log(fetch_site)
         const response = await fetch(fetch_site);
         if (response) {
           const data = await response.json();
@@ -55,19 +51,29 @@ const PreWalkingScreen = ({ onPress, selectedPet, setSelectedPet }) => {
       Geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          setLatitude(latitude);
-          setLongitude(longitude);
+          console.log('lat',latitude)
+          console.log('position',position)
+          setLagi(latitude);
+          setLogi(longitude);
         },
         (error) => {
           console.error(error);
         },
-        { enableHighAccuracy: true, timeout: 500000, maximumAge: 10000 }
+        { enableHighAccuracy: false, timeout: 4000, maximumAge: 10000 }
       );
     };
     
-    getCurrentLocation();
-    fetchWeatherData();
-  }, [latitude, longitude, weatherData ? '': weatherData]);
+   
+    // fetchWeatherData();
+     // 1분마다 fetchWeatherData 함수 호출
+    const interval = setInterval(() => {
+      getCurrentLocation();
+      fetchWeatherData();
+    }, 2000); // 1분(60,000밀리초) 주기로 호출
+
+    // Clean-up 함수에서 interval을 클리어해야 합니다.
+    return () => clearInterval(interval);
+  }, [lagi, lang]);
 
 
   useEffect(() => {
@@ -111,41 +117,64 @@ const PreWalkingScreen = ({ onPress, selectedPet, setSelectedPet }) => {
               <Text style={[weatherStyles.weatherSubText, {fontSize: 16, }]}>체감 {weatherData.feels_like}º 습도 {weatherData.humidity}%</Text>
             </>
           ) : (
-            <Text>날씨 정보를 가져오는 중...</Text>
+            <Text style={{marginTop: 45, fontSize: 18, fontWeight: "bold", color: "#282828",}}>날씨 정보를 가져오는 중...</Text>
           )}
         </View>
-        <Text style={styles.header}>함께 산책하기</Text>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.scrollViewContent}
-        >
-          {petList.map((pet) => (
-            <View
-              key={pet.id}
-              style={[
-                styles.petListContainer,
-                selectedPet !== pet.id && styles.blurContainer,
-                selectedPet === pet.id && styles.selectedPetContainer,
-              ]}
-            >
-              <TouchableWithoutFeedback onPressIn={() => handlePressPet(pet.id)}>
-                <View style={styles.petInfoContainer}>
-                  <Image
-                    source={pet.petImage ? { uri: pet.petImage } : require("../../assets/dog.png")}
-                    style={styles.petImage}
-                  />
-                  <Text style={[styles.petText, selectedPet === pet.id && styles.selectedPetText]}>{pet.petName}</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          ))}
-        </ScrollView>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity disabled={!selectedPet} onPress={onPress} style={[styles.Boxstyles,!selectedPet && styles.disabledButton]}>
-            <Text style={styles.textStyle}>{selectedPet ? '산책 시작' : '펫을 선택해주세요'}</Text>
-          </TouchableOpacity>
+        
+        {
+          petList.length === 0 ? (
+            <Text style={styles.header}></Text>
+          ) : (
+            <Text style={styles.header}>함께 산책하기</Text>
+          )
+        }
+        
+
+        <View style={{marginBottom: 45}}>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.scrollViewContent}
+          >
+            {petList.map((pet) => (
+              <View
+                key={pet.id}
+                style={[
+                  styles.petListContainer,
+                  selectedPet !== pet.id && styles.blurContainer,
+                  selectedPet === pet.id && styles.selectedPetContainer,
+                ]}
+              >
+                <TouchableWithoutFeedback onPressIn={() => handlePressPet(pet.id)}>
+                  <View style={styles.petInfoContainer}>
+                    <Image
+                      source={pet.petImage ? { uri: pet.petImage } : require("../../assets/dog.png")}
+                      style={styles.petImage}
+                    />
+                    <Text 
+                      style={[styles.petText, selectedPet === pet.id && styles.selectedPetText]}
+                    >{pet.petName}</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+            ))}
+          </ScrollView>
         </View>
+        
+        <TouchableOpacity 
+          style={[styles.Boxstyles, !selectedPet && styles.disabledButton]}
+          disabled={!selectedPet}
+          onPress={onPress}
+        >
+          {
+            petList.length === 0 ? (
+              <Text style={styles.textStyle}>{selectedPet ? '산책 시작' : '펫을 등록해주세요'}</Text>
+            ) : (
+              <Text style={styles.textStyle}>{selectedPet ? '산책 시작' : '펫을 선택해주세요'}</Text>
+            )
+          }
+        </TouchableOpacity>
+
       </View>
     </LinearGradient>
   );
@@ -158,92 +187,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
 
-  header:{
-    fontSize: 25,
-    fontWeight: "bold",
-    marginTop: 15,
-    marginLeft: 15,
-    marginBottom: 20,
-    color: 'black',
-  },
-
-  // 버튼
-  button: {
-    // 정렬
-    justifyContent: "center",
-    alignItems: "center",
-    height: 40,
-    width: 330,
-    borderRadius: 5,
-  },
-
-  // 스크롤 뷰
-  scrollViewContent: {
-    flexDirection: "row",
-    marginLeft: 10,
-    elevation: 10,
-    marginBottom: 30,
-  },
-  petInfoContainer: {
-    paddingLeft: 5,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    flexDirection: 'column',
-  },
-  petImage: {
-    width: 200,
-    height: 200,
-    borderRadius: 15,
-    overflow: "hidden",
-    marginBottom: 5,
-    marginTop: 5,
-    marginRight: 5,
-    alignSelf: 'center',
-  },
-  petText:{
-    fontSize: 20,
-    fontWeight: "bold",
-    color: 'black',
-  },
-
-  buttonContainer:{
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-
-  Boxstyles: {
-    width: 250,
-    height: 50,
-    borderRadius: 15,
-    backgroundColor: "#3B8DF8",
-    alignItems: 'center',
-    padding: 15,
-    elevation:10,
-  },
-
-  backgroundImage: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    resizeMode: "cover",
-    height: '105%',
-  },
-
-  textStyle: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: 'white',
-  },
-
   box:{
     width: "100%",
     height: "18%",
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 10,
+    marginTop: 60,
+    marginBottom: 50,
 
     borderWidth: 1,
     borderRadius: 15,
@@ -251,31 +200,78 @@ const styles = StyleSheet.create({
     backgroundColor: "#C0CDDF",
   },
 
-  boxText:{
-    fontSize: 15,
+  // 스크롤 뷰
+  scrollViewContent: {
+    flexDirection: "row",
+    right: 5,
+  },
+
+  header:{
+    alignSelf: "center",
+    
+    fontSize: 24,
     fontWeight: "bold",
-    color: 'black',
+    color: "#282828",
   },
 
   petListContainer: {
-    width: 200,
-    marginHorizontal: 5,
     alignItems: 'center',
+    width: 135,
   },
-
+  
   blurContainer: {
     opacity: 0.3, // 흐릿한 효과를 위한 투명도 조절
   },
 
-  disabledButton: {
-    width: 250,
-    height: 50,
-    borderRadius: 15,
-    backgroundColor: "#D3D3D3",
-    alignItems: 'center',
+  petText:{
+    alignSelf: "center",
+
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#282828",
+  },
+
+  petInfoContainer: {
+    paddingLeft: 5,
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+
+  petImage: {
+    width: 125,
+    height: 125,
+    borderWidth: 1,
+    borderColor: "#E2E6EB",
+    borderRadius: 10,
+    marginTop: 15,
+    alignSelf: 'center',
+  },
+
+  Boxstyles: {
+    alignSelf: 'center',
+    width: "100%",
+    height: "8%",
+    marginTop: 10,
+    
+    borderRadius: 5,
+    backgroundColor: "#3B8DF8",
+
     padding: 15,
-    elevation:10,
-  }
+    elevation: 2,
+  },
+
+  disabledButton: {
+    backgroundColor: "#D3D3D3",
+  },
+  
+  textStyle: {
+    alignSelf: "center",
+
+    fontSize: 15,
+    fontWeight: "bold",
+    color: 'white',
+  },
 })
 
 const weatherStyles = StyleSheet.create({

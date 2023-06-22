@@ -30,19 +30,15 @@ function DiagnosisScreen() {
   const [aiResult, setAiResult] = useState( {
     labels: [
       "구진, 플라크",
-      "비듬, 각질, 상피성잔고리",
       "태선화, 과다색소침착",
       "농포, 여드름",
       "미란, 궤양",
       "결절, 종괴",
     ],
-    predictions: [0, 0, 0, 0, 0, 0],
+    predictions: [0, 0, 0, 0, 0],
   });
   const [ diagnosisResultText2, setDiagnosisResultText2] = useState('')
   
-
-  
-
   // 펫 정보 불러오기
   useEffect(() => {
     if (user) {
@@ -69,7 +65,7 @@ function DiagnosisScreen() {
   // SelectedImage AI SERVER 전송
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1,}}>
       {/* 이미지 선택 여부에 따라 화면 전환 */}
       {!selectedImage ? (
         <PreDiagList 

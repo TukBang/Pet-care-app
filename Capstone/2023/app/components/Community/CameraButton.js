@@ -7,6 +7,7 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { launchImageLibrary, launchCamera } from "react-native-image-picker";
 
 import ActionSheetModal from "../ActionSheetModal";
+import ImagePicker from "react-native-image-crop-picker";
 
 const imagePickerOption = {
   mediaType: "photo",
@@ -16,7 +17,7 @@ const imagePickerOption = {
 };
 
 // CommunityScreen 에서 게시물 추가하기 위한 모달을 띄우는데 사용
-function CameraButton() {
+function CameraButton({setBoardCategory}) {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
@@ -31,19 +32,40 @@ function CameraButton() {
     }).start();
   }, [animation]);
 
-  const onPickImage = (res) => {
+  const onPickedImage = (res) => {
     if (res.didCancel || !res) {
       return;
     }
-    navigation.push("Upload", { res, isSolution: false });
+    navigation.push("Upload", { res, setBoardCategory, isSolution: false });
   };
 
+  // 카메라 실행 함수
   const onLaunchCamera = () => {
-    launchCamera(imagePickerOption, onPickImage);
+    ImagePicker.openCamera(imagePickerOption)
+      .then((image) => {
+        ImagePicker.openCropper({
+          path: image.path,
+          width: image.width,
+          height: image.height,
+        })
+          .then(onPickedImage)
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
   };
 
   const onLaunchImageLibrary = () => {
-    launchImageLibrary(imagePickerOption, onPickImage);
+    ImagePicker.openPicker(imagePickerOption)
+      .then((image) => {
+        ImagePicker.openCropper({
+          path: image.path,
+          width: image.width,
+          height: image.height,
+        })
+          .then(onPickedImage)
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
   };
 
   return (

@@ -22,9 +22,10 @@ import MapInfo from "./MapInfo";
 import MapUploadModal from "./MapUploadModal";
 import events from "../../lib/events";
 import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
-var initLatitude = 35.44376;            // 이 부분은 아래 주석이 활성화되면 null으로 변경
-var initLongitude = 139.63766833333332; // 이 부분은 아래 주석이 활성화되면 null으로 변경
+var initLatitude = null;            // 이 부분은 아래 주석이 활성화되면 null으로 변경
+var initLongitude = null;           // 이 부분은 아래 주석이 활성화되면 null으로 변경
 var startLatitude = null;
 var startLongitude = null;
 var watchLatitude = null;
@@ -36,19 +37,19 @@ let count = 0;
 
 // 이걸 활성화 시키면 어플을 키자마자 위치 접근 권한이 있어야 함
 // 어플을 킬 때 권한을 키는 방법을 찾아야 함
-// // 내 위치 가져오기
-// Geolocation.getCurrentPosition((position) => {
-//   initLatitude = JSON.parse(JSON.stringify(position.coords.latitude));
-//   initLongitude = JSON.parse(JSON.stringify(position.coords.longitude));
+// 내 위치 가져오기
+Geolocation.getCurrentPosition((position) => {
+  initLatitude = JSON.parse(JSON.stringify(position.coords.latitude));
+  initLongitude = JSON.parse(JSON.stringify(position.coords.longitude));
 
-//   // 초기 위치 출력
-//   console.log("#0-----------------------------------------------------------------------------");
-//   console.log("초기 위치");
-//   console.log("위도:", latitude);
-//   console.log("경도:", longitude);
-//   console.log("");
-//   console.log("#0-----------------------------------------------------------------------------");
-// });
+  // 초기 위치 출력
+  console.log("#0-----------------------------------------------------------------------------");
+  console.log("초기 위치");
+  console.log("위도:", initLatitude);
+  console.log("경도:", initLongitude);
+  console.log("");
+  console.log("#0-----------------------------------------------------------------------------");
+});
 
 function AnimatedMarkers({setWalkingStart, selectedPet}) {
   // 변수 부문 ----------------------------------------------------------------------------------------------------------------------------------
@@ -269,7 +270,9 @@ function AnimatedMarkers({setWalkingStart, selectedPet}) {
   
       setResultImage(result);
       setIsModalVisible(true);
-      
+    }
+    else {
+      setWalkingStart(false);
     }
   }; 
 
@@ -396,24 +399,6 @@ function AnimatedMarkers({setWalkingStart, selectedPet}) {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.header}>산책</Text>
-        
-        <TouchableOpacity onPress={startTracking}>
-          <Text>시작</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity onPress={stopTracking}>
-          <Text>중단</Text>
-        </TouchableOpacity>
-        {!mapLoaded &&
-            <Modal transparent={true} animationType="fade">
-              <Pressable style={styles.background}>
-                <View style={styles.loading}>
-                  <ActivityIndicator size="large" />
-                </View>
-              </Pressable>
-            </Modal>
-        }
         <MapView
           style={styles.map}
           provider={PROVIDER_GOOGLE}
@@ -424,22 +409,39 @@ function AnimatedMarkers({setWalkingStart, selectedPet}) {
           region={getMapRegion()}
           customMapStyle={mapStyle}
         >
-          <Polyline zIndex={5} coordinates={routeCoordinates} strokeWidth={5} strokeColor="green"/>
+          <Polyline zIndex={5} coordinates={routeCoordinates} strokeWidth={5} strokeColor="#3A8DF8"/>
           <Marker.Animated
             ref={markerRef}
             coordinate={coordinate.current}
             image
           />
         </MapView>
+      
         {/* 산책 정보 기록 Contatiner */}
         <MapInfo 
           elapsedTime={elapsedTime} 
           distanceTravelled={distanceTravelled}
           kcal={kcal}
         />
-        <Text>{latitude}</Text>
-        <Text>{longitude}</Text>
+
+        <View style={{flexDirection: "row", width: "100%",}}>
+          <TouchableOpacity
+            style={[styles.button, {marginHorizontal: "22.7%",}]}
+            onPress={startTracking}
+          >
+            <Icon style={styles.iconImage} name='play-arrow' size={60} />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={stopTracking}
+          >
+            <Icon style={styles.iconImage} name='pause' size={60} />
+          </TouchableOpacity>
+        </View>
+        
       </View>
+      
       <MapUploadModal 
         isModalVisible={isModalVisible} 
         hideModal={hideModal} 
@@ -456,17 +458,28 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    width: "100%",
-    height: "70%",
     alignItems: "center",
-    paddingLeft: 20,
-    paddingRight: 20,
+    width: "100%",
+    height: "80%",
   },
-  
+
   map: {
+    justifyContent: "flex-end",
     width: "100%",
     height: "100%",
-    justifyContent: "flex-end",
+  },
+
+  iconImage: {
+    color: "#F6FAFF",
+  },
+
+  button: {
+    marginTop: 16.5,
+
+    backgroundColor: "#3A8DF8",
+    borderWidth: 1,
+    borderColor: "#3A8DF8",
+    borderRadius: 50,
   },
 });
 

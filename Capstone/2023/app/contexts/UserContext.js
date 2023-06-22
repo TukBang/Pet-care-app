@@ -9,12 +9,19 @@ const UserContext = createContext(null);
 
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [updateVariable, setUpdateVariable] = useState(null);
+  const [lagi, setLagi] = useState(null)
+  const [logi, setLogi] = useState(null)
   return (
     <UserContext.Provider
       children={children}
       value={{
         user,
         setUser,
+        updateVariable,
+        setUpdateVariable,
+        lagi, setLagi,
+        logi, setLogi,
       }}
     />
   );

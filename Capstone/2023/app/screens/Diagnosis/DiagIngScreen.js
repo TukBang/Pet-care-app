@@ -18,19 +18,14 @@ function DiagIngScreen ({
     setDiagnosisResultText2,
 }) {
 
-    const serverUrl = "http://121.170.118.190:5000/images";
+  const serverUrl = "http://121.170.118.190:5000/images";
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
   // 진단 선택 스크린
   let DiagnosisText1 = `진단하려는 사진을 확인해주세요.`;
-  let DiagnosisText2 = `  [Tip]\n  환부가 잘 보이고, 이미지가 클수록 정확도가 향상됩니다!`;
+  let DiagnosisText2 = `  환부가 잘 보이고, 이미지가 클수록 정확도가 향상됩니다!`;
   let buttonText1 = `다시 선택하기`;
   let buttonText2 = `진단하기`;
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-  useEffect(() => {
-    console.log(aiResult);
-  }, [aiResult]);
-
 
   const handlePostRequest = async () => {
     try {
@@ -62,6 +57,7 @@ function DiagIngScreen ({
           image: image,
         }),
       });
+
       if (Platform.OS === "android") {
         await reference.putString(image, "base64", { contentType: selectedImage.mime });
       } else {
@@ -79,7 +75,6 @@ function DiagIngScreen ({
           predictions["L3"],
           predictions["L4"],
           predictions["L5"],
-          predictions["L6"],
         ]
       }))
       console.log('set직후' ,aiResult)
@@ -96,8 +91,6 @@ function DiagIngScreen ({
         image: petdiagImage,
       })
       events.emit("refresh");
-
-
 
       setDiagState(true);
       setDiagEnd(true);      
@@ -141,7 +134,6 @@ function DiagIngScreen ({
             onPress={() => {
               setDiagState(false);
               // AI 서버에 이미지 전송
-              // 0번째 펫을 선택하도록 설정 (카테고리 선택 요소에 따라 바뀔 수 있도록 변경 필요 2023-05-02)
               handlePostRequest();
 
               // 진단 모달 띄우기
@@ -169,34 +161,39 @@ function DiagIngScreen ({
   // 진단 선택 스타일
 const diagnosisSelectStyles = StyleSheet.create({
   text1: {
-    marginTop: 10,
-    marginBottom: 10,
+    alignSelf: "center",
+
+    marginTop: "5%",
+    marginBottom: "5%",
     marginLeft: 10,
 
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#282828",
   },
 
   text2: {
-    marginBottom: 40,
-    marginLeft: 10,
+    alignSelf: "center",
+    right: 4,
 
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "bold",
+    color: "#282828"
   },
 
   imageView: {
     alignItems: "center",
 
-    height: 300,
+    height: "64%",
     width: "100%",
 
     // 여백
-    marginBottom: 30,
+    marginBottom: 25,
   },
 
   image: {
-    width: 300,
-    height: 300,
+    width: "100%",
+    height: "100%",
   },
 
   button_container: {

@@ -83,7 +83,8 @@ function SignInScreen({ navigation, route }) {
   return (
     <KeyboardAvoidingView
       style={styles.keyboardAvoidingView}
-      behavior={Platform.select({ ios: "padding" })}
+      behavior="padding"
+      keyboardVerticalOffset={-110}
     >
       <SafeAreaView style={styles.fullscreen}>
         <View style={styles.container}>
@@ -106,18 +107,15 @@ function SignInScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-
   keyboardAvoidingView: {
     flex: 1,
     backgroundColor: "#F6FAFF",
-    
   },
 
   fullscreen: {
-    marginTop: "20%",
+    height: "100%",
     alignItems: "center",
     justifyContent: "center",
-    
   },
 
   text: {
@@ -126,15 +124,15 @@ const styles = StyleSheet.create({
     color: "#3a8df0",
   },
 
-  form: {
-    marginTop: 155,
-    width: "90%",
-  },
-
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 100,    // Text와 Image 사이의 간격 조정
+    marginTop: "40%",
+    marginBottom: "60%",
+  },
+
+  form: {
+    width: "90%",
   },
 
   image: {

@@ -37,13 +37,11 @@ function DiagResult({
     return (
       <LinearGradient
         colors={['#f6faff', '#f6faff']}
-        // colors={['#F0F8FF', '#D1EEFD']}
-
         style={{flex : 1}}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
       >
-      <View style={{ backgroundColor: 'f6faff' }}>
+      <View style={{ backgroundColor: 'F6FAFF' }}>
         {diagEnd ? (
           // 진단 결과 스크린
           <View style={diagnosisResultStyles.resultScreenView}>
@@ -68,13 +66,19 @@ function DiagResult({
               </View>
             </View>
             {/* 차트 표시 */}
-            <View style={diagnosisResultStyles.chartView}>
-              <ProbChart prediction={aiResult["predictions"]} />
+            <View style={{marginTop: 25, height: "200%"}}>
+              <ProbChart 
+                prediction={aiResult["predictions"]}
+                chartTitle={diagnosisResultStyles.chartTitle}
+                chartView={diagnosisResultStyles.chartView}
+                chartStyle={diagnosisResultStyles.chartStyle}
+              />
             </View>
+            
     
             <View style={diagnosisResultStyles.button_container}>
               <TouchableOpacity
-                style={diagnosisResultStyles.button}
+                style={[diagnosisResultStyles.button, {marginTop: 20,}]}
                 onPress={() => {
                   setSelectedImage(null);
                   setDiagtempView(false);
@@ -83,6 +87,7 @@ function DiagResult({
               >
                 <Text style={diagnosisResultStyles.buttonText}>{resultButtonText1}</Text>
               </TouchableOpacity>
+
               {/* gowrite 함수에 selectedImage 인자 전달 - 상담 게시글 작성 이동*/}
               <TouchableOpacity
                 style={diagnosisResultStyles.button}
@@ -124,18 +129,18 @@ const diagnosisResultStyles = StyleSheet.create({
   resultTextTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    
+    color: "#282828",
   },
 
   resultTextContent: {
     fontSize: 15,
+    color: "#282828",
   },
 
   imageView: {
     overflow: "hidden",
     width: "50%",
     height: "100%",
-    
   },
 
   image: {
@@ -144,21 +149,37 @@ const diagnosisResultStyles = StyleSheet.create({
     height: 200,
   },
 
+  chartTitle: {    
+    marginBottom: 10,
+
+    fontSize: 16,
+    color: "#282828",
+  },
+
   chartView: {
-    // 정렬
-    flexDirection: "row",
-    height: 100,
-    padding: 0,
+    flex: 1,
     
-    marginBottom: 118,
+    height: "100%",
+    width: "100%",
+
+    borderWidth: 1,
+    borderColor: "#C0CDDF",
+  },
+
+  chartStyle: {
+    height: "100%",
+    width: "100%",
+
+    borderWidth: 1,
+    borderColor: "#C0CDDF",
+    backgroundColor: "#FFFFFF",
   },
 
   button_container: {
     // 정렬
     flexDirection: "column",
-    justifyContent: "space-between",
     alignItems: "center",
-    overflow: "hidden",
+    height: "120%",
     
     // 여백
     marginTop: 20,
@@ -169,8 +190,8 @@ const diagnosisResultStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
 
-    height: 40,
-    width: 330,
+    height: "35%",
+    width: "100%",
 
     // 여백
     marginTop: 10,
@@ -180,14 +201,13 @@ const diagnosisResultStyles = StyleSheet.create({
     borderRadius: 5,
 
     // 배경색
-    backgroundColor: "#FFFFFF",
-    elevation: 3,
+    backgroundColor: "#3A8DF8",
   },
 
   // 버튼 텍스트
   buttonText: {
     fontSize: 15,
-    color: "#000000",
+    color: "#FFFFFF",
   },
 });
 

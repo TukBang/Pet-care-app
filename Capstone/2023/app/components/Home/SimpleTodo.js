@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ImageBackground, Image } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, RefreshControl, Image, FlatList } from "react-native";
 // import { useUserContext } from "../../contexts/UserContext";
 import { useNavigation } from "@react-navigation/native";
 import useCal from "../../hooks/calendar/useCal";
 import { useEffect } from "react";
 import { getNextClosestWalkingByUser } from "../../lib/walkInfo";
 import useWalk from "../../hooks/walking/useWalk";
+import { useUserContext } from "../../contexts/UserContext";
 
 // 홈 화면을 구성하는 요소 - 기능 요약의 형태
 
 function SimpleTodo() {
-  const { onecal } = useCal();
+  const { onecal, refreshing, onRefresh } = useCal();
+  const [nonOneCal, setNonOneCal] = useState([]);
   const { oneWalk } = useWalk()
   const navigation = useNavigation();
 
@@ -19,23 +21,30 @@ function SimpleTodo() {
   const [ todo, setTodo ] = useState()
 
   const [ recentDiagnosis, setRecentDiagnosis ] = useState()
-  const [ isWalked, setIsWalked ] = useState(false);
   const [ walkedRecent, setWalkedRecent ] = useState()
   const [ beforeDay, setBeforeDay] = useState()
 
+  const {updateVariable, setUpdateVariable} = useUserContext();
+  const {user} = useUserContext();
 
   const todoText = todo ? todo : "일정이 없어요!";
-  const walkText = "마지막 산책 : " + (walkedRecent && beforeDay === 0 ? '오늘' : beforeDay + '일 전');
+  const walkText = walkedRecent ? ("마지막 산책 : " + (walkedRecent && beforeDay === 0 ? '오늘' : beforeDay + '일 전')) : ("산책을 해볼까요?");
   const diagnosisText = recentDiagnosis ? recentDiagnosis : '진단 기록 바로 가기';
-
+  const expertText = user.isExpert ? ("상담 게시글 확인하기") : ("전문가에게 물어보세요!")
+  
   useEffect(() =>{
-    if (onecal && onecal.createdAt !== null) {
+    
+    setUpdateVariable(0);
+    console.log(updateVariable)
+    if (onecal) {
+      console.log('onecal',onecal)
+      if(onecal.s_time && onecal.s_time.seconds){
       const options = {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
       };
-      console.log(onecal)
+      console.log('onecal.s_time.seconds',onecal.s_time.seconds)
       const recentDate = new Date(onecal.s_time.seconds * 1000)
       const today= new Date()
       const diffInMilliseconds = Math.abs(recentDate - today);
@@ -44,11 +53,12 @@ function SimpleTodo() {
       // date.get
       setTodoRecent(recentDate.toLocaleString('ko-KR', options))
       setTodo(onecal.memo)
-    } else {
+    }} else {
       setTodoRecent(null)
       setAfterDay(null)
     }
-  },[onecal])
+    console.log(updateVariable)
+  },[onecal, updateVariable])
 
   useEffect(() => {
     if (oneWalk && oneWalk.createdAt !== null) {
@@ -67,7 +77,7 @@ function SimpleTodo() {
       setWalkedRecent(null)
       setBeforeDay(null)
     }
-},[oneWalk])
+},[oneWalk,updateVariable])
 
   const onPressCalendar = () => {
     navigation.navigate("CalendarScreen")
@@ -102,6 +112,13 @@ function SimpleTodo() {
               </>
               )}
         </TouchableOpacity>
+        {/* <FlatList
+          data={onecal}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={[Boxstyles.boxView1, {marginLeft : 7.5}]}
+          refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}
+        /> */}
         <TouchableOpacity onPress={() => onPressWalking()} style={[Boxstyles.boxView2, {marginRight : 7.5}]} activeOpacity={0.8}>
           {beforeDay === 0 ? (
             <>
@@ -130,13 +147,27 @@ function SimpleTodo() {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onPressConsult()} style={[Boxstyles.boxView4, {marginRight : 7.5}]} activeOpacity={0.8}>
               <Text style={Boxstyles.boxTitle}>상담 하기</Text>
-              <Text style={Boxstyles.boxSentence}>전문가에게 물어보세요!</Text>
+              <Text style={Boxstyles.boxSentence}>{expertText}</Text>
 
         </TouchableOpacity>
       </View>
     </View>
   );
 }
+
+const renderItem = ({ item }) => (
+  <CalendarCard
+  calendarID = {item.calendarID}
+  calendarUid = {item.calendarUid}
+  title = {item.title}
+  memo = {item.memo}
+  s_time = {item.s_time}
+  e_time = {item.e_time}
+  userID = {item.userID}
+  petName = {item.petName}
+  createdAt  = {item.createdAt}
+  />
+);
 
 const styles = StyleSheet.create({
   block: {

@@ -12,7 +12,16 @@ function DiagTabNavigator() {
     <Tab.Navigator
       initialRouteName="진단하기" 
       screenOptions={{
-        
+        tabBarStyle: {
+          backgroundColor: "#F6FAFF",
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: "#3A8DF8",
+        },
+        tabBarActiveTintColor: "#282828",
+        tabBarLabelStyle: {
+          fontSize: 14,
+        },
       }}
       >
       <Tab.Screen

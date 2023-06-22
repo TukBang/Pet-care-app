@@ -15,8 +15,6 @@ const WalkingScreen = () => {
   return (
     <LinearGradient
       colors={['#f6faff', '#f6faff']}
-      // colors={['#F0F8FF', '#D1EEFD']}
-
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
     >

@@ -34,14 +34,15 @@ function WriteScreen({ route }) {
 
   const { onCreate, onModify, onRemove } = useContext(LogContext);
   
-  const { user } = useUserContext();
+  const { user, setUpdateVariable } = useUserContext();
   const uid = user["id"];
   const [calendarList, setCalendarList] = useState([]);
-
+  
+  
   const createId = uuidv4();
   
   //저장함수
-  const onSave = () => {
+  const onSave = async () => {
     if (title === "" || title === null) {
       Alert.alert("실패", "제목을 입력해주세요.");
       return;
@@ -50,11 +51,11 @@ function WriteScreen({ route }) {
       Alert.alert("실패", "내용을 입력해주세요.");
       return;
     }
-    if (date > endDate) {
+    if (date >= endDate) {
       Alert.alert("실패", "시작 시간이 종료 시간보다 늦을 수 없어요.");
       return;
     }
-    createCalendar({
+    await createCalendar({
       calendarUid: createId,
       title: title,
       memo: body,
@@ -65,6 +66,8 @@ function WriteScreen({ route }) {
     })
       .then(() => {
         console.log('Data saved successfully');
+        console.log('setUp')
+        setUpdateVariable(1);
         // navigation.pop();
       })
       .catch((error) => {
@@ -73,16 +76,16 @@ function WriteScreen({ route }) {
       });
 // test
     if (log) {
-      onModify({
+       await onModify({
         id: log.id,
         date: date,
         endDate: endDate,
         title,
         body,
         pet,
-      });
+      })
     } else {
-      onCreate({
+      await onCreate({
         id: createId,
         title,
         body,
@@ -90,8 +93,9 @@ function WriteScreen({ route }) {
         date: date,
         endDate: endDate,
         // date: selectedDate.toISOString(),
-      });
+      })
     }
+    setUpdateVariable(1);
     events.emit("Calrefresh");
     navigation.pop();
   };
@@ -123,12 +127,14 @@ function WriteScreen({ route }) {
     deleteCalendarRecordFromFirebase(DeleteCalendarID)
       .then(() => {
         console.log('Calendar document deleted successfully');
+        setUpdateVariable(1);
         // 삭제 후 추가 작업 수행
       })
       .catch((error) => {
         console.error('Error deleting calendar document:', error);
         // 삭제 실패 시 에러 처리 방식 결정
       });
+    events.emit("Calrefresh");
   };
 
   // 삭제 여부를 물어보는 함수

@@ -26,7 +26,7 @@ export default function usewalk(userId) {
     setWalk(walk.concat(olderwalk));
   };
 
-  //새로고침
+  // 새로고침
   const onOneRefresh = useCallback(async () => {
     if (!oneWalk || oneWalk.length === 0 || oneRefreshing) {
       return;

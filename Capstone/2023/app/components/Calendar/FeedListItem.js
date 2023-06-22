@@ -24,7 +24,15 @@ function formatDate(date) {
 }
 
 function FeedListItem({ log }) {
-  const { title, date } = log;
+  let { title, date, endDate } = log;
+
+  if (typeof date === "string") {
+    date = Date.parse(date);
+  }
+  if (typeof endDate === "string") {
+    endDate = Date.parse(endDate);
+  }
+
   const navigation = useNavigation();
 
   const onPress = () => {
@@ -47,7 +55,7 @@ function FeedListItem({ log }) {
       onPress={onPress}
     >
       <Text style={styles.title}>{showTitle}</Text>
-      <Text style={styles.time}>{formatDate(date)}</Text>
+      <Text style={styles.time}>{format(date, "a h:mm", { locale: ko })} - {format(endDate, "a h:mm", { locale: ko })}</Text>
     </Pressable>
   );
 }

@@ -30,7 +30,7 @@ function DetailPostCards({ user, category, title, photoURL, description, created
   });
 
   const date = useMemo(
-    () => (createdAt ? new Date(createdAt._seconds * 1000) : new Date()),
+    () => (createdAt ? new Date(createdAt._seconds * 1000) : null),
     [createdAt]
   );
 
@@ -57,9 +57,16 @@ function DetailPostCards({ user, category, title, photoURL, description, created
             />
             <View style={{flexDirection: "column"}}>
               <Text style={styles.displayName}>{user.displayName}</Text>
-              <Text date={date} style={styles.date}>
-                {format(date, "MM/dd hh:mm", { locale: ko })}
-              </Text>
+              {
+                date === null ? (
+                  <Text></Text>
+                ) : (
+                  <Text date={date} style={styles.date}>
+                    {format(date, "MM/dd hh:mm", { locale: ko })}
+                  </Text>
+                )
+              }
+              
             </View>
           </Pressable>
 

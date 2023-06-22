@@ -12,13 +12,12 @@ function CheckList({ setModalVisible }) {
 
 
   //진단 문구
-  let explainText1 = `피부 진단 AI 기술을 사용하여 6가지 증상을 진단합니다.
+  let explainText1 = `피부 진단 AI 기술을 사용하여 5가지 증상을 진단합니다.
    1. 구진, 플라크
-   2. 비듬, 각질, 상피성잔고리
-   3. 태선화, 과다색소침착
-   4. 농포, 여드름
-   5. 미란, 궤양
-   6. 결절, 종괴`;
+   2. 태선화, 과다색소침착
+   3. 농포, 여드름
+   4. 미란, 궤양
+   5. 결절, 종괴`;
   let explainText2 = `진단 결과는 전문가의 진단과 다를 수 있습니다. 결과에서 진단된 병의 설명을 자세히 읽어보시고 참고용으로 사용해주세요. 또한 진단된 병이 심각하다면, 수의사와 상담을 권장드립니다!`;
   let checkText = `유의사항 확인`;
   let buttonText2 = "챗봇에게 물어보기";
@@ -107,22 +106,27 @@ const styles = StyleSheet.create({
   // 유의사항
   header: {
     // 여백
+    alignSelf: "center",
     marginTop: 30,
-    marginLeft: 155,
 
     // 폰트
     fontSize: 30,
+    fontWeight: "bold",
+    color: "#282828",
   },
 
   // 설명
   sentence: {
+    // 평평하게 정렬
+    textAlign: "justify",
+
     // 여백
     marginTop: 10,
     marginLeft: 40,
     marginRight: 40,
 
-    // 평평하게 정렬
-    textAlign: "justify",
+    fontSize: 16,
+    color: "#282828",
   },
 
   // 체크박스 뷰 (텍스트, 체크박스)
@@ -140,6 +144,9 @@ const styles = StyleSheet.create({
     // 여백
     marginTop: 10,
     marginLeft: 10,
+
+    fontSize: 14,
+    color: "#282828",
   },
 
   // 체크박스

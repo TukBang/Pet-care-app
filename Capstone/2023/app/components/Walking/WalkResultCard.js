@@ -4,6 +4,9 @@ import { useNavigation } from "@react-navigation/native";
 import { getPetInfoByUserID } from "../../lib/petInfo";
 import { useState } from "react";
 
+import { format, formatDistanceToNow } from "date-fns";
+import ko from "date-fns/locale/ko";
+
 function WalkResultCard({
     walkID,
     time,
@@ -14,7 +17,7 @@ function WalkResultCard({
     walkingImage, 
     createdAt 
     }) 
-     {
+{
 
   const date = useMemo(
     () => (createdAt ? new Date(createdAt._seconds * 1000) : new Date()),
@@ -22,7 +25,6 @@ function WalkResultCard({
   );
   const [petInfo, setPetInfo] = useState();
   const [filteredPet, setFilteredPet] = useState();
-
   
 
   useEffect(() => {
@@ -42,34 +44,104 @@ function WalkResultCard({
 
   return (
     <>
-      <View style={styles.paddingBlock}>
-        <View style={styles.header}>
-          <Image
-            source={{ uri: walkingImage}}
-            style={styles.image1}
-            resizeMethod="resize"
-            resizeMode="cover"
-          />
-        </View>
-        <View style={styles.profile}>
-          <View style={styles.walkingBox}>
-            {/* <Text>펫 이름 : {filteredPet.petName}</Text> */}
-            <Text>펫 이름 : {filteredPet}</Text>
-            <Text>거리 : {distance}</Text>
-            <Text>소모 칼로리 : {kcal}</Text>
-            <Text>걸린 시간 : {time}</Text>
-            <Text date={date} style={styles.date}>
-              {date.toLocaleString()}
-            </Text>
+      <View style={{flexDirection: "row"}}>
+        <View style={styles.paddingBlock}>
+          <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+
+            <View style={[styles.walkingBox, {justifyContent: "flex-end"}]}>
+              {/* <Text>펫 이름 : {filteredPet.petName}</Text> */}
+              <Text style={[styles.recordText, {marginBottom: 10, fontWeight: "bold"}]}>{filteredPet}</Text>
+              <View style={styles.infoContainer}>
+                <View style={styles.recordView}>
+                  <Text style={[styles.recordText, {alignSelf: "center", marginBottom: 2}]}>시간</Text>
+                  {
+                    time >= 60000 ? (
+                      <Text style={[styles.recordText, {alignSelf: "center", fontSize: 12,}]}>{((time - (time % 60000)) / 60000).toFixed(0)}분 {(time % 60000 / 1000).toFixed(0)}초</Text>
+                    ) : (
+                      <Text style={[styles.recordText, {alignSelf: "center", fontSize: 12,}]}>{(time / 1000).toFixed(0)} 초</Text>
+                    )
+                  }                  
+                </View>
+
+                <View style={styles.recordView}>
+                  <Text style={[styles.recordText, {alignSelf: "center", marginBottom: 2}]}>거리</Text>
+                  <Text style={[styles.recordText, {alignSelf: "center", fontSize: 12,}]}>{distance.toFixed(1)} km</Text>
+                </View>
+                <View style={styles.recordView}>
+                  <Text style={[styles.recordText, {alignSelf: "center", marginBottom: 2}]}>칼로리</Text>
+                  <Text style={[styles.recordText, {alignSelf: "center", fontSize: 12,}]}>{kcal.toFixed(1)} kcal</Text>
+                </View>
+              </View>
+              
+              <Text date={date} style={styles.date}>{format(date, "yyyy년 MM월 dd일 hh:mm", { locale: ko })}</Text>
+            </View>
           </View>
         </View>
+
+        <View style={styles.imageView}>
+          <Image
+            source={{uri: walkingImage}}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        </View>
       </View>
-      <View style={styles.border} />
+
+      <View style={{width: "100%"}}>
+        <View style={[styles.border]} />
+      </View>
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  paddingBlock: {
+    paddingHorizontal: 10,
+  },
+
+  // 펫 프로필 뷰
+  walkingBox:{
+    width: '60%',
+    marginTop: 10,
+  },
+
+  infoContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "60%",
+  },
+
+  border: {
+    height: 1,
+    marginLeft: 10,
+    marginRight: 10,
+    
+    backgroundColor: "#C0CDDF",
+  },
+
+  recordView: {
+    flexDirection: "column",
+    width: "80%", 
+    marginRight: 2, 
+    
+    borderWidth: 1, 
+    borderRadius: 5, 
+    borderColor: "#C0CDDF"
+  },
+
+  recordText: {
+    fontSize: 14,
+    color: "#282828",
+  },
+
+  date: {
+    color: "#686868",
+    fontSize: 12,
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 2,
+  },
+
   // 펫 프로필 이미지와 펫 이름 뷰 스타일
   header: {
     flexDirection: "row",
@@ -84,26 +156,22 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
 
-  // 선택된 펫 프로필 이미지
-  image1: {
-    backgroundColor: "#bdbdbd",
-    width: "15%",
-    aspectRatio: 1,
-    // marginBottom: 6,
-    marginTop: 15,
-    borderRadius: 50,
+  // 산책된 이미지
+  imageView: {
+    width: "50%",
+    marginRight: 10,
+    marginBottom: 10,
   },
 
-  // 프로필 , input 사진 이미지 뷰
-  profile:{
-    flexDirection: "row",
-    flex: 1,
-  },
-
-  // 펫 프로필 뷰
-  walkingBox:{
-    width: '50%',
+  image: {
+    width: "65%",
+    aspectRatio: 1.5,
     marginTop: 10,
+    marginLeft: 12,
+    
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "#C0CDDF"
   },
 
   text:{
@@ -113,23 +181,11 @@ const styles = StyleSheet.create({
     marginLeft: 40,
   },
 
-  border: {
-    height: 1,
-    backgroundColor: "gray",
-    // marginBottom: 10,
-    marginLeft: 10,
-    marginRight: 20,
-  },
-
   avatar: {
     width: 15,
     height: 15,
     borderRadius: 16,
     // alignSelf:'right'
-  },
-
-  paddingBlock: {
-    paddingHorizontal: 16,
   },
 
   head: {
@@ -165,26 +221,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
-  image: {
-    backgroundColor: "#bdbdbd",
-    width: "65%",
-    aspectRatio: 1,
-    
-    //marginLeft: 20,
-    marginTop: 10,
-    borderRadius: 10,
-  },
-
   description: {
     fontSize: 16,
     // lineHeight: 24,
     marginLeft: 8,
-  },
-  
-  date: {
-    color: "#757575",
-    fontSize: 12,
-    lineHeight: 18,
   },
 });
 

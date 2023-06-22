@@ -6,7 +6,7 @@ import {
   Image,
   Pressable,
   TextInput,
-  Button,
+  TouchableOpacity,
   FlatList,
   ActivityIndicator,
   ScrollView,
@@ -139,7 +139,6 @@ function BoardScreen({ route }) {
     >
     <View style={{ flex: 1 }}>
       <ScrollView 
-        contentContainerStyle={ styles.scrollViewContent }
         refreshControl={<RefreshControl onRefresh={onCombinedRefresh} refreshing={refreshing || refreshingComment} />}
       >
         <View style={styles.block}>
@@ -176,7 +175,13 @@ function BoardScreen({ route }) {
           value={txt}
           onChangeText={(value) => setTxt(value)}
         />
-        <Button onPress={onSubmit} title="작성" />
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={onSubmit} 
+        >
+          <Text style={styles.buttonText}>작성</Text>
+        </TouchableOpacity>
       </View>
     </View>
     </LinearGradient>
@@ -184,10 +189,6 @@ function BoardScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
-  scrollViewContent: {
-    //flexGrow: 1,
-  },
-
   block: {
     margin: 10,
   },
@@ -196,26 +197,49 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
 
-  commentInput: {
-    marginLeft: 5,
-    marginRight: 5,
-    marginBottom: 5,
-    borderWidth: 2,
-    borderRadius: 10,
-    borderColor: "#C0CDDF",
-    backgroundColor: "#C0CDDF",
-  },
-
   border: {
     height: 2,
     backgroundColor: "#C0CDDF",
     marginTop: 20,
     marginBottom: 10,
   },
-  
-  commentTitle: {
+
+  commentInputContainer: {
+    flexDirection: "row",
+    width: "100%",
+    marginRight: 10,
+
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
 
+  commentInput: {
+    width: "84%",
+    marginRight: "1%",
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: "#C0CDDF",
+    backgroundColor: "#C0CDDF",
+  },
+
+  button: {
+    // 정렬
+    justifyContent: "center",
+    alignItems: "center",
+    width: "15%",
+
+    // 모양
+    borderRadius: 5,
+
+    // 배경색
+    backgroundColor: "#3A8DF8",
+  },
+
+  // 버튼 텍스트
+  buttonText: {
+    fontSize: 15,
+    color: "#FFFFFF",
+  },
 });
 
 export default BoardScreen;
