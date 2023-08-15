@@ -89,7 +89,7 @@ function SignInScreen({ navigation, route }) {
       <SafeAreaView style={styles.fullscreen}>
         <View style={styles.container}>
           <Image source={pcaImage} style={styles.image}  resizeMode="contain"/>
-          <Text style={styles.text}>PCA</Text>
+          <Text style={styles.text}>PetNer</Text>
           <Image source={catImage} style={styles.image2}  resizeMode="contain"/>
         </View>
         <View style={styles.form}>

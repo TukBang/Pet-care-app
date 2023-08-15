@@ -103,14 +103,15 @@ function SimpleTodo() {
       <View style={Boxstyles.boxContainer}>
         <TouchableOpacity onPress={() => onPressCalendar()} style={[Boxstyles.boxView1, {marginLeft : 7.5}]} activeOpacity={0.8}>
             <Text style={Boxstyles.boxTitle}>최근 일정</Text>
-              {!todoRecent ? (
+            <Text style={Boxstyles.boxSentence}>일정을 등록해보세요.</Text>
+              {/* {!todoRecent ? (
               <Text style={Boxstyles.boxSentence}>일정을 등록해보세요.</Text>
               ) : (
               <>
                 <Text style={Boxstyles.boxSentence}>{afterDay ? afterDay + '일 뒤에' : '오늘' } 일정이 있어요!</Text>
                 <Text style={Boxstyles.boxSentence}>"{todoText}"</Text>
               </>
-              )}
+              )} */}
         </TouchableOpacity>
         {/* <FlatList
           data={onecal}
