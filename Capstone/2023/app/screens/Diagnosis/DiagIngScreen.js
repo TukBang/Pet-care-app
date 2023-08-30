@@ -18,7 +18,7 @@ function DiagIngScreen ({
     setDiagnosisResultText2,
 }) {
 
-  const serverUrl = "http://121.170.118.190:5000/images";
+  const serverUrl = "http://14.34.93.175:5000/images";
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
   // 진단 선택 스크린
   let DiagnosisText1 = `진단하려는 사진을 확인해주세요.`;

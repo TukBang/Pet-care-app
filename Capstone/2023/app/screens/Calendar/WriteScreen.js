@@ -51,8 +51,10 @@ function WriteScreen({ route }) {
       Alert.alert("실패", "내용을 입력해주세요.");
       return;
     }
-    if (date >= endDate) {
+    if (date <= endDate) {
       Alert.alert("실패", "시작 시간이 종료 시간보다 늦을 수 없어요.");
+      console.log(date)
+      console.log(endDate)
       return;
     }
     await createCalendar({
