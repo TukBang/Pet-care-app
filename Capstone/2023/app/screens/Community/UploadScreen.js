@@ -112,7 +112,7 @@ function UploadScreen() {
     const containsProfanity = profanityList.some(word => description.includes(word));
     const containsProfanityTitle = profanityList.some(word => title.includes(word));
     if (containsProfanity || containsProfanityTitle) {
-      Alert.alert("실패", "욕설 또는 불용어를 포함하고 있습니다.");
+      Alert.alert("실패", "욕설 또는 비속어를 포함하고 있습니다.");
       return;
     }
 

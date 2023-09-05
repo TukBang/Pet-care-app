@@ -238,7 +238,7 @@ function AnimatedMarkers({setWalkingStart, selectedPet}) {
   };
 
   // 칼로리 계산 함수
-  const calcKcal = (distanceDelta) => {return ((distanceDelta / 0.1) * 7)};
+  const calcKcal = (distanceDelta) => {return ((distanceDelta / 1000) * 6.4)};
 
   const stopTracking = async () => {
     if (isTracking) {

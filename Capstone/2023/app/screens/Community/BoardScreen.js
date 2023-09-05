@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   ScrollView,
   windowHeight,
+  Alert,
 } from "react-native";
 import { Dimensions } from 'react-native';
 
@@ -116,7 +117,11 @@ function BoardScreen({ route }) {
     '호졉', '호좁', '후라덜넘', '후장', '후장꽂아', '후장뚫어', '흐접', '흐젚', '흐졉', 'bitch', 'fuck', 'fuckyou', 'penis', 'pennis', 'pussy', 'sex']; // 욕설 및 불용어 목록
     const containsProfanity = profanityList.some(word => txt.includes(word));
     if (containsProfanity) {
-      Alert.alert("실패", "욕설 또는 불용어를 포함하고 있습니다.");
+      Alert.alert("실패", "욕설 또는 비속어를 포함하고 있습니다.");
+      return;
+    }
+    if (txt === "" || txt === null) {
+      Alert.alert("실패", "내용을 입력해주세요.");
       return;
     }
     await createComment({
