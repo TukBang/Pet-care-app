@@ -113,13 +113,6 @@ function SimpleTodo() {
             </>
             )}
         </TouchableOpacity>
-        {/* <FlatList
-          data={onecal}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={[Boxstyles.boxView1, {marginLeft : 7.5}]}
-          refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}
-        /> */}
         <TouchableOpacity onPress={() => onPressWalking()} style={[Boxstyles.boxView2, {marginRight : 7.5}]} activeOpacity={0.8}>
           {beforeDay === 0 ? (
             <>
@@ -132,15 +125,9 @@ function SimpleTodo() {
             </>
           )}
           <Text style={Boxstyles.boxSentence}>{walkText}</Text>
-          
           <Image style={Boxstyles.image} source={require("../../assets/dog_walking.png")} />
         </TouchableOpacity>
       </View>
-
-      {/* /////////////////////////////////////////////////////// */}
-      {/* 이부분 화면 전환 바꿔줘야해 */}
-      {/* /////////////////////////////////////////////////////// */}
-      
       <View style={Boxstyles.boxContainer}>
         <TouchableOpacity onPress={() => onPressDiagnosis()} style={[Boxstyles.boxView3, {marginLeft : 7.5}]} activeOpacity={0.8}>
             <Text style={Boxstyles.boxTitle}>진단 기록</Text>
@@ -149,7 +136,6 @@ function SimpleTodo() {
         <TouchableOpacity onPress={() => onPressConsult()} style={[Boxstyles.boxView4, {marginRight : 7.5}]} activeOpacity={0.8}>
               <Text style={Boxstyles.boxTitle}>상담 하기</Text>
               <Text style={Boxstyles.boxSentence}>{expertText}</Text>
-
         </TouchableOpacity>
       </View>
     </View>
