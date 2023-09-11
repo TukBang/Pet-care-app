@@ -9,16 +9,18 @@ import storage from "@react-native-firebase/storage";
 import { v4 } from "uuid";
 import events from "../../lib/events";
 import LinearGradient from "react-native-linear-gradient";
+import { aiResult, modifyAiResult } from "./DiagnosisScreen";
 
 function DiagIngScreen ({
-    aiResult,setAiResult,
+    // aiResult,
+    // setAiResult,
     petList,uid,
     selectedImage, setSelectedImage,
     setDiagState,setDiagEnd,setDiagtempView,setDiagModalVisible,
     setDiagnosisResultText2,
 }) {
 
-  const serverUrl = "http://14.34.93.175:5000/images";
+  const serverUrl = "http://222.98.82.134:5000/images";
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////  
   // 진단 선택 스크린
   let DiagnosisText1 = `진단하려는 사진을 확인해주세요.`;
@@ -66,18 +68,14 @@ function DiagIngScreen ({
 
       var petdiagImage = await reference.getDownloadURL();
       let predictions = await response.json();
-      console.log('set이전 predic',predictions)
-      await setAiResult((prevState) => ({
-        ...prevState,
-        predictions: [
-          predictions["L1"],
-          predictions["L2"],
-          predictions["L3"],
-          predictions["L4"],
-          predictions["L5"],
-        ]
-      }))
-      console.log('set직후' ,aiResult)
+
+      modifyAiResult([
+        predictions["L1"],
+        predictions["L2"],
+        predictions["L3"],
+        predictions["L4"],
+        predictions["L5"] 
+      ])
       await createDiagnosisResult({
         userID: uid, 
         petName: petName,

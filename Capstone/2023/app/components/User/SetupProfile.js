@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Image, Platform, StyleSheet, View, Pressable, ActivityIndicator } from "react-native";
 import { useUserContext } from "../../contexts/UserContext";
 import { signOut } from "../../lib/auth";
@@ -68,16 +68,20 @@ function SetupProfile() {
           return;
         }
         setResponse(res);
+        console.log(response)
       }
     );
   };
+
+  useEffect(() => {
+  }, [response]);
 
   return (
     <View style={styles.block}>
       <Pressable onPress={onSelectImage}>
         <Image
           stlye={styles.circle}
-          source={response ? { uri: response?.assets[0]?.uri } : require("../../assets/user.png")}
+          source={response ? { uri: response?.assets[0]?.fileName } : require("../../assets/user.png")}
         />
       </Pressable>
 
@@ -93,7 +97,7 @@ function SetupProfile() {
           <ActivityIndicator size={32} color="#6200ee" style={styles.spinner} />
         ) : (
           <View style={styles.buttons}>
-            <CustomButton title="다음" onPress={onSubmit} hasMarginBottom />
+            <CustomButton style={{}} title="다음" onPress={onSubmit} hasMarginBottom />
             <CustomButton title="취소" onPress={onCancel} theme="secondary" />
           </View>
         )}
@@ -120,7 +124,10 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   buttons: {
+    
     marginTop: 48,
+    flexDirection: 'row',
+    justifyContent: "space-between",
   },
 });
 

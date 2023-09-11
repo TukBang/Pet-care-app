@@ -4,10 +4,10 @@ import DiagModal from "../../components/Diagnosis/DiagModal";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import ProbChart from "../../components/Diagnosis/HorizontalBarChart";
 import LinearGradient from "react-native-linear-gradient";
-
+import { aiResult } from "../Diagnosis/DiagnosisScreen";
 
 function DiagResult({
-    aiResult,
+    // aiResult,
     diagEnd, setDiagEnd,
     selectedImage, setSelectedImage, 
     setDiagnosisResultText2,diagnosisResultText2,
@@ -29,7 +29,7 @@ function DiagResult({
         console.log("predictions", predictions) ;
         navigation.push("Upload", { res, predictions, isSolution: true });
       };
-
+    
     setDiagnosisResultText2(`${
       aiResult.labels[aiResult.predictions.indexOf(Math.max(...aiResult.predictions))]
     }(이)가 의심됩니다.`);

@@ -12,6 +12,21 @@ import { useUserContext } from "../../contexts/UserContext";
 // get the pet infomation
 import { getPetInfoByUserID } from "../../lib/petInfo";
 
+let aiResult = {
+  labels: [
+    "구진, 플라크",
+    "태선화, 과다색소침착",
+    "농포, 여드름",
+    "미란, 궤양",
+    "결절, 종괴",
+  ],
+  predictions: [0, 0, 0, 0, 0],
+}
+
+function modifyAiResult(newPredictions) {
+  aiResult.predictions = newPredictions;
+}
+
 function DiagnosisScreen() {
   // get the user information
   const { user } = useUserContext();
@@ -27,16 +42,17 @@ function DiagnosisScreen() {
   const [diagState, setDiagState] = useState(false);
   const [diagEnd, setDiagEnd] = useState(false);
   const [diagtempView, setDiagtempView] = useState(false);
-  const [aiResult, setAiResult] = useState( {
-    labels: [
-      "구진, 플라크",
-      "태선화, 과다색소침착",
-      "농포, 여드름",
-      "미란, 궤양",
-      "결절, 종괴",
-    ],
-    predictions: [0, 0, 0, 0, 0],
-  });
+  // const [aiResult, setAiResult] = useState( {
+  //   labels: [
+  //     "구진, 플라크",
+  //     "태선화, 과다색소침착",
+  //     "농포, 여드름",
+  //     "미란, 궤양",
+  //     "결절, 종괴",
+  //   ],
+  //   predictions: [0, 0, 0, 0, 0],
+  // });
+  
   const [ diagnosisResultText2, setDiagnosisResultText2] = useState('')
   
   // 펫 정보 불러오기
@@ -89,7 +105,7 @@ function DiagnosisScreen() {
                 setDiagtempView={setDiagtempView}
                 setDiagModalVisible={setDiagModalVisible}
                 aiResult={aiResult}
-                setAiResult={setAiResult}
+                // setAiResult={setAiResult}
               />
             ) : (
               <>
@@ -195,3 +211,4 @@ const diagnosisSelectStyles = StyleSheet.create({
 });
 
 export default DiagnosisScreen;
+export {aiResult, modifyAiResult};

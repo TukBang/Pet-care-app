@@ -11,7 +11,7 @@ const ChatScreenCom = () => {
   const {user} = useUserContext();
   const uid = user["id"];
   const userNickName = user['displayName'];
-  const serverUrl = "http://14.34.93.175:5000/chatbot";
+  const serverUrl = "http://222.98.82.134:5000/chatbot";
 
   const postMessage = async (message) => {
     try {
