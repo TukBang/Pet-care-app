@@ -14,7 +14,7 @@ from torchinfo import summary
 
 # ChatBot
 import openai
-import threading
+from multiprocessing import Process
 import time, datetime
 
 # Web server based on Flask ()
@@ -36,15 +36,15 @@ model_path = "D:/Capstone/model/server/"
 image_path = "D:/Capstone/images/"
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = sdm.Skin_Distinction_Model(model=efficientnet_v2_s(weights="DEFAULT"),
-                                   out_features=6,
+                                   out_features=5,
                                    device=device,
                                    save_path=model_path).to(device)
 
 # initial
 # org-Tukorea_S2-9_Pet_Care_Application_BNL
 os.environ["OPENAI_ORGANIZATION"] = "org-MRE3IgCPLUw65a4D5cDpLAxK"
-os.environ["OPENAI_API_KEY"] = "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"
 openai.organization = os.getenv("OPENAI_ORGANIZATION")
+os.environ["OPENAI_API_KEY"] = "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"
 openai.api_key = os.getenv("OPENAI_API_KEY")
 last_use_user = list()
 chatbot = dict()
@@ -170,7 +170,7 @@ class PetCareChatBot:
         self.chatlog["assistant"].append(answer_message)
 
         # delete exceed log messages
-        while self.chatlog["total_token"] > 1000:
+        while self.chatlog["total_token"] > 3000:
             # delete exceed token
             question_token = self.chatlog["question_token"].pop(0)
             answer_token = self.chatlog["answer_token"].pop(0)
@@ -178,7 +178,7 @@ class PetCareChatBot:
             ### part that can improve memory ability efficiency ###
             self.chatlog["user"].pop(0)
             self.chatlog["assistant"].pop(0)
-            self.chatlog["total_token"] -= question_token - answer_token
+            self.chatlog["total_token"] -= (question_token + answer_token)
             #######################################################
         
         self.last_use_time = datetime.datetime.now()
@@ -230,9 +230,9 @@ class ImageResource(Resource):
                 image.save(save_path)
 
                 test_transforms = transforms.Compose([
-                    transforms.Resize(224),
+                    transforms.Resize(size=(224, 224), interpolation=transforms.InterpolationMode.LANCZOS),
                     transforms.ToTensor(),                    
-                    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
                 ])
 
                 image = Image.fromarray(cv2.merge(list(cv2.split(np.array(image))[::-1])))
@@ -245,7 +245,7 @@ class ImageResource(Resource):
                 ret_data = jsonify({'name': image_name, 
                                     'L1': probs[0], 'L2': probs[1],
                                     'L3': probs[2], 'L4': probs[3],
-                                    'L5': probs[4], 'L6': probs[5]})
+                                    'L5': probs[4]})
                 return ret_data
 
             except Exception as e:
@@ -290,20 +290,19 @@ class ChatResource(Resource):
 def free_chatbot():
     global chatbot, last_use_user
 
-    while True:
-        time.sleep(60)
-        now = datetime.datetime.now()
-        now_uid_list = list()
-        for uid in last_use_user:
-            if (now - chatbot[uid].last_use_time).seconds > 3600:
-                chatbot.pop(uid)
-                last_use_user.remove(uid)
-            else:
-                now_uid_list.append(uid)
-        
-        print("chatbot free thread is working...")
-        print("chatbot count: ", len(chatbot))
-        print("chatbot user list: ", now_uid_list)
+    time.sleep(60)
+    now = datetime.datetime.now()
+    now_uid_list = list()
+    for uid in last_use_user:
+        if (now - chatbot[uid].last_use_time).seconds > 3600:
+            chatbot.pop(uid)
+            last_use_user.remove(uid)
+        else:
+            now_uid_list.append(uid)
+    
+    print("chatbot free thread is working...")
+    print("chatbot count: ", len(chatbot))
+    print("chatbot user list: ", now_uid_list)
 
 if __name__ == "__main__":
     if not os.path.exists(image_path):
@@ -312,26 +311,20 @@ if __name__ == "__main__":
     openai.Model.list()
 
     # chatbot 대화 내용 제거용 thread 생성
-    chatbot_thread = threading.Thread(target=free_chatbot, daemon=True)    
-    chatbot_thread.start()
+    chatbot_process = Process(target=free_chatbot)
+    chatbot_process.start()
 
     pprint(summary(model, input_size=(1, 3, 224, 224), verbose=0))
 
     with open(f"{model_path}last_history.pkl", "rb") as pkl_file:
         save_history_fig(history=pkl.load(pkl_file))
     get_evaluate_images(src_path=model_path, dst_path=image_path + "evaluate/")
-    # 차원 축소 결과 가져오기 추가
 
     # 예외 처리 필요
     model.load_state_dict(torch.load(f"{model_path}high_acc.pth"))
-    
-    # 위 내용이 불러와지면, 서버를 엽니다.
-    app = Flask(__name__)
-    CORS(app)
-    
+
+    app = Flask(__name__); CORS(app)    
     api = Api(app)
     api.add_resource(ImageResource, '/images')
     api.add_resource(ChatResource, '/chatbot')
-
-    # 웹 서버 열기
     app.run(host='0.0.0.0', debug=True)
